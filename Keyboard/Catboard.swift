@@ -87,7 +87,7 @@ class Catboard: KeyboardViewController {
                 for rowKeys in page.rows {
                     for key in rowKeys {
                         if let keyView = self.layout!.viewForKey(key) {
-                            keyView.addTarget(self, action: "takeScreenshotDelay", forControlEvents: .TouchDown)
+                            keyView.addTarget(self, action: #selector(Catboard.takeScreenshotDelay), forControlEvents: .TouchDown)
                         }
                     }
                 }
@@ -95,12 +95,12 @@ class Catboard: KeyboardViewController {
         }
     }
     
-    override func createBanner() -> ExtraView? {
-        return CatboardBanner(globalColors: self.dynamicType.globalColors, darkMode: false, solidColorMode: self.solidColorMode())
-    }
+//    override func createBanner() -> ExtraView? {
+//        return CatboardBanner(globalColors: self.dynamicType.globalColors, darkMode: false, solidColorMode: self.solidColorMode())
+//    }
     
     func takeScreenshotDelay() {
-        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("takeScreenshot"), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(Catboard.takeScreenshot), userInfo: nil, repeats: false)
     }
     
     func takeScreenshot() {

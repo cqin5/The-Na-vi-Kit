@@ -234,11 +234,11 @@ class KeyboardViewController: UIInputViewController {
     override func loadView() {
         super.loadView()
         
-        if let aBanner = self.createBanner() {
-            aBanner.hidden = true
-            self.view.insertSubview(aBanner, belowSubview: self.forwardingView)
-            self.bannerView = aBanner
-        }
+//        if let aBanner = self.createBanner() {
+//            aBanner.hidden = true
+//            self.view.insertSubview(aBanner, belowSubview: self.forwardingView)
+//            self.bannerView = aBanner
+//        }
     }
     
     override func viewWillAppear(animated: Bool) {
