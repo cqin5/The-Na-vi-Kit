@@ -33,6 +33,16 @@ class KeyboardKey: UIControl {
     var text: String {
         didSet {
             self.label.text = text
+            switch self.label.text! {
+            case "Ts", "Tx", "Kx", "Px", "Ng":
+                let firstLetter = NSMutableAttributedStringMake(string: String(self.label.text!.characters.prefix(1)), font: self.label.font.fontWithSize(20), colour: self.label.textColor)
+                let secondLetter = NSAttributedStringMake(string: String(self.label.text!.characters.dropFirst()), font: self.label.font.fontWithSize(18), colour: self.label.textColor)
+                firstLetter.appendAttributedString(secondLetter)
+                self.label.attributedText = firstLetter
+            default:
+                break
+            }
+            
             self.label.frame = CGRectMake(self.labelInset, self.labelInset, self.bounds.width - self.labelInset * 2, self.bounds.height - self.labelInset * 2)
             self.redrawText()
         }
@@ -156,7 +166,7 @@ class KeyboardKey: UIControl {
         self.addSubview(self.background)
         self.background.addSubview(self.label)
         
-        let setupViews: Void = {
+        let _: Void = {
             self.displayView.opaque = false
             self.underView?.opaque = false
             self.borderView?.opaque = false
@@ -175,6 +185,7 @@ class KeyboardKey: UIControl {
             self.label.minimumScaleFactor = CGFloat(0.1)
             self.label.userInteractionEnabled = false
             self.label.numberOfLines = 1
+            
         }()
     }
     

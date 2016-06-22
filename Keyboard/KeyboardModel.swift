@@ -146,8 +146,8 @@ class Key: Hashable {
     }
     
     func setLetter(letter: String) {
-        self.lowercaseOutput = (letter as NSString).lowercaseString
-        self.uppercaseOutput = (letter as NSString).uppercaseString
+        self.lowercaseOutput = letter.lowercaseString
+        self.uppercaseOutput = letter.stringWithCapitalizedFirstLetter
         self.lowercaseKeyCap = self.lowercaseOutput
         self.uppercaseKeyCap = self.uppercaseOutput
     }
