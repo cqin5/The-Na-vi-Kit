@@ -10,19 +10,31 @@ import UIKit
 
 class NDDefinitionViewController: UIViewController {
 
-    var dictionaryEntry : NDDictionaryEntry!
+    @IBOutlet var naviLabel : UILabel!
+    @IBOutlet var categoryLabel : UILabel!
+    @IBOutlet var definitionView : UITextView!
+    
+    var entry : NDDictionaryEntry!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        loadEntry()
+    }
+    
+    func loadEntry() {
+        naviLabel.text = entry.navi
+        categoryLabel.text = entry.category
+        definitionView.text = entry.english
+    }
+    
+    @IBAction func backButtonTapped(sender:AnyObject?) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.popViewControllerAnimated(true)
+    }
 
     /*
     // MARK: - Navigation

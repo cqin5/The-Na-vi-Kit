@@ -19,6 +19,13 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         loadDictionaryFile()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if searchBar.text?.characters.count > 0 {
+            self.searchText(searchBar.text!)
+        }
+    }
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -32,6 +39,13 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
         let cell = tableView.dequeueReusableCellWithIdentifier("MainDictionaryCell", forIndexPath: indexPath) as! NDDictionaryMainTableViewCell
         cell.loadData(dictionaryItems[indexPath.row])
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
+        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewControllerWithIdentifier("NDDefinitionViewController") as! NDDefinitionViewController
+        definitionViewController.entry = dictionaryItems[indexPath.row]
+        self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
     func loadDictionaryFile() {

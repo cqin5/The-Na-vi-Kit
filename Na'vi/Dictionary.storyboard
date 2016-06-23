@@ -15,11 +15,11 @@
                         <viewControllerLayoutGuide type="bottom" id="quC-gE-Akt"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gyC-oD-4E7">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" placeholder="Look up" translatesAutoresizingMaskIntoConstraints="NO" id="6ah-g4-Ied">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="qyA-M4-HG9"/>
                                 </constraints>
@@ -28,8 +28,8 @@
                                     <outlet property="delegate" destination="eb5-g9-aSJ" id="XRr-qv-AKJ"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jFO-Ln-0O2">
-                                <rect key="frame" x="0.0" y="108" width="600" height="492"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jFO-Ln-0O2">
+                                <rect key="frame" x="0.0" y="44" width="600" height="492"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MainDictionaryCell" rowHeight="90" id="kyo-0Q-MVX" customClass="NDDictionaryMainTableViewCell" customModule="Na_vi" customModuleProvider="target">
@@ -80,7 +80,6 @@
                                         <connections>
                                             <outlet property="englishLabel" destination="fnN-DF-6S1" id="nqI-Ij-obj"/>
                                             <outlet property="naviLabel" destination="mry-eW-YvN" id="8Nn-63-Tbw"/>
-                                            <segue destination="KvF-Zq-u3X" kind="show" id="6IF-JT-Vgb"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -120,7 +119,7 @@
         <!--Definition-->
         <scene sceneID="ksW-Ao-BxK">
             <objects>
-                <viewController id="KvF-Zq-u3X" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NDDefinitionViewController" id="KvF-Zq-u3X" customClass="NDDefinitionViewController" customModule="Na_vi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8Lf-CK-9sv"/>
                         <viewControllerLayoutGuide type="bottom" id="Bcn-ZC-dXi"/>
@@ -129,8 +128,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="toruk" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwe-fL-RbX">
-                                <rect key="frame" x="20" y="84" width="560" height="34"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="toruk" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwe-fL-RbX">
+                                <rect key="frame" x="20" y="20" width="560" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="fDM-uo-n9N"/>
                                 </constraints>
@@ -138,15 +137,15 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMr-mI-H9n">
-                                <rect key="frame" x="16" y="147" width="564" height="413"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMr-mI-H9n">
+                                <rect key="frame" x="16" y="83" width="564" height="413"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="noun" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e3y-OM-k0a">
-                                <rect key="frame" x="20" y="118" width="560" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="noun" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e3y-OM-k0a">
+                                <rect key="frame" x="20" y="54" width="560" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="Wx9-ci-8Pi"/>
                                 </constraints>
@@ -170,8 +169,17 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Definition" id="IsP-3q-V3u">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="UEq-nB-MYt"/>
+                        <barButtonItem key="leftBarButtonItem" title="&lt;" id="UEq-nB-MYt">
+                            <connections>
+                                <action selector="backButtonTapped:" destination="KvF-Zq-u3X" id="6WC-49-mkz"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="categoryLabel" destination="e3y-OM-k0a" id="HYj-lD-C7u"/>
+                        <outlet property="definitionView" destination="PMr-mI-H9n" id="xhH-1s-tbJ"/>
+                        <outlet property="naviLabel" destination="Vwe-fL-RbX" id="50L-rW-Lt1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZBb-F7-QDh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -181,7 +189,7 @@
         <scene sceneID="bLL-l5-Fh8">
             <objects>
                 <navigationController id="J88-PW-P0M" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="TgL-ba-1ok">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="TgL-ba-1ok">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
