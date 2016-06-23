@@ -45,10 +45,11 @@
 		A6CB923B1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
 		A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6CB923C1D1B64960030D414 /* Dictionary.storyboard */; };
 		A6CB923F1D1B66C50030D414 /* DictionaryMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB923E1D1B66C50030D414 /* DictionaryMainViewController.swift */; };
-		A6CB92411D1B66DF0030D414 /* DictionaryMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92401D1B66DF0030D414 /* DictionaryMainTableViewCell.swift */; };
-		A6CB92461D1B6AEA0030D414 /* DictionaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* DictionaryItem.swift */; };
+		A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */; };
+		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
 		A6CB92471D1B71070030D414 /* DictionaryFile.json in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92431D1B67880030D414 /* DictionaryFile.json */; };
 		A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92481D1BFFBB0030D414 /* StringScore.swift */; };
+		A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,10 +131,11 @@
 		A6CB92331D1B358E0030D414 /* CQUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CQUIHelper.swift; sourceTree = "<group>"; };
 		A6CB923C1D1B64960030D414 /* Dictionary.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dictionary.storyboard; sourceTree = "<group>"; };
 		A6CB923E1D1B66C50030D414 /* DictionaryMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMainViewController.swift; sourceTree = "<group>"; };
-		A6CB92401D1B66DF0030D414 /* DictionaryMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMainTableViewCell.swift; sourceTree = "<group>"; };
+		A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryMainTableViewCell.swift; sourceTree = "<group>"; };
 		A6CB92431D1B67880030D414 /* DictionaryFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DictionaryFile.json; sourceTree = "<group>"; };
-		A6CB92451D1B6AEA0030D414 /* DictionaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryItem.swift; sourceTree = "<group>"; };
+		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB92481D1BFFBB0030D414 /* StringScore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringScore.swift; sourceTree = "<group>"; };
+		A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDefinitionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,8 +286,9 @@
 			children = (
 				A6CB923C1D1B64960030D414 /* Dictionary.storyboard */,
 				A6CB923E1D1B66C50030D414 /* DictionaryMainViewController.swift */,
-				A6CB92451D1B6AEA0030D414 /* DictionaryItem.swift */,
-				A6CB92401D1B66DF0030D414 /* DictionaryMainTableViewCell.swift */,
+				A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */,
+				A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */,
+				A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */,
 				A6CB92431D1B67880030D414 /* DictionaryFile.json */,
 			);
 			name = "Na'vi Dictionary";
@@ -489,6 +492,7 @@
 			files = (
 				A6CB92341D1B358E0030D414 /* CQMPHelper.swift in Sources */,
 				A6CB92381D1B358E0030D414 /* CQStdHelper.swift in Sources */,
+				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
 				A6AE8AF91D1AD43E00345E2E /* ViewController.swift in Sources */,
 				A6CB923F1D1B66C50030D414 /* DictionaryMainViewController.swift in Sources */,
 				A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */,
@@ -496,8 +500,8 @@
 				A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */,
 				A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */,
-				A6CB92461D1B6AEA0030D414 /* DictionaryItem.swift in Sources */,
-				A6CB92411D1B66DF0030D414 /* DictionaryMainTableViewCell.swift in Sources */,
+				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
+				A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

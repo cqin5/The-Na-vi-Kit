@@ -13,7 +13,7 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet var tableView : UITableView!
     @IBOutlet var searchBar : UISearchBar!
     
-    var dictionaryItems : [DictionaryItem] = [DictionaryItem]()
+    var dictionaryItems : [NDDictionaryEntry] = [NDDictionaryEntry]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MainDictionaryCell", forIndexPath: indexPath) as! DictionaryMainTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("MainDictionaryCell", forIndexPath: indexPath) as! NDDictionaryMainTableViewCell
         cell.loadData(dictionaryItems[indexPath.row])
         return cell
     }
@@ -45,7 +45,7 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
                     let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     
                     for jsonItem in jsonResult["dict"]!.allObjects {
-                        dictionaryItems.append(DictionaryItem.createItem((jsonItem as! NSDictionary)))
+                        dictionaryItems.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
                     }
                     
                     self.tableView.reloadData()

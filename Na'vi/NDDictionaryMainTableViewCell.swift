@@ -1,5 +1,5 @@
 //
-//  DictionaryMainTableViewCell.swift
+//  NDDictionaryMainTableViewCell.swift
 //  Na'vi
 //
 //  Created by Chuhan Qin on 2016-06-22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DictionaryMainTableViewCell: UITableViewCell {
+class NDDictionaryMainTableViewCell: UITableViewCell {
 
     @IBOutlet var naviLabel : UILabel!
     @IBOutlet var englishLabel : UILabel!
@@ -22,7 +22,7 @@ class DictionaryMainTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func loadData(dictionaryItem:DictionaryItem) {
+    func loadData(dictionaryItem:NDDictionaryEntry) {
         
         let firstLine = NSMutableAttributedStringMake(string: dictionaryItem.navi, font:naviFont, colour: naviColour)
         let firstLineSecondPart = NSMutableAttributedStringMake(string: " | " + dictionaryItem.category, font:categoryFont, colour: categoryColour)
