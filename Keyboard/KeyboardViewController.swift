@@ -242,7 +242,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
-        self.bannerView?.hidden = false
+        self.bannerView?.hidden = true
         self.keyboardHeight = self.heightForOrientation(self.interfaceOrientation, withTopBanner: true)
     }
     
@@ -613,7 +613,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func updateKeyCaps(uppercase: Bool) {
-        let characterUppercase = (NSUserDefaults.standardUserDefaults().boolForKey(kSmallLowercase) ? uppercase : true)
+        let characterUppercase = (NSUserDefaults.standardUserDefaults().boolForKey(kSmallLowercase) ? !uppercase : uppercase)
         self.layout?.updateKeyCaps(false, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
     }
     

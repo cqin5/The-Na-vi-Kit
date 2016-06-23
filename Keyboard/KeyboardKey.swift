@@ -39,6 +39,8 @@ class KeyboardKey: UIControl {
                 let secondLetter = NSAttributedStringMake(string: String(self.label.text!.characters.dropFirst()), font: self.label.font.fontWithSize(18), colour: self.label.textColor)
                 firstLetter.appendAttributedString(secondLetter)
                 self.label.attributedText = firstLetter
+            case "ts", "tx", "kx", "px", "ng":
+                self.label.font = self.label.font.fontWithSize(21)
             default:
                 break
             }
