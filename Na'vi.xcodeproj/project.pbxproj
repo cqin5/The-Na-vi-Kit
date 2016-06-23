@@ -97,7 +97,7 @@
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A6AE8AFB1D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Na_vi.xcdatamodel; sourceTree = "<group>"; };
-		A6AE8B001D1AD43E00345E2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A6AE8B001D1AD43E00345E2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Na'vi/Assets.xcassets"; sourceTree = "<group>"; };
 		A6AE8B031D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A6AE8B051D1AD43E00345E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6AE8B0A1D1AD43E00345E2E /* Na'viTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Na'viTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -173,9 +173,10 @@
 		A6AE8AEA1D1AD43E00345E2E = {
 			isa = PBXGroup;
 			children = (
-				A6AE8AF51D1AD43E00345E2E /* Na'vi */,
+				A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */,
 				A6CB92421D1B66E60030D414 /* Na'vi Dictionary */,
 				A6CB92021D1B32050030D414 /* Na'vi Keyboard */,
+				A6CB924E1D1C6E420030D414 /* Shared Resources */,
 				A6AE8B0D1D1AD43E00345E2E /* Na'viTests */,
 				A6AE8B181D1AD43E00345E2E /* Na'viUITests */,
 				A6AE8AF41D1AD43E00345E2E /* Products */,
@@ -193,18 +194,16 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A6AE8AF51D1AD43E00345E2E /* Na'vi */ = {
+		A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */ = {
 			isa = PBXGroup;
 			children = (
 				A6CB92481D1BFFBB0030D414 /* StringScore.swift */,
 				A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */,
 				A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */,
 				A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */,
-				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
-				A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */,
 				A6AE8B051D1AD43E00345E2E /* Info.plist */,
-				A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */,
 			);
+			name = "Na'vi Main App";
 			path = "Na'vi";
 			sourceTree = "<group>";
 		};
@@ -293,6 +292,16 @@
 			);
 			name = "Na'vi Dictionary";
 			path = "Na'vi";
+			sourceTree = "<group>";
+		};
+		A6CB924E1D1C6E420030D414 /* Shared Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
+				A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */,
+				A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */,
+			);
+			name = "Shared Resources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -556,6 +565,7 @@
 				A6AE8B031D1AD43E00345E2E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = "Na'vi";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -803,7 +813,8 @@
 				A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */,
 			);
 			currentVersion = A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */;
-			path = Na_vi.xcdatamodeld;
+			name = Na_vi.xcdatamodeld;
+			path = "Na'vi/Na_vi.xcdatamodeld";
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
