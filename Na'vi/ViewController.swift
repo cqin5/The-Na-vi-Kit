@@ -27,6 +27,10 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func dismissViewController(){
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 
     @IBAction func sendEmailButtonTapped(sender: AnyObject) {
         let mailComposeViewController = configuredMailComposeViewController()
