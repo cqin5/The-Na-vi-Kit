@@ -50,13 +50,13 @@ func defaultKeyboard() -> Keyboard {
 //    defaultKeyboard.addKey(settings, row: 3, page: 0)
     
     let space = Key(.Space)
-    space.uppercaseKeyCap = " "
+    space.uppercaseKeyCap = "mo"
     space.uppercaseOutput = " "
     space.lowercaseOutput = " "
     defaultKeyboard.addKey(space, row: 3, page: 0)
     
     let returnKey = Key(.Return)
-    returnKey.uppercaseKeyCap = "return"
+    returnKey.uppercaseKeyCap = "tätxaw"
     returnKey.uppercaseOutput = "\n"
     returnKey.lowercaseOutput = "\n"
     defaultKeyboard.addKey(returnKey, row: 3, page: 0)
