@@ -36,6 +36,7 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func loadDictionaryFile() {
+        dictionaryItems.removeAll()
         if let path = NSBundle.mainBundle().URLForResource("DictionaryFile", withExtension: "json") {
             
             if let jsonData = NSData(contentsOfURL:path) {
