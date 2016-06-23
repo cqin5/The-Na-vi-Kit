@@ -31,16 +31,16 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
 
     func updateSectionTitles() {
-        sectionTitles = defaultClassifiedDictionary.map{String($0.first!.navi.lowercaseString.characters.first!)}
+        sectionTitles = dictionaryItems.map{String($0.first!.navi.lowercaseString.characters.first!)}
     }
     
     // *** Table View Data ***
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return defaultClassifiedDictionary.count
+        return dictionaryItems.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return defaultClassifiedDictionary[section].count
+        return dictionaryItems[section].count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -56,8 +56,10 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionTitles[section]
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView : NDDictionarySectionTableViewCell = tableView.dequeueReusableCellWithIdentifier("NDDictionarySectionTableViewCell") as! NDDictionarySectionTableViewCell
+        headerView.updateSectionTitle(sectionTitles[section])
+        return headerView
     }
     
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
@@ -66,6 +68,11 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     func loadDefaultDictionary() {
         self.dictionaryItems = defaultClassifiedDictionary
+    }
+    
+    func updateDictionaryData() {
+        updateSectionTitles()
+        self.tableView.reloadData()
     }
     
     
@@ -95,16 +102,19 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     func searchText(searchText:String) {
         self.loadDefaultDictionary()
-//        let filteredDictionary = self.dictionaryItems.filter { (dictionaryItem) -> Bool in
-//            return dictionaryItems[indexPath.section][indexPath.row].navi.uppercaseString.contains(searchText.uppercaseString)
-//                || dictionaryItems[indexPath.section][indexPath.row].category.uppercaseString.contains(searchText.uppercaseString)
-//                || dictionaryItems[indexPath.section][indexPath.row].english.uppercaseString.contains(searchText.uppercaseString)
-//        }
-//        dictionaryItems = filteredDictionary
-//        if searchText.characters.count == 0 {
-//            self.loadDefaultDictionary()
-//        }
-//        self.tableView.reloadData()
+
+        for (i,_) in self.dictionaryItems.enumerate() {
+            self.dictionaryItems[i] = self.dictionaryItems[i].filter { (dictionaryItem) -> Bool in
+                return dictionaryItem.navi.uppercaseString.contains(searchText.uppercaseString)
+                    || dictionaryItem.english.uppercaseString.contains(searchText.uppercaseString)
+            }
+        }
+        self.dictionaryItems = self.dictionaryItems.filter{$0.count > 0}
+        
+        if searchText.characters.count == 0 {
+            self.loadDefaultDictionary()
+        }
+        updateDictionaryData()
     }
 
 }

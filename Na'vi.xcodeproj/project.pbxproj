@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A614202A1D1AD5DC001C0FBD /* Na'vi Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na'vi Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */; };
 		A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */; };
 		A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */; };
 		A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */; };
@@ -93,6 +94,7 @@
 
 /* Begin PBXFileReference section */
 		A61420231D1AD5DC001C0FBD /* Na'vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na'vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
 		A6AE8AF31D1AD43E00345E2E /* Na'vi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Na'vi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -172,6 +174,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A65A932D1D1CAA3F0058FB19 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */,
+				A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 		A6AE8AEA1D1AD43E00345E2E = {
 			isa = PBXGroup;
 			children = (
@@ -283,8 +294,8 @@
 			children = (
 				A6CB923C1D1B64960030D414 /* Dictionary.storyboard */,
 				A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */,
-				A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */,
 				A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */,
+				A65A932D1D1CAA3F0058FB19 /* Cell */,
 				A6CB92511D1C92DB0030D414 /* Models */,
 			);
 			name = "Na'vi Dictionary";
@@ -511,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6CB92341D1B358E0030D414 /* CQMPHelper.swift in Sources */,
+				A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */,
 				A6CB92381D1B358E0030D414 /* CQStdHelper.swift in Sources */,
 				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
 				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
