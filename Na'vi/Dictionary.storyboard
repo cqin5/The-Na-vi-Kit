@@ -171,14 +171,14 @@
                     <navigationItem key="navigationItem" title="Definition" id="IsP-3q-V3u">
                         <barButtonItem key="leftBarButtonItem" title="&lt;" id="UEq-nB-MYt">
                             <connections>
-                                <action selector="backButtonTapped:" destination="KvF-Zq-u3X" id="6WC-49-mkz"/>
+                                <action selector="backButtonTapped:" destination="KvF-Zq-u3X" id="s8v-kc-MFj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="categoryLabel" destination="e3y-OM-k0a" id="HYj-lD-C7u"/>
-                        <outlet property="definitionView" destination="PMr-mI-H9n" id="xhH-1s-tbJ"/>
-                        <outlet property="naviLabel" destination="Vwe-fL-RbX" id="50L-rW-Lt1"/>
+                        <outlet property="categoryLabel" destination="e3y-OM-k0a" id="LS8-7H-6mA"/>
+                        <outlet property="definitionView" destination="PMr-mI-H9n" id="vUE-4v-fXN"/>
+                        <outlet property="naviLabel" destination="Vwe-fL-RbX" id="QMl-oJ-kyB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZBb-F7-QDh" userLabel="First Responder" sceneMemberID="firstResponder"/>

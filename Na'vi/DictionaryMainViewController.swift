@@ -13,11 +13,13 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet var tableView : UITableView!
     @IBOutlet var searchBar : UISearchBar!
     
+    var defaultDictionaryEntries : [NDDictionaryEntry] = [NDDictionaryEntry]()
     var dictionaryItems : [NDDictionaryEntry] = [NDDictionaryEntry]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadDictionaryFile()
+        dictionaryItems = defaultDictionaryEntries
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -27,6 +29,8 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
 
+    
+    // *** Table View Data ***
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -48,6 +52,8 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
         self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
+    
+    // *** Na'vi Dictionary Data ***
     func loadDictionaryFile() {
         dictionaryItems.removeAll()
         if let path = NSBundle.mainBundle().URLForResource("DictionaryFile", withExtension: "json") {
@@ -59,7 +65,7 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
                     let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     
                     for jsonItem in jsonResult["dict"]!.allObjects {
-                        dictionaryItems.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
+                        defaultDictionaryEntries.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
                     }
                     
                     self.tableView.reloadData()
@@ -73,13 +79,19 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
     
+    func loadDefaultDictionary() {
+        self.dictionaryItems = defaultDictionaryEntries
+    }
+    
+    
+    // *** Search Bar Actions ****
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchText(searchText)
     }
     
     func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
         if searchBar.text?.characters.count > 0 {
-            self.loadDictionaryFile()
+            self.loadDefaultDictionary()
         }
         return true
     }
@@ -87,7 +99,7 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         self.searchBar.endEditing(true)
         if searchBar.text!.characters.count == 0 {
-            self.loadDictionaryFile()
+            self.loadDefaultDictionary()
         }
     }
     
@@ -97,17 +109,17 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func searchText(searchText:String) {
-        self.loadDictionaryFile()
+        self.loadDefaultDictionary()
         let filteredDictionary = self.dictionaryItems.filter { (dictionaryItem) -> Bool in
             return dictionaryItem.navi.uppercaseString.contains(searchText.uppercaseString)
                 || dictionaryItem.category.uppercaseString.contains(searchText.uppercaseString)
                 || dictionaryItem.english.uppercaseString.contains(searchText.uppercaseString)
         }
         dictionaryItems = filteredDictionary
-        self.tableView.reloadData()
         if searchText.characters.count == 0 {
-            self.loadDictionaryFile()
+            self.loadDefaultDictionary()
         }
+        self.tableView.reloadData()
     }
 
 }
