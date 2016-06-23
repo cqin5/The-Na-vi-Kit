@@ -13,13 +13,14 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     @IBOutlet var tableView : UITableView!
     @IBOutlet var searchBar : UISearchBar!
     
-    var defaultDictionaryEntries : [NDDictionaryEntry] = NDDictionary().defaultDictionary
     var defaultClassifiedDictionary : [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
     var dictionaryItems : [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
+    var sectionTitles : [String] = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dictionaryItems = defaultClassifiedDictionary
+        updateSectionTitles()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -29,6 +30,9 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         }
     }
 
+    func updateSectionTitles() {
+        sectionTitles = defaultClassifiedDictionary.map{String($0.first!.navi.lowercaseString.characters.first!)}
+    }
     
     // *** Table View Data ***
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -52,8 +56,12 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sectionTitles[section]
+    }
+    
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
-        return defaultClassifiedDictionary.map{String($0.first!.navi.characters.first!)}
+        return sectionTitles
     }
     
     func loadDefaultDictionary() {

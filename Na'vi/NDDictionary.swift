@@ -31,8 +31,6 @@ class NDDictionary: NSObject {
                 defaultDictionary.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
             }
             
-            defaultDictionary.sortInPlace{$0.navi < $1.navi}
-            
         } catch let error as NSError {
             print(error)
         }
