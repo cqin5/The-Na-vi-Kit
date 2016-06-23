@@ -31,7 +31,6 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MainDictionaryCell", forIndexPath: indexPath) as! DictionaryMainTableViewCell
         cell.loadData(dictionaryItems[indexPath.row])
-        print(dictionaryItems[indexPath.row].navi)
         return cell
     }
     
