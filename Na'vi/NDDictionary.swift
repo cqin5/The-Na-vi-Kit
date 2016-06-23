@@ -31,12 +31,15 @@ class NDDictionary: NSObject {
                 defaultDictionary.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
             }
             
+            defaultDictionary.sortInPlace{$0.navi < $1.navi}
+            
         } catch let error as NSError {
             print(error)
         }
     }
     
     func classifyDictionary() {
+        defaultClassifiedDictionary.removeAll()
         var currentFirstLetter : Character = Character(" ")
         for dictionaryEntry in defaultDictionary {
             if !dictionaryEntry.navi.uppercaseString.characters.contains(currentFirstLetter) { // if the current first letter has been scanned before, skip
