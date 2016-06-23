@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		A614202A1D1AD5DC001C0FBD /* Na'vi Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na'vi Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */; };
-		A6AE8AF91D1AD43E00345E2E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* ViewController.swift */; };
+		A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */; };
 		A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */; };
 		A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */; };
 		A6AE8B011D1AD43E00345E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B001D1AD43E00345E2E /* Assets.xcassets */; };
@@ -94,7 +94,7 @@
 		A61420231D1AD5DC001C0FBD /* Na'vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na'vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF31D1AD43E00345E2E /* Na'vi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Na'vi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A6AE8AF81D1AD43E00345E2E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A6AE8AFB1D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Na_vi.xcdatamodel; sourceTree = "<group>"; };
 		A6AE8B001D1AD43E00345E2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 			children = (
 				A6CB92481D1BFFBB0030D414 /* StringScore.swift */,
 				A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */,
-				A6AE8AF81D1AD43E00345E2E /* ViewController.swift */,
+				A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */,
 				A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */,
 				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
 				A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */,
@@ -493,7 +493,7 @@
 				A6CB92341D1B358E0030D414 /* CQMPHelper.swift in Sources */,
 				A6CB92381D1B358E0030D414 /* CQStdHelper.swift in Sources */,
 				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
-				A6AE8AF91D1AD43E00345E2E /* ViewController.swift in Sources */,
+				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
 				A6CB923F1D1B66C50030D414 /* DictionaryMainViewController.swift in Sources */,
 				A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */,
 				A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */,

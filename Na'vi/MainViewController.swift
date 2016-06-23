@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  Na'vi
 //
 //  Created by Chuhan Qin on 2016-06-22.
@@ -9,23 +9,18 @@
 import UIKit
 import MessageUI
 
-class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
+class MainViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
-    @IBOutlet var tf : UITextField!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-//        tf.becomeFirstResponder()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func dismissViewController(){
@@ -45,6 +40,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         return .LightContent
     }
     
+    
+    // *** Send Email ***
     func configuredMailComposeViewController() -> MFMailComposeViewController {
         let mailComposerVC = MFMailComposeViewController()
         mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
