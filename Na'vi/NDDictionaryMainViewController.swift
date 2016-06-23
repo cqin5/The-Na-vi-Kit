@@ -1,5 +1,5 @@
 //
-//  DictionaryMainViewController.swift
+//  NDDictionaryMainViewController.swift
 //  Na'vi
 //
 //  Created by Chuhan Qin on 2016-06-22.
@@ -8,18 +8,18 @@
 
 import UIKit
 
-class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
     @IBOutlet var tableView : UITableView!
     @IBOutlet var searchBar : UISearchBar!
     
-    var defaultDictionaryEntries : [NDDictionaryEntry] = [NDDictionaryEntry]()
-    var dictionaryItems : [NDDictionaryEntry] = [NDDictionaryEntry]()
+    var defaultDictionaryEntries : [NDDictionaryEntry] = NDDictionary().defaultDictionary
+    var defaultClassifiedDictionary : [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
+    var dictionaryItems : [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadDictionaryFile()
-        dictionaryItems = defaultDictionaryEntries
+        dictionaryItems = defaultClassifiedDictionary
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -32,55 +32,32 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     
     // *** Table View Data ***
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return defaultClassifiedDictionary.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dictionaryItems.count
+        return defaultClassifiedDictionary[section].count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MainDictionaryCell", forIndexPath: indexPath) as! NDDictionaryMainTableViewCell
-        cell.loadData(dictionaryItems[indexPath.row])
+        cell.loadData(dictionaryItems[indexPath.section][indexPath.row])
         return cell
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
         let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewControllerWithIdentifier("NDDefinitionViewController") as! NDDefinitionViewController
-        definitionViewController.entry = dictionaryItems[indexPath.row]
+        definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
         self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
-    
-    // *** Na'vi Dictionary Data ***
-    func loadDictionaryFile() {
-        dictionaryItems.removeAll()
-        if let path = NSBundle.mainBundle().URLForResource("DictionaryFile", withExtension: "json") {
-            
-            if let jsonData = NSData(contentsOfURL:path) {
-                
-                do {
-                    
-                    let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(jsonData, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-                    
-                    for jsonItem in jsonResult["dict"]!.allObjects {
-                        defaultDictionaryEntries.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
-                    }
-                    
-                    self.tableView.reloadData()
-                    
-                } catch let error as NSError {
-                    print(error)
-                }
-                
-                
-            }
-        }
+    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        return defaultClassifiedDictionary.map{String($0.first!.navi.characters.first!)}
     }
     
     func loadDefaultDictionary() {
-        self.dictionaryItems = defaultDictionaryEntries
+        self.dictionaryItems = defaultClassifiedDictionary
     }
     
     
@@ -110,16 +87,16 @@ class DictionaryMainViewController: UIViewController, UITableViewDelegate, UITab
     
     func searchText(searchText:String) {
         self.loadDefaultDictionary()
-        let filteredDictionary = self.dictionaryItems.filter { (dictionaryItem) -> Bool in
-            return dictionaryItem.navi.uppercaseString.contains(searchText.uppercaseString)
-                || dictionaryItem.category.uppercaseString.contains(searchText.uppercaseString)
-                || dictionaryItem.english.uppercaseString.contains(searchText.uppercaseString)
-        }
-        dictionaryItems = filteredDictionary
-        if searchText.characters.count == 0 {
-            self.loadDefaultDictionary()
-        }
-        self.tableView.reloadData()
+//        let filteredDictionary = self.dictionaryItems.filter { (dictionaryItem) -> Bool in
+//            return dictionaryItems[indexPath.section][indexPath.row].navi.uppercaseString.contains(searchText.uppercaseString)
+//                || dictionaryItems[indexPath.section][indexPath.row].category.uppercaseString.contains(searchText.uppercaseString)
+//                || dictionaryItems[indexPath.section][indexPath.row].english.uppercaseString.contains(searchText.uppercaseString)
+//        }
+//        dictionaryItems = filteredDictionary
+//        if searchText.characters.count == 0 {
+//            self.loadDefaultDictionary()
+//        }
+//        self.tableView.reloadData()
     }
 
 }

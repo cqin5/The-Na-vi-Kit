@@ -9,7 +9,7 @@
         <!--Na'vi-English-->
         <scene sceneID="Vhr-bs-Yh9">
             <objects>
-                <viewController storyboardIdentifier="DictionaryMainViewController" id="eb5-g9-aSJ" customClass="DictionaryMainViewController" customModule="Na_vi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DictionaryMainViewController" id="eb5-g9-aSJ" customClass="NDDictionaryMainViewController" customModule="Na_vi" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="h9a-rf-6Op"/>
                         <viewControllerLayoutGuide type="bottom" id="quC-gE-Akt"/>

@@ -44,12 +44,13 @@
 		A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
 		A6CB923B1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
 		A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6CB923C1D1B64960030D414 /* Dictionary.storyboard */; };
-		A6CB923F1D1B66C50030D414 /* DictionaryMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB923E1D1B66C50030D414 /* DictionaryMainViewController.swift */; };
+		A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */; };
 		A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */; };
 		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
 		A6CB92471D1B71070030D414 /* DictionaryFile.json in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92431D1B67880030D414 /* DictionaryFile.json */; };
 		A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92481D1BFFBB0030D414 /* StringScore.swift */; };
 		A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */; };
+		A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924F1D1C92D60030D414 /* NDDictionary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,17 +126,18 @@
 		A6CB92141D1B32050030D414 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		A6CB92161D1B32050030D414 /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
 		A6CB92171D1B32050030D414 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		A6CB92301D1B358E0030D414 /* CQMPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CQMPHelper.swift; sourceTree = "<group>"; };
-		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CQNSHelper.swift; sourceTree = "<group>"; };
-		A6CB92321D1B358E0030D414 /* CQStdHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CQStdHelper.swift; sourceTree = "<group>"; };
-		A6CB92331D1B358E0030D414 /* CQUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CQUIHelper.swift; sourceTree = "<group>"; };
+		A6CB92301D1B358E0030D414 /* CQMPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQMPHelper.swift; path = Keyboard/CQMPHelper.swift; sourceTree = "<group>"; };
+		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQNSHelper.swift; path = Keyboard/CQNSHelper.swift; sourceTree = "<group>"; };
+		A6CB92321D1B358E0030D414 /* CQStdHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQStdHelper.swift; path = Keyboard/CQStdHelper.swift; sourceTree = "<group>"; };
+		A6CB92331D1B358E0030D414 /* CQUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQUIHelper.swift; path = Keyboard/CQUIHelper.swift; sourceTree = "<group>"; };
 		A6CB923C1D1B64960030D414 /* Dictionary.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dictionary.storyboard; sourceTree = "<group>"; };
-		A6CB923E1D1B66C50030D414 /* DictionaryMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMainViewController.swift; sourceTree = "<group>"; };
+		A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryMainViewController.swift; sourceTree = "<group>"; };
 		A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryMainTableViewCell.swift; sourceTree = "<group>"; };
 		A6CB92431D1B67880030D414 /* DictionaryFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DictionaryFile.json; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB92481D1BFFBB0030D414 /* StringScore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringScore.swift; sourceTree = "<group>"; };
 		A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDefinitionViewController.swift; sourceTree = "<group>"; };
+		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,10 +237,6 @@
 				A6CB920C1D1B32050030D414 /* Info.plist */,
 				A6CB92141D1B32050030D414 /* Media.xcassets */,
 				A6CB92171D1B32050030D414 /* Utilities.swift */,
-				A6CB92301D1B358E0030D414 /* CQMPHelper.swift */,
-				A6CB92311D1B358E0030D414 /* CQNSHelper.swift */,
-				A6CB92321D1B358E0030D414 /* CQStdHelper.swift */,
-				A6CB92331D1B358E0030D414 /* CQUIHelper.swift */,
 			);
 			name = "Na'vi Keyboard";
 			path = Keyboard;
@@ -284,11 +282,10 @@
 			isa = PBXGroup;
 			children = (
 				A6CB923C1D1B64960030D414 /* Dictionary.storyboard */,
-				A6CB923E1D1B66C50030D414 /* DictionaryMainViewController.swift */,
-				A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */,
+				A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */,
 				A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */,
 				A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */,
-				A6CB92431D1B67880030D414 /* DictionaryFile.json */,
+				A6CB92511D1C92DB0030D414 /* Models */,
 			);
 			name = "Na'vi Dictionary";
 			path = "Na'vi";
@@ -297,11 +294,25 @@
 		A6CB924E1D1C6E420030D414 /* Shared Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A6CB92301D1B358E0030D414 /* CQMPHelper.swift */,
+				A6CB92311D1B358E0030D414 /* CQNSHelper.swift */,
+				A6CB92321D1B358E0030D414 /* CQStdHelper.swift */,
+				A6CB92331D1B358E0030D414 /* CQUIHelper.swift */,
 				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
 				A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */,
 				A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */,
 			);
 			name = "Shared Resources";
+			sourceTree = "<group>";
+		};
+		A6CB92511D1C92DB0030D414 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A6CB924F1D1C92D60030D414 /* NDDictionary.swift */,
+				A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */,
+				A6CB92431D1B67880030D414 /* DictionaryFile.json */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -503,7 +514,7 @@
 				A6CB92381D1B358E0030D414 /* CQStdHelper.swift in Sources */,
 				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
 				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
-				A6CB923F1D1B66C50030D414 /* DictionaryMainViewController.swift in Sources */,
+				A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */,
 				A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */,
 				A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */,
 				A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */,
@@ -511,6 +522,7 @@
 				A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */,
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
 				A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */,
+				A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
