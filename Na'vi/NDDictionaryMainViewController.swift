@@ -20,7 +20,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
         dictionaryItems = defaultClassifiedDictionary
-        updateSectionTitles()
+        sectionTitles = NDDictionary.sectionIndices(withDictionary: dictionaryItems)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -29,9 +29,19 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
             self.searchText(searchBar.text!)
         }
     }
-
+    
+    // *** Dictionary Data ***
     func updateSectionTitles() {
-        sectionTitles = dictionaryItems.map{String($0.first!.navi.lowercaseString.characters.first!)}
+        sectionTitles = NDDictionary.sectionIndices(withDictionary: dictionaryItems)
+    }
+    
+    func loadDefaultDictionary() {
+        self.dictionaryItems = defaultClassifiedDictionary
+    }
+    
+    func updateDictionaryData() {
+        updateSectionTitles()
+        self.tableView.reloadData()
     }
     
     // *** Table View Data ***
@@ -65,16 +75,6 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
         return sectionTitles
     }
-    
-    func loadDefaultDictionary() {
-        self.dictionaryItems = defaultClassifiedDictionary
-    }
-    
-    func updateDictionaryData() {
-        updateSectionTitles()
-        self.tableView.reloadData()
-    }
-    
     
     // *** Search Bar Actions ****
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {

@@ -10,13 +10,15 @@ import UIKit
 
 class NDDictionary: NSObject {
     
-    var defaultDictionary : [NDDictionaryEntry] = [NDDictionaryEntry]()
-    var defaultClassifiedDictionary : [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
+    var defaultDictionary: [NDDictionaryEntry] = [NDDictionaryEntry]()
+    var defaultClassifiedDictionary: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
+    var defaultSectionIndices: [String] = [String]()
     
     override init(){
         super.init()
         loadDictionaryFile()
-        classifyDictionary()
+        classifyDictionaryV2()
+        defaultSectionIndices = NDDictionary.sectionIndices(withDictionary: defaultClassifiedDictionary)
     }
 
     // *** Na'vi Dictionary Data ***
@@ -54,5 +56,29 @@ class NDDictionary: NSObject {
         }
     }
     
-
+    func classifyDictionaryV2() {
+        defaultClassifiedDictionary.removeAll()
+        var firstLettersScanned : [Character] = [Character]()
+        
+        for dictionaryEntry in defaultDictionary {
+            let currentFirstLetter : Character = dictionaryEntry.navi.uppercaseString.characters.first!
+            if !firstLettersScanned.contains(currentFirstLetter) {
+                firstLettersScanned.append(currentFirstLetter)
+                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercaseString.characters.first! == currentFirstLetter }
+                defaultClassifiedDictionary.append(entry)
+            }
+        }
+        defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
+        defaultClassifiedDictionary.sortInPlace{$0.first!.navi < $1.first!.navi}
+        
+        for (i,_) in defaultClassifiedDictionary.enumerate() {
+            defaultClassifiedDictionary[i].sortInPlace{$0.navi < $1.navi}
+        }
+    }
+    
+    class func sectionIndices(withDictionary entries:[[NDDictionaryEntry]]) -> [String] {
+        let indices: [String] = entries.map{String($0.first!.navi.lowercaseString.characters.first!)}
+        return indices
+    }
+    
 }
