@@ -49,10 +49,10 @@ class NDDictionary: NSObject {
             }
         }
         defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sortInPlace{$0.first!.navi < $1.first!.navi}
+        defaultClassifiedDictionary.sortInPlace{$0.first!.navi.uppercaseString < $1.first!.navi.uppercaseString}
         
         for (i,_) in defaultClassifiedDictionary.enumerate() {
-            defaultClassifiedDictionary[i].sortInPlace{$0.navi < $1.navi}
+            defaultClassifiedDictionary[i].sortInPlace{$0.navi.uppercaseString < $1.navi.uppercaseString}
         }
     }
     
@@ -69,10 +69,10 @@ class NDDictionary: NSObject {
             }
         }
         defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sortInPlace{$0.first!.navi < $1.first!.navi}
+        defaultClassifiedDictionary.sortInPlace{$0.first!.navi.uppercaseString < $1.first!.navi.uppercaseString}
         
         for (i,_) in defaultClassifiedDictionary.enumerate() {
-            defaultClassifiedDictionary[i].sortInPlace{$0.navi < $1.navi}
+            defaultClassifiedDictionary[i].sortInPlace{$0.navi.uppercaseString < $1.navi.uppercaseString}
         }
     }
     
