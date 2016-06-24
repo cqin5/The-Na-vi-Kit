@@ -14,6 +14,13 @@ class NDDefinitionViewController: UIViewController {
     @IBOutlet var categoryLabel : UILabel!
     @IBOutlet var definitionView : UITextView!
     
+    let naviFont : UIFont = UIFont.systemFontOfSize(18)
+    let IPAFont : UIFont = UIFont.systemFontOfSize(16)
+    let definitionFont : UIFont = UIFont.systemFontOfSize(16)
+    let naviColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
+    let IPAColour : UIColor = UIColor(white: 0.5, alpha: 1.0)
+    let definitionColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
+    
     var entry : NDDictionaryEntry!
     
     override func viewDidLoad() {
@@ -26,9 +33,14 @@ class NDDefinitionViewController: UIViewController {
     }
     
     func loadEntry() {
-        naviLabel.text = entry.navi
+        let firstLine = NSMutableAttributedStringMake(string: entry.navi, font:naviFont, colour: naviColour)
+        let firstLineSecondPart = NSMutableAttributedStringMake(string: "\t|" + entry.IPA + "| " , font:IPAFont, colour: IPAColour)
+        firstLine.appendAttributedString(firstLineSecondPart)
+        
+        naviLabel.attributedText = firstLine
         categoryLabel.text = entry.category
-        definitionView.text = entry.english
+        
+        definitionView.attributedText = NSAttributedStringMake(string: entry.english, font: definitionFont, colour: definitionColour)
     }
     
     @IBAction func backButtonTapped(sender:AnyObject?) {

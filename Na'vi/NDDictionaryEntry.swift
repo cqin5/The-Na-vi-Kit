@@ -13,6 +13,7 @@ class NDDictionaryEntry: NSObject {
     var navi:String = ""
     var category:String = ""
     var english:String = ""
+    var IPA:String = ""
     
     class func createEntry(itemDictionary:NSDictionary) -> NDDictionaryEntry {
         let entry = NDDictionaryEntry()
@@ -20,7 +21,7 @@ class NDDictionaryEntry: NSObject {
         entry.navi = itemDictionary["Na'vi"] as! String
         entry.category = itemDictionary["Category"] as! String
         entry.english = itemDictionary["English"] as! String
-        
+        entry.IPA = itemDictionary["IPA"] as! String
         return entry
     }
 
