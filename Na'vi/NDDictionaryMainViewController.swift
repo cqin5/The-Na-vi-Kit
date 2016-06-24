@@ -10,17 +10,19 @@ import UIKit
 
 class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
-    @IBOutlet var tableView : UITableView!
-    @IBOutlet var searchBar : UISearchBar!
+    @IBOutlet var tableView: UITableView!
+    @IBOutlet var searchBar: UISearchBar!
     
-    var defaultClassifiedDictionary : [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
-    var dictionaryItems : [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
-    var sectionTitles : [String] = [String]()
+    var defaultClassifiedDictionary: [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
+    var dictionaryItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
+    var sectionTitles: [String] = [String]()
+    var categories: [String] = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         dictionaryItems = defaultClassifiedDictionary
-        sectionTitles = NDDictionary.sectionIndices(withDictionary: dictionaryItems)
+        sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
+        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -31,17 +33,18 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     // *** Dictionary Data ***
-    func updateSectionTitles() {
-        sectionTitles = NDDictionary.sectionIndices(withDictionary: dictionaryItems)
-    }
-    
     func loadDefaultDictionary() {
         self.dictionaryItems = defaultClassifiedDictionary
     }
     
     func updateDictionaryData() {
-        updateSectionTitles()
+        sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
+        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
+        
         self.tableView.reloadData()
+        if self.tableView.numberOfSections != 0 {
+            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        }
     }
     
     // *** Table View Data ***

@@ -18,7 +18,7 @@ class NDDictionary: NSObject {
         super.init()
         loadDictionaryFile()
         classifyDictionaryV2()
-        defaultSectionIndices = NDDictionary.sectionIndices(withDictionary: defaultClassifiedDictionary)
+        defaultSectionIndices = NDDictionary.sectionIndices(ofDictionary: defaultClassifiedDictionary)
     }
 
     // *** Na'vi Dictionary Data ***
@@ -76,9 +76,15 @@ class NDDictionary: NSObject {
         }
     }
     
-    class func sectionIndices(withDictionary entries:[[NDDictionaryEntry]]) -> [String] {
+    class func sectionIndices(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
         let indices: [String] = entries.map{String($0.first!.navi.lowercaseString.characters.first!)}
+        
+        
         return indices
+    }
+    
+    class func categories(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
+        return NSSet(array: entries.map{$0.first!.category.lowercaseString}).allObjects as! [String]
     }
     
 }
