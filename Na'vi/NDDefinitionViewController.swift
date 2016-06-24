@@ -34,7 +34,7 @@ class NDDefinitionViewController: UIViewController {
     
     func loadEntry() {
         let firstLine = NSMutableAttributedStringMake(string: entry.navi, font:naviFont, colour: naviColour)
-        let firstLineSecondPart = NSMutableAttributedStringMake(string: "\t|" + entry.IPA + "| " , font:IPAFont, colour: IPAColour)
+        let firstLineSecondPart = NSMutableAttributedStringMake(string: " \t|" + entry.IPA + "| " , font:IPAFont, colour: IPAColour)
         firstLine.appendAttributedString(firstLineSecondPart)
         
         naviLabel.attributedText = firstLine
