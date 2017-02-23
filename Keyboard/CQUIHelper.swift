@@ -33,8 +33,8 @@ class CQHelper {
     
     
     /* Sizes */
-    static var screenWidth = UIScreen.mainScreen().bounds.width
-    static var screenHeight = UIScreen.mainScreen().bounds.height
+    static var screenWidth = UIScreen.main.bounds.width
+    static var screenHeight = UIScreen.main.bounds.height
     
     static var baseSpacing = CGFloat(10.0)
     static var edgeSpacing = baseSpacing * 2
@@ -48,14 +48,14 @@ class CQHelper {
         return view.frame.origin.y + view.frame.height
     }
     
-    class func centerYCoordinateOffsetBy(points points:CGFloat, fromView view:UIView) -> CGPoint {
+    class func centerYCoordinateOffsetBy(points:CGFloat, fromView view:UIView) -> CGPoint {
         return CGPoint(x: view.center.x, y: view.center.y + points)
     }
     
-    class func loadImageInBackground(imageURL imageURL:String, inView view:UIImageView) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
-            let image = UIImage(data: NSData(contentsOfURL: NSURL(string: imageURL)!)!)
-            dispatch_async(dispatch_get_main_queue(), {
+    class func loadImageInBackground(imageURL:String, inView view:UIImageView) {
+        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async(execute: {
+            let image = UIImage(data: try! Data(contentsOf: URL(string: imageURL)!))
+            DispatchQueue.main.async(execute: {
                 view.image = image
             })
         })
@@ -70,14 +70,14 @@ class CQHelper {
         let filter = CIFilter(name: "CIGaussianBlur")
         filter!.setValue(inputImage, forKey: kCIInputImageKey)
         filter!.setValue(radius, forKey: "inputRadius")
-        let result:CIImage = filter!.valueForKey(kCIOutputImageKey) as! CIImage
+        let result:CIImage = filter!.value(forKey: kCIOutputImageKey) as! CIImage
         
-        let cgImage = context.createCGImage(result, fromRect: inputImage!.extent)
+        let cgImage = context.createCGImage(result, from: inputImage!.extent)
         
-        return UIImage(CGImage: cgImage)
+        return UIImage(cgImage: cgImage!)
     }
     
-    class func get(image:UIImage, forView view:UIView, withGradientColoursTopColour topColour:UIColor, andBottomColour bottomColour:UIColor) -> UIImageView {
+    class func get(_ image:UIImage, forView view:UIView, withGradientColoursTopColour topColour:UIColor, andBottomColour bottomColour:UIColor) -> UIImageView {
         let viewToBeReturned = UIImageView(frame: view.frame)
         let backgroundImageView = UIImageView(image: image)
         backgroundImageView.frame = view.frame
@@ -91,9 +91,9 @@ class CQHelper {
 
 extension UIButton {
     
-    func changeToHalfHeightCornerRadiusButtonWith(borderColour borderColour:UIColor) {
+    func changeToHalfHeightCornerRadiusButtonWith(borderColour:UIColor) {
         self.layer.cornerRadius = self.frame.height/2
-        self.layer.borderColor = borderColour.CGColor
+        self.layer.borderColor = borderColour.cgColor
         self.layer.borderWidth = 0.6
         self.layer.opacity = 0.7
 
@@ -103,12 +103,12 @@ extension UIButton {
 
 extension UIView {
     
-    func getGradient(topColour:UIColor, bottomColour:UIColor) -> UIView {
+    func getGradient(_ topColour:UIColor, bottomColour:UIColor) -> UIView {
         let gradient = CAGradientLayer()
         let gradientView = UIView()
         
         gradient.frame = self.frame
-        gradient.colors = [topColour.CGColor, bottomColour.CGColor]
+        gradient.colors = [topColour.cgColor, bottomColour.cgColor]
         gradientView.frame = self.frame
         gradientView.layer.insertSublayer(gradient, above: gradientView.layer)
         
@@ -116,17 +116,17 @@ extension UIView {
     }
     
     func showActivityIndicator(){
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
-        activityIndicator.frame = CGRectMake(0, 0, 140, 140)
-        if self.isKindOfClass(UITableView) {
-            activityIndicator.frame = CGRectMake(0, (self as! UITableView).contentOffset.y, self.frame.width, self.frame.height)
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 140, height: 140)
+        if self.isKind(of: UITableView.self) {
+            activityIndicator.frame = CGRect(x: 0, y: (self as! UITableView).contentOffset.y, width: self.frame.width, height: self.frame.height)
         } else {
             activityIndicator.center = self.center
         }
         activityIndicator.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
         activityIndicator.layer.cornerRadius = 20
         activityIndicator.startAnimating()
-        self.userInteractionEnabled = false
+        self.isUserInteractionEnabled = false
         self.addSubview(activityIndicator)
 //        println(self.frame)
 //        println(container.frame)
@@ -135,23 +135,23 @@ extension UIView {
     
     func hideActivityIndicator() {
         for subview in self.subviews {
-            if subview.isKindOfClass(UIActivityIndicatorView) {
+            if subview.isKind(of: UIActivityIndicatorView.self) {
                 (subview as! UIActivityIndicatorView).stopAnimating()
-                (subview as! UIActivityIndicatorView).hidden = true
+                (subview as! UIActivityIndicatorView).isHidden = true
                 (subview as! UIActivityIndicatorView).removeFromSuperview()
             }
         }
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
     }
     
-    func addBackgroundImage(image:UIImage, withBlurRadius radius:CGFloat, withGradientColoursTopColour topColour:UIColor, andBottomColour bottomColour:UIColor){
+    func addBackgroundImage(_ image:UIImage, withBlurRadius radius:CGFloat, withGradientColoursTopColour topColour:UIColor, andBottomColour bottomColour:UIColor){
         let backgroundImageView = UIImageView(image: CQHelper.blur(anImage: image, withRadius: radius))
         backgroundImageView.frame = self.frame
         self.addSubview(getGradient(topColour, bottomColour: bottomColour))
         self.addSubview(backgroundImageView)
     }
     
-    func addBackgroundImage(image:UIImage, withGradientColoursTopColour topColour:UIColor, andBottomColour bottomColour:UIColor){
+    func addBackgroundImage(_ image:UIImage, withGradientColoursTopColour topColour:UIColor, andBottomColour bottomColour:UIColor){
         let backgroundImageView = UIImageView(image: image)
         backgroundImageView.frame = self.frame
         self.addSubview(getGradient(topColour, bottomColour: bottomColour))
@@ -160,14 +160,14 @@ extension UIView {
 
     //UIView manipulation
     func showBorder() {
-        self.layer.borderColor = UIColor.redColor().CGColor
+        self.layer.borderColor = UIColor.red.cgColor
         self.layer.borderWidth = 1
         
     }
     
     //UIView manipulation
     func hideBorder() {
-            self.layer.borderColor = UIColor.clearColor().CGColor
+            self.layer.borderColor = UIColor.clear.cgColor
             self.layer.borderWidth = 0
     }
 
@@ -175,10 +175,10 @@ extension UIView {
 
 extension UIButton {
     
-    func set(backgroundColour backgroundColour:UIColor, cornerRadius:CGFloat, borderWidth:CGFloat, borderColour:UIColor){
+    func set(backgroundColour:UIColor, cornerRadius:CGFloat, borderWidth:CGFloat, borderColour:UIColor){
         self.backgroundColor = backgroundColor
         self.layer.cornerRadius = cornerRadius
-        self.layer.borderColor = borderColour.CGColor
+        self.layer.borderColor = borderColour.cgColor
         self.layer.borderWidth = borderWidth
     }
     
@@ -186,7 +186,7 @@ extension UIButton {
 
 extension UITextField {
     
-    func monitorTextLength(maxLength:Int) {
+    func monitorTextLength(_ maxLength:Int) {
         
         if self.text!.characters.count > maxLength {
             self.deleteBackward()
@@ -195,71 +195,71 @@ extension UITextField {
     }
     
     func setUpKeyboardForNumber() {
-        self.keyboardType = UIKeyboardType.NumberPad
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
+        self.keyboardType = UIKeyboardType.numberPad
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
     }
     
     func setUpKeyboardForUserame() {
-        self.keyboardType = UIKeyboardType.Default
-        self.autocapitalizationType = UITextAutocapitalizationType.None
-        self.autocorrectionType = UITextAutocorrectionType.No
+        self.keyboardType = UIKeyboardType.default
+        self.autocapitalizationType = UITextAutocapitalizationType.none
+        self.autocorrectionType = UITextAutocorrectionType.no
     }
     
     func setUpKeyboardForName() {
-        self.keyboardType = UIKeyboardType.Default
-        self.autocapitalizationType = UITextAutocapitalizationType.Words
-        self.autocorrectionType = UITextAutocorrectionType.Yes
+        self.keyboardType = UIKeyboardType.default
+        self.autocapitalizationType = UITextAutocapitalizationType.words
+        self.autocorrectionType = UITextAutocorrectionType.yes
     }
     
     func setUpKeyboardForPhone() {
-        self.keyboardType = UIKeyboardType.PhonePad
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
+        self.keyboardType = UIKeyboardType.phonePad
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
     }
     //TODO autoformat phone numbers
     
     func setUpKeyboardForAddress() {
-        self.keyboardType = UIKeyboardType.Default
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
-        self.autocapitalizationType = UITextAutocapitalizationType.Words
-        self.autocorrectionType = UITextAutocorrectionType.Yes
+        self.keyboardType = UIKeyboardType.default
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.autocapitalizationType = UITextAutocapitalizationType.words
+        self.autocorrectionType = UITextAutocorrectionType.yes
     }
     
     
     func setUpKeyboardForPostalCode() {
-        self.keyboardType = UIKeyboardType.Default
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
-        self.autocapitalizationType = UITextAutocapitalizationType.AllCharacters
-        self.autocorrectionType = UITextAutocorrectionType.No
+        self.keyboardType = UIKeyboardType.default
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.autocapitalizationType = UITextAutocapitalizationType.allCharacters
+        self.autocorrectionType = UITextAutocorrectionType.no
     }
     
     func setUpKeyboardForPIN() {
-        self.keyboardType = UIKeyboardType.NumberPad
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
+        self.keyboardType = UIKeyboardType.numberPad
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
     }
     
     
     //TODO autoformat postal code
     
     func setUpKeyboardForPassword() {
-        self.keyboardType = UIKeyboardType.Default
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
-        self.secureTextEntry = true
+        self.keyboardType = UIKeyboardType.default
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.isSecureTextEntry = true
     }
     
     func setUpKeyboardForEmail() {
-        self.keyboardType = UIKeyboardType.EmailAddress
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
-        self.autocapitalizationType = UITextAutocapitalizationType.None
-        self.autocorrectionType = UITextAutocorrectionType.No
+        self.keyboardType = UIKeyboardType.emailAddress
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.autocapitalizationType = UITextAutocapitalizationType.none
+        self.autocorrectionType = UITextAutocorrectionType.no
     }
     
     
     //TODO autoformat email
     
-    func setUpKeyboardForCreditCard(textField:UITextField) {
-        self.keyboardType = UIKeyboardType.NumberPad
-        self.clearButtonMode = UITextFieldViewMode.WhileEditing
-        self.autocapitalizationType = UITextAutocapitalizationType.None
+    func setUpKeyboardForCreditCard(_ textField:UITextField) {
+        self.keyboardType = UIKeyboardType.numberPad
+        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.autocapitalizationType = UITextAutocapitalizationType.none
     }
     
 
@@ -274,11 +274,11 @@ extension UIColor {
         var alpha: CGFloat = 1.0
         
         if hex.hasPrefix("#") {
-            let index   = hex.startIndex.advancedBy(1)
-            let hex     = hex.substringFromIndex(index)
-            let scanner = NSScanner(string: hex)
+            let index   = hex.characters.index(hex.startIndex, offsetBy: 1)
+            let hex     = hex.substring(from: index)
+            let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0
-            if scanner.scanHexLongLong(&hexValue) {
+            if scanner.scanHexInt64(&hexValue) {
                 switch (hex.characters.count) {
                 case 3:
                     red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
@@ -318,11 +318,11 @@ extension UIColor {
         var alpha: CGFloat = alpha
         
         if hex.hasPrefix("#") {
-            let index   = hex.startIndex.advancedBy(1)
-            let hex     = hex.substringFromIndex(index)
-            let scanner = NSScanner(string: hex)
+            let index   = hex.characters.index(hex.startIndex, offsetBy: 1)
+            let hex     = hex.substring(from: index)
+            let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0
-            if scanner.scanHexLongLong(&hexValue) {
+            if scanner.scanHexInt64(&hexValue) {
                 switch (hex.characters.count) {
                 case 3:
                     red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0

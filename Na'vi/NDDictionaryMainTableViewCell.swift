@@ -13,8 +13,8 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     @IBOutlet var naviLabel : UILabel!
     @IBOutlet var englishLabel : UILabel!
     
-    let naviFont : UIFont = UIFont.systemFontOfSize(18)
-    let categoryFont : UIFont = UIFont.systemFontOfSize(14)
+    let naviFont : UIFont = UIFont.systemFont(ofSize: 18)
+    let categoryFont : UIFont = UIFont.systemFont(ofSize: 14)
     let naviColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
     let categoryColour : UIColor = UIColor(white: 0.2, alpha: 1.0)
     
@@ -22,19 +22,19 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func loadData(dictionaryItem:NDDictionaryEntry) {
+    func loadData(_ dictionaryItem:NDDictionaryEntry) {
         
         let firstLine = NSMutableAttributedStringMake(string: dictionaryItem.navi, font:naviFont, colour: naviColour)
         let firstLineSecondPart = NSMutableAttributedStringMake(string: " | " + dictionaryItem.category, font:categoryFont, colour: categoryColour)
         
-        firstLine.appendAttributedString(firstLineSecondPart)
+        firstLine.append(firstLineSecondPart)
         
         naviLabel.attributedText = firstLine
         englishLabel.text = dictionaryItem.english
         
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state

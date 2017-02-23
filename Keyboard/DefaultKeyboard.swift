@@ -15,78 +15,78 @@ func defaultKeyboard() -> Keyboard {
 
     
     for key in lettersRow1 {
-        let keyModel = Key(.Character)
+        let keyModel = Key(.character)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 0, page: 0)
     }
     
     for key in lettersRow2 {
-        let keyModel = Key(.Character)
+        let keyModel = Key(.character)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 1, page: 0)
     }
     
-    let keyModel = Key(.Shift)
+    let keyModel = Key(.shift)
     defaultKeyboard.addKey(keyModel, row: 2, page: 0)
     
     for key in lettersRow3 {
-        let keyModel = Key(.Character)
+        let keyModel = Key(.character)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 2, page: 0)
     }
     
-    let backspace = Key(.Backspace)
+    let backspace = Key(.backspace)
     defaultKeyboard.addKey(backspace, row: 2, page: 0)
     
-    let keyModeChangeNumbers = Key(.ModeChange)
+    let keyModeChangeNumbers = Key(.modeChange)
     keyModeChangeNumbers.uppercaseKeyCap = "123"
     keyModeChangeNumbers.toMode = 1
     defaultKeyboard.addKey(keyModeChangeNumbers, row: 3, page: 0)
     
-    let keyboardChange = Key(.KeyboardChange)
+    let keyboardChange = Key(.keyboardChange)
     defaultKeyboard.addKey(keyboardChange, row: 3, page: 0)
     
 //    let settings = Key(.Settings)
 //    defaultKeyboard.addKey(settings, row: 3, page: 0)
     
-    let space = Key(.Space)
+    let space = Key(.space)
     space.uppercaseKeyCap = "mo"
     space.uppercaseOutput = " "
     space.lowercaseOutput = " "
     defaultKeyboard.addKey(space, row: 3, page: 0)
     
-    let returnKey = Key(.Return)
+    let returnKey = Key(.return)
     returnKey.uppercaseKeyCap = "tätxaw"
     returnKey.uppercaseOutput = "\n"
     returnKey.lowercaseOutput = "\n"
     defaultKeyboard.addKey(returnKey, row: 3, page: 0)
     
     for key in ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"] {
-        let keyModel = Key(.SpecialCharacter)
+        let keyModel = Key(.specialCharacter)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 0, page: 1)
     }
     
     for key in ["-", "/", ":", ";", "(", ")", "$", "&", "@", "\""] {
-        let keyModel = Key(.SpecialCharacter)
+        let keyModel = Key(.specialCharacter)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 1, page: 1)
     }
     
-    let keyModeChangeSpecialCharacters = Key(.ModeChange)
+    let keyModeChangeSpecialCharacters = Key(.modeChange)
     keyModeChangeSpecialCharacters.uppercaseKeyCap = "#+="
     keyModeChangeSpecialCharacters.toMode = 2
     defaultKeyboard.addKey(keyModeChangeSpecialCharacters, row: 2, page: 1)
     
     for key in [".", ",", "?", "!", "'"] {
-        let keyModel = Key(.SpecialCharacter)
+        let keyModel = Key(.specialCharacter)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 2, page: 1)
     }
     
     defaultKeyboard.addKey(Key(backspace), row: 2, page: 1)
     
-    let keyModeChangeLetters = Key(.ModeChange)
+    let keyModeChangeLetters = Key(.modeChange)
     keyModeChangeLetters.uppercaseKeyCap = "ABC"
     keyModeChangeLetters.toMode = 0
     defaultKeyboard.addKey(keyModeChangeLetters, row: 3, page: 1)
@@ -100,13 +100,13 @@ func defaultKeyboard() -> Keyboard {
     defaultKeyboard.addKey(Key(returnKey), row: 3, page: 1)
     
     for key in ["[", "]", "{", "}", "#", "%", "^", "*", "+", "="] {
-        let keyModel = Key(.SpecialCharacter)
+        let keyModel = Key(.specialCharacter)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 0, page: 2)
     }
     
     for key in ["_", "\\", "|", "~", "<", ">", "€", "£", "¥", "•"] {
-        let keyModel = Key(.SpecialCharacter)
+        let keyModel = Key(.specialCharacter)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 1, page: 2)
     }
@@ -114,7 +114,7 @@ func defaultKeyboard() -> Keyboard {
     defaultKeyboard.addKey(Key(keyModeChangeNumbers), row: 2, page: 2)
     
     for key in [".", ",", "?", "!", "'"] {
-        let keyModel = Key(.SpecialCharacter)
+        let keyModel = Key(.specialCharacter)
         keyModel.setLetter(key)
         defaultKeyboard.addKey(keyModel, row: 2, page: 2)
     }

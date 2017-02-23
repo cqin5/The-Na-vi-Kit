@@ -7,6 +7,30 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
@@ -25,7 +49,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         categories = NDDictionary.categories(ofDictionary: dictionaryItems)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if searchBar.text?.characters.count > 0 {
             self.searchText(searchBar.text!)
@@ -43,73 +67,73 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         
         self.tableView.reloadData()
         if self.tableView.numberOfSections != 0 {
-            self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true)
         }
     }
     
     // *** Table View Data ***
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return dictionaryItems.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dictionaryItems[section].count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MainDictionaryCell", forIndexPath: indexPath) as! NDDictionaryMainTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MainDictionaryCell", for: indexPath) as! NDDictionaryMainTableViewCell
         cell.loadData(dictionaryItems[indexPath.section][indexPath.row])
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
-        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewControllerWithIdentifier("NDDefinitionViewController") as! NDDefinitionViewController
+        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewController(withIdentifier: "NDDefinitionViewController") as! NDDefinitionViewController
         definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
         self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView : NDDictionarySectionTableViewCell = tableView.dequeueReusableCellWithIdentifier("NDDictionarySectionTableViewCell") as! NDDictionarySectionTableViewCell
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView : NDDictionarySectionTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NDDictionarySectionTableViewCell") as! NDDictionarySectionTableViewCell
         headerView.updateSectionTitle(sectionTitles[section])
         return headerView
     }
     
-    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return sectionTitles
     }
     
     // *** Search Bar Actions ****
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchText(searchText)
     }
     
-    func searchBarShouldEndEditing(searchBar: UISearchBar) -> Bool {
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
         if searchBar.text?.characters.count > 0 {
             self.loadDefaultDictionary()
         }
         return true
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.endEditing(true)
         if searchBar.text!.characters.count == 0 {
             self.loadDefaultDictionary()
         }
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         self.searchText(searchBar.text!)
         searchBar.endEditing(true)
     }
     
-    func searchText(searchText:String) {
+    func searchText(_ searchText:String) {
         self.loadDefaultDictionary()
 
-        for (i,_) in self.dictionaryItems.enumerate() {
+        for (i,_) in self.dictionaryItems.enumerated() {
             self.dictionaryItems[i] = self.dictionaryItems[i].filter { (dictionaryItem) -> Bool in
-                return dictionaryItem.navi.uppercaseString.contains(searchText.uppercaseString)
-                    || dictionaryItem.english.uppercaseString.contains(searchText.uppercaseString)
+                return dictionaryItem.navi.uppercased().contains(searchText.uppercased())
+                    || dictionaryItem.english.uppercased().contains(searchText.uppercased())
             }
         }
         self.dictionaryItems = self.dictionaryItems.filter{$0.count > 0}

@@ -49,7 +49,6 @@
 		A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */; };
 		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
 		A6CB92471D1B71070030D414 /* DictionaryFile.json in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92431D1B67880030D414 /* DictionaryFile.json */; };
-		A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92481D1BFFBB0030D414 /* StringScore.swift */; };
 		A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */; };
 		A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924F1D1C92D60030D414 /* NDDictionary.swift */; };
 /* End PBXBuildFile section */
@@ -137,7 +136,6 @@
 		A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryMainTableViewCell.swift; sourceTree = "<group>"; };
 		A6CB92431D1B67880030D414 /* DictionaryFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = DictionaryFile.json; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
-		A6CB92481D1BFFBB0030D414 /* StringScore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringScore.swift; sourceTree = "<group>"; };
 		A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDefinitionViewController.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -210,7 +208,6 @@
 		A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */ = {
 			isa = PBXGroup;
 			children = (
-				A6CB92481D1BFFBB0030D414 /* StringScore.swift */,
 				A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */,
 				A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */,
 				A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */,
@@ -414,17 +411,21 @@
 					A61420221D1AD5DC001C0FBD = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MJS6LB37T9;
+						LastSwiftMigration = 0820;
 					};
 					A6AE8AF21D1AD43E00345E2E = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MJS6LB37T9;
+						LastSwiftMigration = 0820;
 					};
 					A6AE8B091D1AD43E00345E2E = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0820;
 						TestTargetID = A6AE8AF21D1AD43E00345E2E;
 					};
 					A6AE8B141D1AD43E00345E2E = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0820;
 						TestTargetID = A6AE8AF21D1AD43E00345E2E;
 					};
 				};
@@ -527,7 +528,6 @@
 				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
 				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
 				A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */,
-				A6CB92491D1BFFBB0030D414 /* StringScore.swift in Sources */,
 				A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */,
 				A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */,
@@ -605,6 +605,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -618,6 +619,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -717,6 +719,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -731,6 +734,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -742,6 +746,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Na'vi.app/Na'vi";
 			};
 			name = Debug;
@@ -754,6 +759,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Na'vi.app/Na'vi";
 			};
 			name = Release;
@@ -765,6 +771,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = "Na'vi";
 			};
 			name = Debug;
@@ -776,6 +783,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = "Na'vi";
 			};
 			name = Release;

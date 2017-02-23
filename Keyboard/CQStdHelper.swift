@@ -8,8 +8,8 @@
 
 import Foundation
 
-func delay(bySeconds seconds:Double, block:dispatch_block_t) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+func delay(bySeconds seconds:Double, block:@escaping ()->()) {
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
         block()
     })
 }

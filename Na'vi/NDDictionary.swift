@@ -25,11 +25,11 @@ class NDDictionary: NSObject {
     func loadDictionaryFile() {
         defaultDictionary.removeAll()
         do {
-            let path = NSBundle.mainBundle().URLForResource("DictionaryFile", withExtension: "json")
-            let jsonData = NSData(contentsOfURL:path!)
-            let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(jsonData!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+            let path = Bundle.main.url(forResource: "DictionaryFile", withExtension: "json")
+            let jsonData = try? Data(contentsOf: path!)
+            let jsonResult: NSDictionary = try JSONSerialization.jsonObject(with: jsonData!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
             
-            for jsonItem in jsonResult["dict"]!.allObjects {
+            for jsonItem in (jsonResult["dict"]! as AnyObject).allObjects {
                 defaultDictionary.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
             }
             
@@ -42,17 +42,17 @@ class NDDictionary: NSObject {
         defaultClassifiedDictionary.removeAll()
         var currentFirstLetter : Character = Character(" ")
         for dictionaryEntry in defaultDictionary {
-            if !dictionaryEntry.navi.uppercaseString.characters.contains(currentFirstLetter) { // if the current first letter has been scanned before, skip
-                currentFirstLetter = dictionaryEntry.navi.uppercaseString.characters.first!
-                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercaseString.characters.first! == currentFirstLetter }
+            if !dictionaryEntry.navi.uppercased().characters.contains(currentFirstLetter) { // if the current first letter has been scanned before, skip
+                currentFirstLetter = dictionaryEntry.navi.uppercased().characters.first!
+                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().characters.first! == currentFirstLetter }
                 defaultClassifiedDictionary.append(entry)
             }
         }
         defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sortInPlace{$0.first!.navi.uppercaseString < $1.first!.navi.uppercaseString}
+        defaultClassifiedDictionary.sort{$0.first!.navi.uppercased() < $1.first!.navi.uppercased()}
         
-        for (i,_) in defaultClassifiedDictionary.enumerate() {
-            defaultClassifiedDictionary[i].sortInPlace{$0.navi.uppercaseString < $1.navi.uppercaseString}
+        for (i,_) in defaultClassifiedDictionary.enumerated() {
+            defaultClassifiedDictionary[i].sort{$0.navi.uppercased() < $1.navi.uppercased()}
         }
     }
     
@@ -61,30 +61,30 @@ class NDDictionary: NSObject {
         var firstLettersScanned : [Character] = [Character]()
         
         for dictionaryEntry in defaultDictionary {
-            let currentFirstLetter : Character = dictionaryEntry.navi.uppercaseString.characters.first!
+            let currentFirstLetter : Character = dictionaryEntry.navi.uppercased().characters.first!
             if !firstLettersScanned.contains(currentFirstLetter) {
                 firstLettersScanned.append(currentFirstLetter)
-                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercaseString.characters.first! == currentFirstLetter }
+                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().characters.first! == currentFirstLetter }
                 defaultClassifiedDictionary.append(entry)
             }
         }
         defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sortInPlace{$0.first!.navi.uppercaseString < $1.first!.navi.uppercaseString}
+        defaultClassifiedDictionary.sort{$0.first!.navi.uppercased() < $1.first!.navi.uppercased()}
         
-        for (i,_) in defaultClassifiedDictionary.enumerate() {
-            defaultClassifiedDictionary[i].sortInPlace{$0.navi.uppercaseString < $1.navi.uppercaseString}
+        for (i,_) in defaultClassifiedDictionary.enumerated() {
+            defaultClassifiedDictionary[i].sort{$0.navi.uppercased() < $1.navi.uppercased()}
         }
     }
     
     class func sectionIndices(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        let indices: [String] = entries.map{String($0.first!.navi.lowercaseString.characters.first!)}
+        let indices: [String] = entries.map{String($0.first!.navi.lowercased().characters.first!)}
         
         
         return indices
     }
     
     class func categories(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        return NSSet(array: entries.map{$0.first!.category.lowercaseString}).allObjects as! [String]
+        return NSSet(array: entries.map{$0.first!.category.lowercased()}).allObjects as! [String]
     }
     
 }

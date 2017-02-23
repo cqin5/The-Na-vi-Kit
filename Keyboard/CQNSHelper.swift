@@ -9,34 +9,34 @@
 import Foundation
 import UIKit
 
-func NSAttributedStringMake(string string:String, font:UIFont, colour:UIColor) -> NSAttributedString {
+func NSAttributedStringMake(string:String, font:UIFont, colour:UIColor) -> NSAttributedString {
     
     return NSAttributedString(string: string, attributes: [NSFontAttributeName : font, NSForegroundColorAttributeName : colour])
     
 }
 
-func NSMutableAttributedStringMake(string string:String, font:UIFont, colour:UIColor) -> NSMutableAttributedString {
+func NSMutableAttributedStringMake(string:String, font:UIFont, colour:UIColor) -> NSMutableAttributedString {
     
     return NSMutableAttributedString(string: string, attributes: [NSFontAttributeName : font, NSForegroundColorAttributeName : colour])
     
 }
 
-func randomStringWithLength(length length: Int) -> String {
+func randomStringWithLength(length: Int) -> String {
     
     let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     
     let randomString : NSMutableString = NSMutableString(capacity: length)
     
-    for (var i=0; i < length; i++){
+    for i in 0 ..< length {
         let length = UInt32 (letters.length)
         let rand = arc4random_uniform(length)
-        randomString.appendFormat("%C", letters.characterAtIndex(Int(rand)))
+        randomString.appendFormat("%C", letters.character(at: Int(rand)))
     }
     
     return randomString.stringValue
 }
 
-extension NSTimeInterval {
+extension TimeInterval {
     
     func toHHmmss() -> String {
         var minutes = 0
@@ -61,8 +61,8 @@ extension NSTimeInterval {
         return "\(minutes):\(secondsToReturn)"
     }
     
-    var timeIntervalRoundedToSeconds:NSTimeInterval {
-        return NSTimeInterval(Int(self/1))
+    var timeIntervalRoundedToSeconds:TimeInterval {
+        return TimeInterval(Int(self/1))
     }
 }
 
@@ -84,11 +84,11 @@ extension String {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         
-        return emailTest.evaluateWithObject(self)
+        return emailTest.evaluate(with: self)
     }
     
-    func contains(string:String) -> Bool {
-        return (self.rangeOfString(string) != nil)
+    func contains(_ string:String) -> Bool {
+        return (self.range(of: string) != nil)
     }
     
 //    var base64String:String {
@@ -97,7 +97,7 @@ extension String {
 //    }
     
     var stringWithCapitalizedFirstLetter: String {
-        let first = String(characters.prefix(1)).capitalizedString
+        let first = String(characters.prefix(1)).capitalized
         let other = String(characters.dropFirst())
         return first + other
     }

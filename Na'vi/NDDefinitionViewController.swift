@@ -14,9 +14,9 @@ class NDDefinitionViewController: UIViewController {
     @IBOutlet var categoryLabel : UILabel!
     @IBOutlet var definitionView : UITextView!
     
-    let naviFont : UIFont = UIFont.systemFontOfSize(18)
-    let IPAFont : UIFont = UIFont.systemFontOfSize(16)
-    let definitionFont : UIFont = UIFont.systemFontOfSize(16)
+    let naviFont : UIFont = UIFont.systemFont(ofSize: 18)
+    let IPAFont : UIFont = UIFont.systemFont(ofSize: 16)
+    let definitionFont : UIFont = UIFont.systemFont(ofSize: 16)
     let naviColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
     let IPAColour : UIColor = UIColor(white: 0.5, alpha: 1.0)
     let definitionColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
@@ -27,7 +27,7 @@ class NDDefinitionViewController: UIViewController {
         super.viewDidLoad()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadEntry()
     }
@@ -35,7 +35,7 @@ class NDDefinitionViewController: UIViewController {
     func loadEntry() {
         let firstLine = NSMutableAttributedStringMake(string: entry.navi, font:naviFont, colour: naviColour)
         let firstLineSecondPart = NSMutableAttributedStringMake(string: " \t|" + entry.IPA + "| " , font:IPAFont, colour: IPAColour)
-        firstLine.appendAttributedString(firstLineSecondPart)
+        firstLine.append(firstLineSecondPart)
         
         naviLabel.attributedText = firstLine
         categoryLabel.text = entry.category
@@ -43,9 +43,9 @@ class NDDefinitionViewController: UIViewController {
         definitionView.attributedText = NSAttributedStringMake(string: entry.english, font: definitionFont, colour: definitionColour)
     }
     
-    @IBAction func backButtonTapped(sender:AnyObject?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        self.navigationController?.popViewControllerAnimated(true)
+    @IBAction func backButtonTapped(_ sender:AnyObject?) {
+        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
 
     /*

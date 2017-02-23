@@ -13,12 +13,12 @@ extension MPVolumeView {
     var volumeSlider:UISlider {
         self.showsRouteButton = false
         self.showsVolumeSlider = false
-        self.hidden = true
+        self.isHidden = true
         var slider = UISlider()
         for subview in self.subviews {
-            if subview.isKindOfClass(UISlider){
+            if subview.isKind(of: UISlider.self){
                 slider = subview as! UISlider
-                slider.continuous = false
+                slider.isContinuous = false
                 (subview as! UISlider).value = AVAudioSession.sharedInstance().outputVolume
                 return slider
             }

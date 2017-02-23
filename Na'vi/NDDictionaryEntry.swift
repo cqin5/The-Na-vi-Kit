@@ -15,7 +15,7 @@ class NDDictionaryEntry: NSObject {
     var english:String = ""
     var IPA:String = ""
     
-    class func createEntry(itemDictionary:NSDictionary) -> NDDictionaryEntry {
+    class func createEntry(_ itemDictionary:NSDictionary) -> NDDictionaryEntry {
         let entry = NDDictionaryEntry()
         
         entry.navi = itemDictionary["Na'vi"] as! String
