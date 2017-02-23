@@ -9,9 +9,9 @@
 func defaultKeyboard() -> Keyboard {
     let defaultKeyboard = Keyboard()
     
-    let lettersRow1 = ["ä","w","e","r","t","tx","u","i","o","p"]
-    let lettersRow2 = ["a","s","px","f","'","h","ì","k","l"]
-    let lettersRow3 = ["ts","y","kx","v","ng","n","m"]
+    let lettersRow1 = ["kx","w","e","r","t","y","u","i","o","p"]
+    let lettersRow2 = ["a","s","tx","f","ng","'","h","ì","k","l"]
+    let lettersRow3 = ["z","ä","ts","v","px","n","m"]
 
     
     for key in lettersRow1 {

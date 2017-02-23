@@ -444,9 +444,9 @@
 			projectRoot = "";
 			targets = (
 				A6AE8AF21D1AD43E00345E2E /* Na'vi */,
+				A61420221D1AD5DC001C0FBD /* Na'vi Keyboard */,
 				A6AE8B091D1AD43E00345E2E /* Na'viTests */,
 				A6AE8B141D1AD43E00345E2E /* Na'viUITests */,
-				A61420221D1AD5DC001C0FBD /* Na'vi Keyboard */,
 			);
 		};
 /* End PBXProject section */
