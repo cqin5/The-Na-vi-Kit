@@ -109,7 +109,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        if searchBar.text?.characters.count > 0 {
+        if searchBar.text?.count > 0 {
             self.loadDefaultDictionary()
         }
         return true
@@ -117,7 +117,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.endEditing(true)
-        if searchBar.text!.characters.count == 0 {
+        if searchBar.text!.count == 0 {
             self.loadDefaultDictionary()
         }
     }
@@ -138,7 +138,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         }
         self.dictionaryItems = self.dictionaryItems.filter{$0.count > 0}
         
-        if searchText.characters.count == 0 {
+        if searchText.count == 0 {
             self.loadDefaultDictionary()
         }
         updateDictionaryData()

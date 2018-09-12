@@ -188,7 +188,7 @@ extension UITextField {
     
     func monitorTextLength(_ maxLength:Int) {
         
-        if self.text!.characters.count > maxLength {
+        if self.text!.count > maxLength {
             self.deleteBackward()
         }
         
@@ -279,7 +279,7 @@ extension UIColor {
             let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0
             if scanner.scanHexInt64(&hexValue) {
-                switch (hex.characters.count) {
+                switch (hex.count) {
                 case 3:
                     red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
                     green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
@@ -323,7 +323,7 @@ extension UIColor {
             let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0
             if scanner.scanHexInt64(&hexValue) {
-                switch (hex.characters.count) {
+                switch (hex.count) {
                 case 3:
                     red   = CGFloat((hexValue & 0xF00) >> 8)       / 15.0
                     green = CGFloat((hexValue & 0x0F0) >> 4)       / 15.0
