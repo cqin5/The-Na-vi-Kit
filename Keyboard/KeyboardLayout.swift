@@ -959,7 +959,8 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         var leftSideAreaWidth = frame.width * leftSideRatio
         let rightSideAreaWidth = frame.width * rightSideRatio
         var leftButtonWidth = (leftSideAreaWidth - (gapWidth * CGFloat(2 - 1))) / CGFloat(2)
-        leftButtonWidth = rounded(leftButtonWidth)
+        leftButtonWidth = keysBeforeSpace == 1 ? rounded(leftButtonWidth * 2 + 4) : rounded(leftButtonWidth)
+
         var rightButtonWidth = (rightSideAreaWidth - (gapWidth * CGFloat(keysAfterSpace - 1))) / CGFloat(keysAfterSpace)
         rightButtonWidth = rounded(rightButtonWidth)
         
@@ -969,6 +970,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         if hasButtonInMicButtonPosition {
             leftSideAreaWidth = leftSideAreaWidth + gapWidth + micButtonWidth
         }
+        
         
         var spaceWidth = frame.width - leftSideAreaWidth - rightSideAreaWidth - gapWidth * CGFloat(2)
         spaceWidth = rounded(spaceWidth)
