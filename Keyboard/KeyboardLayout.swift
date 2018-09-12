@@ -475,6 +475,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         }
         
         if model.type == Key.KeyType.shift {
+            print("🦁🦁🦁🦁")
             if key.shape == nil {
                 let shiftShape = self.getShape(ShiftShape.self)
                 key.shape = shiftShape
