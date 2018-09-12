@@ -51,7 +51,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if searchBar.text?.characters.count > 0 {
+        if searchBar.text?.count > 0 {
             self.searchText(searchBar.text!)
         }
     }

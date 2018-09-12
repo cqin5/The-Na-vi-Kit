@@ -11,13 +11,13 @@ import UIKit
 
 func NSAttributedStringMake(string:String, font:UIFont, colour:UIColor) -> NSAttributedString {
     
-    return NSAttributedString(string: string, attributes: [NSFontAttributeName : font, NSForegroundColorAttributeName : colour])
+    return NSAttributedString(string: string, attributes: [NSAttributedStringKey.font : font, NSAttributedStringKey.foregroundColor : colour])
     
 }
 
 func NSMutableAttributedStringMake(string:String, font:UIFont, colour:UIColor) -> NSMutableAttributedString {
     
-    return NSMutableAttributedString(string: string, attributes: [NSFontAttributeName : font, NSForegroundColorAttributeName : colour])
+    return NSMutableAttributedString(string: string, attributes: [NSAttributedStringKey.font : font, NSAttributedStringKey.foregroundColor : colour])
     
 }
 

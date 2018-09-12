@@ -100,11 +100,11 @@ class Catboard: KeyboardViewController {
 //        return CatboardBanner(globalColors: self.dynamicType.globalColors, darkMode: false, solidColorMode: self.solidColorMode())
 //    }
     
-    func takeScreenshotDelay() {
+    @objc func takeScreenshotDelay() {
         Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(Catboard.takeScreenshot), userInfo: nil, repeats: false)
     }
     
-    func takeScreenshot() {
+    @objc func takeScreenshot() {
         if !self.view.bounds.isEmpty {
             UIDevice.current.beginGeneratingDeviceOrientationNotifications()
             
