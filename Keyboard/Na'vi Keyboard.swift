@@ -135,7 +135,7 @@ func randomCat() -> String {
     let numCats = cats.count
     let randomCat = arc4random() % UInt32(numCats)
     
-    let index = cats.characters.index(cats.startIndex, offsetBy: Int(randomCat))
+    let index = cats.index(cats.startIndex, offsetBy: Int(randomCat))
     let character = cats[index]
     
     return String(character)

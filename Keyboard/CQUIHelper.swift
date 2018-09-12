@@ -53,12 +53,12 @@ class CQHelper {
     }
     
     class func loadImageInBackground(imageURL:String, inView view:UIImageView) {
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.high).async(execute: {
+        DispatchQueue.global(qos: .userInteractive).async {
             let image = UIImage(data: try! Data(contentsOf: URL(string: imageURL)!))
             DispatchQueue.main.async(execute: {
                 view.image = image
             })
-        })
+        }
     }
     
     
@@ -274,7 +274,7 @@ extension UIColor {
         var alpha: CGFloat = 1.0
         
         if hex.hasPrefix("#") {
-            let index   = hex.characters.index(hex.startIndex, offsetBy: 1)
+            let index   = hex.index(hex.startIndex, offsetBy: 1)
             let hex     = hex.substring(from: index)
             let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0
@@ -318,7 +318,7 @@ extension UIColor {
         var alpha: CGFloat = alpha
         
         if hex.hasPrefix("#") {
-            let index   = hex.characters.index(hex.startIndex, offsetBy: 1)
+            let index   = hex.index(hex.startIndex, offsetBy: 1)
             let hex     = hex.substring(from: index)
             let scanner = Scanner(string: hex)
             var hexValue: CUnsignedLongLong = 0

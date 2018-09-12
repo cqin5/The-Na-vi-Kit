@@ -395,7 +395,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func contextChanged() {
-        self.setCapsIfNeeded()
+        _ = self.setCapsIfNeeded()
         self.autoPeriodState = .noSpace
     }
     
@@ -457,7 +457,7 @@ class KeyboardViewController: UIInputViewController {
             // TODO: reset context
         }
         
-        self.setCapsIfNeeded()
+        _ = self.setCapsIfNeeded()
     }
     
     func handleAutoPeriod(_ key: Key) {
@@ -526,7 +526,7 @@ class KeyboardViewController: UIInputViewController {
         self.cancelBackspaceTimers()
         
         self.textDocumentProxy.deleteBackward()
-        self.setCapsIfNeeded()
+        _ = self.setCapsIfNeeded()
         
         // trigger for subsequent deletes
         self.backspaceDelayTimer = Timer.scheduledTimer(timeInterval: backspaceDelay - backspaceRepeat, target: self, selector: #selector(KeyboardViewController.backspaceDelayCallback), userInfo: nil, repeats: false)
@@ -545,7 +545,7 @@ class KeyboardViewController: UIInputViewController {
         self.playKeySound()
         
         self.textDocumentProxy.deleteBackward()
-        self.setCapsIfNeeded()
+        _ = self.setCapsIfNeeded()
     }
     
     @objc func shiftDown(_ sender: KeyboardKey) {
@@ -718,7 +718,7 @@ class KeyboardViewController: UIInputViewController {
     
     func stringIsWhitespace(_ string: String?) -> Bool {
         if string != nil {
-            for char in (string!).characters {
+            for char in string! {
                 if !characterIsWhitespace(char) {
                     return false
                 }
@@ -742,7 +742,7 @@ class KeyboardViewController: UIInputViewController {
                 return false
             case .words:
                 if let beforeContext = documentProxy.documentContextBeforeInput {
-                    let previousCharacter = beforeContext[beforeContext.characters.index(before: beforeContext.endIndex)]
+                    let previousCharacter = beforeContext[beforeContext.index(before: beforeContext.endIndex)]
                     return self.characterIsWhitespace(previousCharacter)
                 }
                 else {
@@ -796,9 +796,10 @@ class KeyboardViewController: UIInputViewController {
             return
         }
         
-        DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
+        DispatchQueue.global(qos: .userInteractive).async {
             AudioServicesPlaySystemSound(1104)
-        })
+        }
+                
     }
     
     //////////////////////////////////////

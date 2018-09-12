@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Alexei Baboulevitch ("Archagon"). All rights reserved.
 //
 
+import UIKit
+
 func defaultKeyboard() -> Keyboard {
     let defaultKeyboard = Keyboard()
     
@@ -44,7 +46,11 @@ func defaultKeyboard() -> Keyboard {
     defaultKeyboard.addKey(keyModeChangeNumbers, row: 3, page: 0)
     
     let keyboardChange = Key(.keyboardChange)
-    defaultKeyboard.addKey(keyboardChange, row: 3, page: 0)
+
+    if UIDevice.current.hasBottom == false {
+        defaultKeyboard.addKey(keyboardChange, row: 3, page: 0)
+    }
+    
     
 //    let settings = Key(.Settings)
 //    defaultKeyboard.addKey(settings, row: 3, page: 0)
@@ -91,7 +97,11 @@ func defaultKeyboard() -> Keyboard {
     keyModeChangeLetters.toMode = 0
     defaultKeyboard.addKey(keyModeChangeLetters, row: 3, page: 1)
     
-    defaultKeyboard.addKey(Key(keyboardChange), row: 3, page: 1)
+    
+    if UIDevice.current.hasBottom == false {
+        defaultKeyboard.addKey(Key(keyboardChange), row: 3, page: 1)
+    }
+
     
 //    defaultKeyboard.addKey(Key(settings), row: 3, page: 1)
     
@@ -123,7 +133,11 @@ func defaultKeyboard() -> Keyboard {
     
     defaultKeyboard.addKey(Key(keyModeChangeLetters), row: 3, page: 2)
     
-    defaultKeyboard.addKey(Key(keyboardChange), row: 3, page: 2)
+    
+    if UIDevice.current.hasBottom == false {
+        defaultKeyboard.addKey(Key(keyboardChange), row: 3, page: 2)
+    }
+
     
 //    defaultKeyboard.addKey(Key(settings), row: 3, page: 2)
     

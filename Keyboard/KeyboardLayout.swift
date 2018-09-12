@@ -362,7 +362,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
                     }
                 }
                 
-                foundCachedKeys.map {
+                _ = foundCachedKeys.map {
                     keyMap.removeValue(forKey: $0)
                 }
                 

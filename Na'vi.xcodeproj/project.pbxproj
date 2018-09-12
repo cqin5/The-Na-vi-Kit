@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A614202A1D1AD5DC001C0FBD /* Na'vi Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na'vi Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A61790992149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
+		A617909A2149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
 		A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */; };
 		A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */; };
 		A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */; };
@@ -93,6 +95,7 @@
 
 /* Begin PBXFileReference section */
 		A61420231D1AD5DC001C0FBD /* Na'vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na'vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A61790982149099200C7ECFE /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
 		A6AE8AF31D1AD43E00345E2E /* Na'vi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Na'vi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -302,6 +305,7 @@
 		A6CB924E1D1C6E420030D414 /* Shared Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A61790982149099200C7ECFE /* UIDevice.swift */,
 				A6CB92301D1B358E0030D414 /* CQMPHelper.swift */,
 				A6CB92311D1B358E0030D414 /* CQNSHelper.swift */,
 				A6CB92321D1B358E0030D414 /* CQStdHelper.swift */,
@@ -508,6 +512,7 @@
 				A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6CB92251D1B32050030D414 /* KeyboardKeyBackground.swift in Sources */,
 				A6CB921D1D1B32050030D414 /* DirectionEnum.swift in Sources */,
+				A617909A2149099200C7ECFE /* UIDevice.swift in Sources */,
 				A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */,
 				A6CB92391D1B358E0030D414 /* CQStdHelper.swift in Sources */,
 				A6CB92271D1B32050030D414 /* KeyboardModel.swift in Sources */,
@@ -535,6 +540,7 @@
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
 				A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */,
 				A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */,
+				A61790992149099200C7ECFE /* UIDevice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

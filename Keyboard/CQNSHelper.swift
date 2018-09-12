@@ -27,7 +27,7 @@ func randomStringWithLength(length: Int) -> String {
     
     let randomString : NSMutableString = NSMutableString(capacity: length)
     
-    for i in 0 ..< length {
+    for _ in 0 ..< length {
         let length = UInt32 (letters.length)
         let rand = arc4random_uniform(length)
         randomString.appendFormat("%C", letters.character(at: Int(rand)))
@@ -97,8 +97,8 @@ extension String {
 //    }
     
     var stringWithCapitalizedFirstLetter: String {
-        let first = String(characters.prefix(1)).capitalized
-        let other = String(characters.dropFirst())
+        let first = String(prefix(1)).capitalized
+        let other = String(dropFirst())
         return first + other
     }
 }

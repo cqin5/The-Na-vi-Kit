@@ -35,8 +35,8 @@ class KeyboardKey: UIControl {
             self.label.text = text
             switch self.label.text! {
             case "Ts", "Tx", "Kx", "Px", "Ng":
-                let firstLetter = NSMutableAttributedStringMake(string: String(self.label.text!.characters.prefix(1)), font: self.label.font.withSize(20), colour: self.label.textColor)
-                let secondLetter = NSAttributedStringMake(string: String(self.label.text!.characters.dropFirst()), font: self.label.font.withSize(18), colour: self.label.textColor)
+                let firstLetter = NSMutableAttributedStringMake(string: String(self.label.text!.prefix(1)), font: self.label.font.withSize(20), colour: self.label.textColor)
+                let secondLetter = NSAttributedStringMake(string: String(self.label.text!.dropFirst()), font: self.label.font.withSize(18), colour: self.label.textColor)
                 firstLetter.append(secondLetter)
                 self.label.attributedText = firstLetter
             case "ts", "tx", "kx", "px", "ng":
