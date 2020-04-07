@@ -31,7 +31,6 @@
 		A6CB921E1D1B32050030D414 /* ExtraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92091D1B32050030D414 /* ExtraView.swift */; };
 		A6CB921F1D1B32050030D414 /* ForwardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920A1D1B32050030D414 /* ForwardingView.swift */; };
 		A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920B1D1B32050030D414 /* ImageKey.swift */; };
-		A6CB92211D1B32050030D414 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6CB920C1D1B32050030D414 /* Info.plist */; };
 		A6CB92221D1B32050030D414 /* KeyboardConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920D1D1B32050030D414 /* KeyboardConnector.swift */; };
 		A6CB92231D1B32050030D414 /* KeyboardInputTraits.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920E1D1B32050030D414 /* KeyboardInputTraits.swift */; };
 		A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920F1D1B32050030D414 /* KeyboardKey.swift */; };
@@ -486,6 +485,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -510,7 +510,6 @@
 				A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */,
 				A617909D2149214D00C7ECFE /* GoogleService-Info.plist in Resources */,
 				A6CB92291D1B32050030D414 /* Media.xcassets in Resources */,
-				A6CB92211D1B32050030D414 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,8 +722,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -739,8 +739,9 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -843,8 +844,9 @@
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -861,8 +863,9 @@
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
