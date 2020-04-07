@@ -92,7 +92,7 @@
 		A61790982149099200C7ECFE /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		A617909B2149214C00C7ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
-		A6AE8AF31D1AD43E00345E2E /* Na-vi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Na-vi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A6AE8AFB1D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 		A6AE8AF41D1AD43E00345E2E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A6AE8AF31D1AD43E00345E2E /* Na-vi.app */,
+				A6AE8AF31D1AD43E00345E2E /* Eywa.app */,
 				A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */,
 			);
 			name = Products;
@@ -351,7 +351,7 @@
 			);
 			name = "Na-vi";
 			productName = "Na'vi";
-			productReference = A6AE8AF31D1AD43E00345E2E /* Na-vi.app */;
+			productReference = A6AE8AF31D1AD43E00345E2E /* Eywa.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -724,7 +724,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Eywa;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
 			};
@@ -743,7 +743,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Eywa;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
 			};
