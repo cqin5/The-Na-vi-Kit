@@ -21,8 +21,6 @@
 		A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */; };
 		A6AE8B011D1AD43E00345E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B001D1AD43E00345E2E /* Assets.xcassets */; };
 		A6AE8B041D1AD43E00345E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */; };
-		A6AE8B0F1D1AD43E00345E2E /* Na_viTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8B0E1D1AD43E00345E2E /* Na_viTests.swift */; };
-		A6AE8B1A1D1AD43E00345E2E /* Na_viUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8B191D1AD43E00345E2E /* Na_viUITests.swift */; };
 		A6CB92181D1B32050030D414 /* Na'vi Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92031D1B32050030D414 /* Na'vi Keyboard.swift */; };
 		A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */; };
 		A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92061D1B32050030D414 /* DefaultSettings.swift */; };
@@ -66,20 +64,6 @@
 			remoteGlobalIDString = A61420221D1AD5DC001C0FBD;
 			remoteInfo = "Na'vi Keyboard";
 		};
-		A6AE8B0B1D1AD43E00345E2E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A6AE8AEB1D1AD43E00345E2E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A6AE8AF21D1AD43E00345E2E;
-			remoteInfo = "Na'vi";
-		};
-		A6AE8B161D1AD43E00345E2E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A6AE8AEB1D1AD43E00345E2E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A6AE8AF21D1AD43E00345E2E;
-			remoteInfo = "Na'vi";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -116,12 +100,6 @@
 		A6AE8B001D1AD43E00345E2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Na'vi/Assets.xcassets"; sourceTree = "<group>"; };
 		A6AE8B031D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A6AE8B051D1AD43E00345E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A6AE8B0A1D1AD43E00345E2E /* Na-viTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Na-viTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A6AE8B0E1D1AD43E00345E2E /* Na_viTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Na_viTests.swift; sourceTree = "<group>"; };
-		A6AE8B101D1AD43E00345E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A6AE8B151D1AD43E00345E2E /* Na-viUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Na-viUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A6AE8B191D1AD43E00345E2E /* Na_viUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Na_viUITests.swift; sourceTree = "<group>"; };
-		A6AE8B1B1D1AD43E00345E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6CB92031D1B32050030D414 /* Na'vi Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Na'vi Keyboard.swift"; sourceTree = "<group>"; };
 		A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKeyboard.swift; sourceTree = "<group>"; };
 		A6CB92061D1B32050030D414 /* DefaultSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSettings.swift; sourceTree = "<group>"; };
@@ -174,20 +152,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A6AE8B071D1AD43E00345E2E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A6AE8B121D1AD43E00345E2E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -216,8 +180,6 @@
 				A6CB92421D1B66E60030D414 /* Na'vi Dictionary */,
 				A6CB92021D1B32050030D414 /* Na'vi Keyboard */,
 				A6CB924E1D1C6E420030D414 /* Shared Resources */,
-				A6AE8B0D1D1AD43E00345E2E /* Na'viTests */,
-				A6AE8B181D1AD43E00345E2E /* Na'viUITests */,
 				A6AE8AF41D1AD43E00345E2E /* Products */,
 				FC5AD84527B6CE13CF7CE16F /* Pods */,
 				4D6EEE16EA68B908F628BBD3 /* Frameworks */,
@@ -228,8 +190,6 @@
 			isa = PBXGroup;
 			children = (
 				A6AE8AF31D1AD43E00345E2E /* Na-vi.app */,
-				A6AE8B0A1D1AD43E00345E2E /* Na-viTests.xctest */,
-				A6AE8B151D1AD43E00345E2E /* Na-viUITests.xctest */,
 				A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */,
 			);
 			name = Products;
@@ -245,24 +205,6 @@
 			);
 			name = "Na'vi Main App";
 			path = "Na'vi";
-			sourceTree = "<group>";
-		};
-		A6AE8B0D1D1AD43E00345E2E /* Na'viTests */ = {
-			isa = PBXGroup;
-			children = (
-				A6AE8B0E1D1AD43E00345E2E /* Na_viTests.swift */,
-				A6AE8B101D1AD43E00345E2E /* Info.plist */,
-			);
-			path = "Na'viTests";
-			sourceTree = "<group>";
-		};
-		A6AE8B181D1AD43E00345E2E /* Na'viUITests */ = {
-			isa = PBXGroup;
-			children = (
-				A6AE8B191D1AD43E00345E2E /* Na_viUITests.swift */,
-				A6AE8B1B1D1AD43E00345E2E /* Info.plist */,
-			);
-			path = "Na'viUITests";
 			sourceTree = "<group>";
 		};
 		A6CB92021D1B32050030D414 /* Na'vi Keyboard */ = {
@@ -412,42 +354,6 @@
 			productReference = A6AE8AF31D1AD43E00345E2E /* Na-vi.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A6AE8B091D1AD43E00345E2E /* Na-viTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A6AE8B211D1AD43E00345E2E /* Build configuration list for PBXNativeTarget "Na-viTests" */;
-			buildPhases = (
-				A6AE8B061D1AD43E00345E2E /* Sources */,
-				A6AE8B071D1AD43E00345E2E /* Frameworks */,
-				A6AE8B081D1AD43E00345E2E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A6AE8B0C1D1AD43E00345E2E /* PBXTargetDependency */,
-			);
-			name = "Na-viTests";
-			productName = "Na'viTests";
-			productReference = A6AE8B0A1D1AD43E00345E2E /* Na-viTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		A6AE8B141D1AD43E00345E2E /* Na-viUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A6AE8B241D1AD43E00345E2E /* Build configuration list for PBXNativeTarget "Na-viUITests" */;
-			buildPhases = (
-				A6AE8B111D1AD43E00345E2E /* Sources */,
-				A6AE8B121D1AD43E00345E2E /* Frameworks */,
-				A6AE8B131D1AD43E00345E2E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A6AE8B171D1AD43E00345E2E /* PBXTargetDependency */,
-			);
-			name = "Na-viUITests";
-			productName = "Na'viUITests";
-			productReference = A6AE8B151D1AD43E00345E2E /* Na-viUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -461,22 +367,12 @@
 					A61420221D1AD5DC001C0FBD = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MJS6LB37T9;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1140;
 					};
 					A6AE8AF21D1AD43E00345E2E = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = MJS6LB37T9;
-						LastSwiftMigration = 0940;
-					};
-					A6AE8B091D1AD43E00345E2E = {
-						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0940;
-						TestTargetID = A6AE8AF21D1AD43E00345E2E;
-					};
-					A6AE8B141D1AD43E00345E2E = {
-						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0940;
-						TestTargetID = A6AE8AF21D1AD43E00345E2E;
+						LastSwiftMigration = 1140;
 					};
 				};
 			};
@@ -495,8 +391,6 @@
 			targets = (
 				A6AE8AF21D1AD43E00345E2E /* Na-vi */,
 				A61420221D1AD5DC001C0FBD /* Na-vi Keyboard */,
-				A6AE8B091D1AD43E00345E2E /* Na-viTests */,
-				A6AE8B141D1AD43E00345E2E /* Na-viUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -522,20 +416,6 @@
 				A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */,
 				A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */,
 				A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A6AE8B081D1AD43E00345E2E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A6AE8B131D1AD43E00345E2E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,22 +538,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A6AE8B061D1AD43E00345E2E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A6AE8B0F1D1AD43E00345E2E /* Na_viTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A6AE8B111D1AD43E00345E2E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A6AE8B1A1D1AD43E00345E2E /* Na_viUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -681,16 +545,6 @@
 			isa = PBXTargetDependency;
 			target = A61420221D1AD5DC001C0FBD /* Na-vi Keyboard */;
 			targetProxy = A61420281D1AD5DC001C0FBD /* PBXContainerItemProxy */;
-		};
-		A6AE8B0C1D1AD43E00345E2E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A6AE8AF21D1AD43E00345E2E /* Na-vi */;
-			targetProxy = A6AE8B0B1D1AD43E00345E2E /* PBXContainerItemProxy */;
-		};
-		A6AE8B171D1AD43E00345E2E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A6AE8AF21D1AD43E00345E2E /* Na-vi */;
-			targetProxy = A6AE8B161D1AD43E00345E2E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -728,7 +582,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -745,7 +599,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -872,7 +726,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -891,61 +745,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
-			};
-			name = Release;
-		};
-		A6AE8B221D1AD43E00345E2E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = "Na'viTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Na-vi.app/Na-vi";
-			};
-			name = Debug;
-		};
-		A6AE8B231D1AD43E00345E2E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = "Na'viTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Na-vi.app/Na-vi";
-			};
-			name = Release;
-		};
-		A6AE8B251D1AD43E00345E2E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = "Na'viUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
-				TEST_TARGET_NAME = "Na'vi";
-			};
-			name = Debug;
-		};
-		A6AE8B261D1AD43E00345E2E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = "Na'viUITests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Na-viUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
-				TEST_TARGET_NAME = "Na'vi";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -975,24 +775,6 @@
 			buildConfigurations = (
 				A6AE8B1F1D1AD43E00345E2E /* Debug */,
 				A6AE8B201D1AD43E00345E2E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A6AE8B211D1AD43E00345E2E /* Build configuration list for PBXNativeTarget "Na-viTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A6AE8B221D1AD43E00345E2E /* Debug */,
-				A6AE8B231D1AD43E00345E2E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A6AE8B241D1AD43E00345E2E /* Build configuration list for PBXNativeTarget "Na-viUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A6AE8B251D1AD43E00345E2E /* Debug */,
-				A6AE8B261D1AD43E00345E2E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

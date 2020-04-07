@@ -116,7 +116,7 @@ extension UIView {
     }
     
     func showActivityIndicator(){
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
+        let activityIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.white)
         activityIndicator.frame = CGRect(x: 0, y: 0, width: 140, height: 140)
         if self.isKind(of: UITableView.self) {
             activityIndicator.frame = CGRect(x: 0, y: (self as! UITableView).contentOffset.y, width: self.frame.width, height: self.frame.height)
@@ -196,7 +196,7 @@ extension UITextField {
     
     func setUpKeyboardForNumber() {
         self.keyboardType = UIKeyboardType.numberPad
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
     }
     
     func setUpKeyboardForUserame() {
@@ -213,13 +213,13 @@ extension UITextField {
     
     func setUpKeyboardForPhone() {
         self.keyboardType = UIKeyboardType.phonePad
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
     }
     //TODO autoformat phone numbers
     
     func setUpKeyboardForAddress() {
         self.keyboardType = UIKeyboardType.default
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
         self.autocapitalizationType = UITextAutocapitalizationType.words
         self.autocorrectionType = UITextAutocorrectionType.yes
     }
@@ -227,14 +227,14 @@ extension UITextField {
     
     func setUpKeyboardForPostalCode() {
         self.keyboardType = UIKeyboardType.default
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
         self.autocapitalizationType = UITextAutocapitalizationType.allCharacters
         self.autocorrectionType = UITextAutocorrectionType.no
     }
     
     func setUpKeyboardForPIN() {
         self.keyboardType = UIKeyboardType.numberPad
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
     }
     
     
@@ -242,13 +242,13 @@ extension UITextField {
     
     func setUpKeyboardForPassword() {
         self.keyboardType = UIKeyboardType.default
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
         self.isSecureTextEntry = true
     }
     
     func setUpKeyboardForEmail() {
         self.keyboardType = UIKeyboardType.emailAddress
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
         self.autocapitalizationType = UITextAutocapitalizationType.none
         self.autocorrectionType = UITextAutocorrectionType.no
     }
@@ -258,7 +258,7 @@ extension UITextField {
     
     func setUpKeyboardForCreditCard(_ textField:UITextField) {
         self.keyboardType = UIKeyboardType.numberPad
-        self.clearButtonMode = UITextFieldViewMode.whileEditing
+        self.clearButtonMode = UITextField.ViewMode.whileEditing
         self.autocapitalizationType = UITextAutocapitalizationType.none
     }
     

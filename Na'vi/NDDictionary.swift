@@ -42,9 +42,9 @@ class NDDictionary: NSObject {
         defaultClassifiedDictionary.removeAll()
         var currentFirstLetter : Character = Character(" ")
         for dictionaryEntry in defaultDictionary {
-            if !dictionaryEntry.navi.uppercased().characters.contains(currentFirstLetter) { // if the current first letter has been scanned before, skip
-                currentFirstLetter = dictionaryEntry.navi.uppercased().characters.first!
-                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().characters.first! == currentFirstLetter }
+            if !dictionaryEntry.navi.uppercased().contains(currentFirstLetter) { // if the current first letter has been scanned before, skip
+                currentFirstLetter = dictionaryEntry.navi.uppercased().first ?? Character(" ")
+                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().first == currentFirstLetter }
                 defaultClassifiedDictionary.append(entry)
             }
         }
@@ -61,10 +61,10 @@ class NDDictionary: NSObject {
         var firstLettersScanned : [Character] = [Character]()
         
         for dictionaryEntry in defaultDictionary {
-            let currentFirstLetter : Character = dictionaryEntry.navi.uppercased().characters.first!
+            let currentFirstLetter : Character = dictionaryEntry.navi.uppercased().first ?? Character(" ")
             if !firstLettersScanned.contains(currentFirstLetter) {
                 firstLettersScanned.append(currentFirstLetter)
-                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().characters.first! == currentFirstLetter }
+                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().first == currentFirstLetter }
                 defaultClassifiedDictionary.append(entry)
             }
         }
@@ -77,7 +77,7 @@ class NDDictionary: NSObject {
     }
     
     class func sectionIndices(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        let indices: [String] = entries.map{String($0.first!.navi.lowercased().characters.first!)}
+        let indices: [String] = entries.map{String($0.first!.navi.lowercased().first ?? Character(" "))}
         
         
         return indices

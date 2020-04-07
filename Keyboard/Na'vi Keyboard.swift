@@ -120,7 +120,7 @@ class Catboard: KeyboardViewController {
             let name = (self.interfaceOrientation.isPortrait ? "Screenshot-Portrait" : "Screenshot-Landscape")
             let imagePath = "/Users/archagon/Documents/Programming/OSX/RussianPhoneticKeyboard/External/tasty-imitation-keyboard/\(name).png"
             
-            if let pngRep = UIImagePNGRepresentation(capturedImage!) {
+            if let pngRep = capturedImage!.pngData() {
                 try? pngRep.write(to: URL(fileURLWithPath: imagePath), options: [.atomic])
             }
             
