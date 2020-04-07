@@ -42,8 +42,11 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     var sectionTitles: [String] = [String]()
     var categories: [String] = [String]()
     
+    let minimumRowHeight = CGFloat(80)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         dictionaryItems = defaultClassifiedDictionary
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
         categories = NDDictionary.categories(ofDictionary: dictionaryItems)
@@ -54,7 +57,18 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         if searchBar.text?.count > 0 {
             self.searchText(searchBar.text!)
         }
+        setColoursToInterfaceStyle()
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setColoursToInterfaceStyle()
+    }
+    
+    func setColoursToInterfaceStyle() {
+        view.backgroundColor        = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#000000", alpha: 1.0) : UIColor(hex: "#ffffff", alpha: 1.0)
+        tableView.backgroundColor   = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#000000", alpha: 1.0) : UIColor(hex: "#ffffff", alpha: 1.0)
+    }
+
     
     // *** Dictionary Data ***
     func loadDefaultDictionary() {
@@ -76,6 +90,14 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         return dictionaryItems.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+        
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return minimumRowHeight
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dictionaryItems[section].count
     }
@@ -87,10 +109,11 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
-        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewController(withIdentifier: "NDDefinitionViewController") as! NDDefinitionViewController
-        definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
-        self.navigationController?.pushViewController(definitionViewController, animated: true)
+        return
+//        let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
+//        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewController(withIdentifier: "NDDefinitionViewController") as! NDDefinitionViewController
+//        definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
+//        self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

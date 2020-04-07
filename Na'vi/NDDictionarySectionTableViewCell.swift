@@ -12,9 +12,21 @@ class NDDictionarySectionTableViewCell: UITableViewCell {
 
     @IBOutlet var sectionLabel : UILabel!
     
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setColoursToInterfaceStyle()
+        
+        let blurEffect = UIBlurEffect(style: .systemChromeMaterial)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        
+        blurEffectView.alpha = 0.95
+        //always fill the view
+        blurEffectView.frame = self.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        addSubview(blurEffectView)
+        sendSubviewToBack(blurEffectView)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -27,4 +39,13 @@ class NDDictionarySectionTableViewCell: UITableViewCell {
         sectionLabel.text = title
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setColoursToInterfaceStyle()
+    }
+    
+    func setColoursToInterfaceStyle() {
+        backgroundColor         = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#242424", alpha: 0.6) : UIColor(white: 0.8, alpha: 1.0)
+        sectionLabel.textColor  = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#ffffff", alpha: 1.0) : UIColor(white: 0.0, alpha: 1.0)
+    }
+    
 }

@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="flJ-Sn-7Sm">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="flJ-Sn-7Sm">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,96 +15,46 @@
                         <viewControllerLayoutGuide type="bottom" id="O9R-sQ-N7C"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="b9q-z1-869">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Na'vi Input Method" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3pc-y7-dkH">
-                                <rect key="frame" x="185" y="50" width="231" height="60"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Na'vi Input Method" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-dU-B69">
+                                <rect key="frame" x="91.5" y="94" width="231" height="100"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="231" id="KSD-i7-ERf"/>
-                                    <constraint firstAttribute="height" constant="60" id="iKY-u8-mTP"/>
+                                    <constraint firstAttribute="width" constant="231" id="IQf-Yv-aF6"/>
+                                    <constraint firstAttribute="height" constant="100" id="y6N-JV-zUV"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="26"/>
-                                <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="26"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1. Settings - General" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iJm-te-6Yp">
-                                <rect key="frame" x="224" y="196" width="153" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HN5-AE-Kub">
+                                <rect key="frame" x="80.5" y="251" width="253" height="105.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="CLF-JM-vQQ"/>
-                                    <constraint firstAttribute="width" constant="153" id="RYw-sA-iwL"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="VMf-2l-0Xs"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xgD-g5-XsE">
-                                <rect key="frame" x="272" y="167" width="56" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="UYN-tO-86W"/>
-                                    <constraint firstAttribute="width" constant="56" id="i0i-NV-WDd"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2. Keyboard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2a3-rm-WzN">
-                                <rect key="frame" x="255" y="225" width="91" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="9qo-0q-Fwe"/>
-                                    <constraint firstAttribute="width" constant="91" id="CZ6-Bt-Bfg"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3. Keyboards - Add New Keyboard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mtr-Fm-BRU">
-                                <rect key="frame" x="171" y="254" width="260" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="260" id="D1y-fN-lHs"/>
-                                    <constraint firstAttribute="height" constant="21" id="bsg-wb-uZ9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4. Choose Na'vi Keyboard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wZa-xj-I3S">
-                                <rect key="frame" x="204" y="283" width="194" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="194" id="kiD-hH-Dbv"/>
-                                    <constraint firstAttribute="height" constant="21" id="rUr-gh-Ndg"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5. Done" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wJe-jK-Jok">
-                                <rect key="frame" x="217" y="312" width="166" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="11X-L5-cVT"/>
-                                    <constraint firstAttribute="width" constant="166" id="ctg-nj-9h1"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">To enable, go to: 
+1. Settings - General - Keyboards
+2. Add New Keyboard
+3. Choose Na'vi Keyboard</string>
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.066666666669999999" green="0.066666666669999999" blue="0.066666666669999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.066666666669999999" green="0.066666666669999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="2a3-rm-WzN" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="5jG-n7-gQl"/>
-                            <constraint firstItem="xgD-g5-XsE" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="9ol-cA-nDu"/>
-                            <constraint firstItem="3pc-y7-dkH" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="Euw-zo-TTW"/>
-                            <constraint firstItem="wJe-jK-Jok" firstAttribute="top" secondItem="wZa-xj-I3S" secondAttribute="bottom" constant="8" id="Wbb-6i-bzh"/>
-                            <constraint firstItem="wZa-xj-I3S" firstAttribute="top" secondItem="Mtr-Fm-BRU" secondAttribute="bottom" constant="8" id="ZaN-o9-obP"/>
-                            <constraint firstItem="3pc-y7-dkH" firstAttribute="top" secondItem="YtM-A7-hJV" secondAttribute="bottom" constant="30" id="aKw-Uq-6dq"/>
-                            <constraint firstItem="Mtr-Fm-BRU" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" constant="1" id="gS4-rD-w2C"/>
-                            <constraint firstItem="Mtr-Fm-BRU" firstAttribute="top" secondItem="2a3-rm-WzN" secondAttribute="bottom" constant="8" id="hmi-7t-TZa"/>
-                            <constraint firstItem="wJe-jK-Jok" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="jvh-Ju-5gu"/>
-                            <constraint firstItem="iJm-te-6Yp" firstAttribute="top" secondItem="xgD-g5-XsE" secondAttribute="bottom" constant="8" id="op4-br-Ep9"/>
-                            <constraint firstItem="2a3-rm-WzN" firstAttribute="top" secondItem="iJm-te-6Yp" secondAttribute="bottom" constant="8" id="pZR-Mr-SDU"/>
-                            <constraint firstItem="wZa-xj-I3S" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" constant="1" id="r7s-8W-xh7"/>
-                            <constraint firstItem="xgD-g5-XsE" firstAttribute="top" secondItem="3pc-y7-dkH" secondAttribute="bottom" constant="57" id="soV-ft-mfp"/>
-                            <constraint firstItem="iJm-te-6Yp" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="zYR-MH-uni"/>
+                            <constraint firstItem="HN5-AE-Kub" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="0Ub-Uz-fWj"/>
+                            <constraint firstItem="HN5-AE-Kub" firstAttribute="top" secondItem="dv2-dU-B69" secondAttribute="bottom" constant="57" id="Ies-NV-gjE"/>
+                            <constraint firstItem="dv2-dU-B69" firstAttribute="top" secondItem="YtM-A7-hJV" secondAttribute="bottom" constant="50" id="RzC-YO-qCs"/>
+                            <constraint firstItem="dv2-dU-B69" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="ble-QK-nJa"/>
                         </constraints>
                     </view>
                 </viewController>
