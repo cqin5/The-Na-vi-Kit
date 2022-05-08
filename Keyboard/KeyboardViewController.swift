@@ -8,7 +8,6 @@
 
 import UIKit
 import AudioToolbox
-import Firebase
 
 let metrics: [String:Double] = [
     "topBanner": 30
@@ -242,9 +241,7 @@ class KeyboardViewController: UIInputViewController {
 //        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        FirebaseApp.configure()
-        
+    override func viewWillAppear(_ animated: Bool) {        
         self.bannerView?.isHidden = true
         self.keyboardHeight = self.heightForOrientation(self.interfaceOrientation, withTopBanner: true)
     }

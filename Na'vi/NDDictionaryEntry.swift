@@ -19,7 +19,7 @@ class NDDictionaryEntry: NSObject {
         let entry = NDDictionaryEntry()
         
         entry.navi = itemDictionary["Na'vi"] as! String
-        entry.category = itemDictionary["Category"] as! String
+        entry.category = itemDictionary["Part of speech"] as! String
         entry.english = itemDictionary["English"] as! String
         entry.IPA = itemDictionary["IPA"] as! String
         return entry

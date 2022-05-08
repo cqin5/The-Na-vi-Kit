@@ -25,7 +25,7 @@ class NDDictionary: NSObject {
     func loadDictionaryFile() {
         defaultDictionary.removeAll()
         do {
-            let path = Bundle.main.url(forResource: "DictionaryFile", withExtension: "json")
+            let path = Bundle.main.url(forResource: "vocabulary", withExtension: "json")
             let jsonData = try? Data(contentsOf: path!)
             let jsonResult: NSDictionary = try JSONSerialization.jsonObject(with: jsonData!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
             
