@@ -10,13 +10,14 @@ import UIKit
 
 class NDDictionaryMainTableViewCell: UITableViewCell {
 
-    @IBOutlet var naviLabel : UILabel!
-    @IBOutlet var englishLabel : UILabel!
+    @IBOutlet weak var titleLabel : UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var definitionLabel : UILabel!
     
-    let naviFont : UIFont = UIFont.systemFont(ofSize: 18)
-    let categoryFont : UIFont = UIFont.systemFont(ofSize: 14)
-    var naviColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
-    var categoryColour : UIColor = UIColor(white: 0.2, alpha: 1.0)
+    let titleFont : UIFont = UIFont.boldSystemFont(ofSize: 18)
+    let subtitleFont : UIFont = UIFont.systemFont(ofSize: 14)
+    var titleLabelColourLightMode : UIColor = UIColor(white: 0.0, alpha: 1.0)
+    var subtitleLabelColourLightMode : UIColor = UIColor(white: 0.2, alpha: 0.5)
         
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,13 +26,16 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     
     func loadData(_ dictionaryItem:NDDictionaryEntry) {
         
-        let firstLine = NSMutableAttributedStringMake(string: dictionaryItem.navi, font:naviFont, colour: naviColour)
-        let firstLineSecondPart = NSMutableAttributedStringMake(string: " | " + dictionaryItem.category, font:categoryFont, colour: categoryColour)
         
-        firstLine.append(firstLineSecondPart)
+        titleLabel.text = dictionaryItem.navi
+        subtitleLabel.text = dictionaryItem.IPA
         
-        naviLabel.attributedText = firstLine
-        englishLabel.text = dictionaryItem.english
+        let titleLabelAttributedString = NSMutableAttributedStringMake(string: dictionaryItem.navi, font:titleFont, colour: titleLabelColourLightMode)
+        let subtitleLabelAttributedString = NSMutableAttributedStringMake(string: "" + dictionaryItem.IPA + " " + dictionaryItem.partOfSpeech, font:subtitleFont, colour: subtitleLabelColourLightMode)
+        
+        titleLabel.attributedText = titleLabelAttributedString
+        subtitleLabel.attributedText = subtitleLabelAttributedString
+        definitionLabel.text = dictionaryItem.english
         
     }
 
@@ -48,10 +52,10 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     
     
     func setColoursToInterfaceStyle() {
-        naviColour      = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 1.0, alpha: 1.0) : UIColor(white: 0.0, alpha: 1.0)
-        categoryColour  = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 0.6, alpha: 1.0) : UIColor(white: 0.2, alpha: 1.0)
+        titleLabelColourLightMode      = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 1.0, alpha: 1.0) : titleLabelColourLightMode
+        subtitleLabelColourLightMode  = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 0.6, alpha: 0.0) : subtitleLabelColourLightMode
         
-        englishLabel.textColor = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 0.6, alpha: 1.0) : UIColor(white: 0.2, alpha: 1.0)
+        definitionLabel.textColor = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 0.6, alpha: 1.0) : UIColor(white: 0.2, alpha: 1.0)
     }
 
 }

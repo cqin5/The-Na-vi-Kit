@@ -38,7 +38,7 @@ class NDDefinitionViewController: UIViewController {
         firstLine.append(firstLineSecondPart)
         
         naviLabel.attributedText = firstLine
-        categoryLabel.text = entry.category
+        categoryLabel.text = entry.partOfSpeech
         
         definitionView.attributedText = NSAttributedStringMake(string: entry.english, font: definitionFont, colour: definitionColour)
     }

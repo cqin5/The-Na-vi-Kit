@@ -84,7 +84,7 @@ class NDDictionary: NSObject {
     }
     
     class func categories(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        return NSSet(array: entries.map{$0.first!.category.lowercased()}).allObjects as! [String]
+        return NSSet(array: entries.map{$0.first!.partOfSpeech.lowercased()}).allObjects as! [String]
     }
     
 }

@@ -11,7 +11,7 @@ import UIKit
 class NDDictionaryEntry: NSObject {
 
     var navi:String = ""
-    var category:String = ""
+    var partOfSpeech:String = ""
     var english:String = ""
     var IPA:String = ""
     
@@ -19,7 +19,7 @@ class NDDictionaryEntry: NSObject {
         let entry = NDDictionaryEntry()
         
         entry.navi = itemDictionary["Na'vi"] as! String
-        entry.category = itemDictionary["Part of speech"] as! String
+        entry.partOfSpeech = itemDictionary["Part of speech"] as! String
         entry.english = itemDictionary["English"] as! String
         entry.IPA = itemDictionary["IPA"] as! String
         return entry
