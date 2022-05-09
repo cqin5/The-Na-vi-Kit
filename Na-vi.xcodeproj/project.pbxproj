@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		11087954DA923448819C6115 /* Pods_Na_vi_Keyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4570A86B8BDE69E63DE92847 /* Pods_Na_vi_Keyboard.framework */; };
 		5D82B63F2FBF5AFA44BDFFC6 /* Pods_Na_vi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A47F0676EA4884095F19FD1 /* Pods_Na_vi.framework */; };
-		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A61790992149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
 		A617909A2149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
 		A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
@@ -97,6 +97,8 @@
 		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
 		A699EE162828282E0067D977 /* vocabulary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = vocabulary.json; path = Resources/vocabulary.json; sourceTree = SOURCE_ROOT; };
 		A699EE182828B65F0067D977 /* audio */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio; path = Resources/audio; sourceTree = SOURCE_ROOT; };
+		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
+		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
 		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -182,6 +184,8 @@
 		A6AE8AEA1D1AD43E00345E2E = {
 			isa = PBXGroup;
 			children = (
+				A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */,
+				A699EE1A2828C6D50067D977 /* Na-vi.entitlements */,
 				A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */,
 				A6CB92421D1B66E60030D414 /* Na'vi Dictionary */,
 				A6CB92021D1B32050030D414 /* Na'vi Keyboard */,
@@ -529,6 +533,7 @@
 /* Begin PBXTargetDependency section */
 		A61420291D1AD5DC001C0FBD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = A61420221D1AD5DC001C0FBD /* Na-vi Keyboard */;
 			targetProxy = A61420281D1AD5DC001C0FBD /* PBXContainerItemProxy */;
 		};
@@ -559,6 +564,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5E70AB7B24B17FB7D16F9073 /* Pods-Na-vi Keyboard.debug.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -571,8 +577,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -580,6 +588,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 671C372633A56DC8DD03679D /* Pods-Na-vi Keyboard.release.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -592,8 +601,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -711,8 +722,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8MRJGQZL4T;
+				DEVELOPMENT_TEAM = MJS6LB37T9;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -722,8 +734,10 @@
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = Eywa;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -733,8 +747,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = 8MRJGQZL4T;
+				DEVELOPMENT_TEAM = MJS6LB37T9;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -744,8 +759,10 @@
 				MARKETING_VERSION = 1.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = Eywa;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
