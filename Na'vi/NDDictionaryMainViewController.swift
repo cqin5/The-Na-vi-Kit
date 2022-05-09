@@ -37,16 +37,22 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     @IBOutlet var tableView: UITableView!
     @IBOutlet var searchBar: UISearchBar!
     
+    @IBOutlet weak var searchBarBottomConstraint: NSLayoutConstraint!
+    
     var defaultClassifiedDictionary: [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
     var dictionaryItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
     var sectionTitles: [String] = [String]()
     var categories: [String] = [String]()
     
-    let minimumRowHeight = CGFloat(80)
+    let minimumRowHeight = CGFloat(140)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIWindow.keyboardWillShowNotification, object: nil)
+
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIWindow.keyboardWillHideNotification, object: nil)
+
         dictionaryItems = defaultClassifiedDictionary
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
         categories = NDDictionary.categories(ofDictionary: dictionaryItems)
@@ -167,4 +173,28 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         updateDictionaryData()
     }
 
+    @objc func keyboardWillShow(_ notification: NSNotification) {
+        
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+            
+                animateWithKeyboard(notification: notification) { keyboardFrame in
+                    self.searchBarBottomConstraint.constant = keyboardHeight - 40
+                }
+            }
+        
+        
+        
+    }
+    
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        
+        animateWithKeyboard(notification: notification) { keyboardFrame in
+            self.searchBarBottomConstraint.constant = 0
+        }
+        
+    }
+    
 }
+

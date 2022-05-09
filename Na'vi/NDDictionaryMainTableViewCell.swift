@@ -31,7 +31,7 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
         subtitleLabel.text = dictionaryItem.IPA
         
         let titleLabelAttributedString = NSMutableAttributedStringMake(string: dictionaryItem.navi, font:titleFont, colour: titleLabelColourLightMode)
-        let subtitleLabelAttributedString = NSMutableAttributedStringMake(string: "" + dictionaryItem.IPA + " " + dictionaryItem.partOfSpeech, font:subtitleFont, colour: subtitleLabelColourLightMode)
+        let subtitleLabelAttributedString = NSMutableAttributedStringMake(string: "" + dictionaryItem.IPA + "  " + dictionaryItem.partOfSpeech, font:subtitleFont, colour: subtitleLabelColourLightMode)
         
         titleLabel.attributedText = titleLabelAttributedString
         subtitleLabel.attributedText = subtitleLabelAttributedString
