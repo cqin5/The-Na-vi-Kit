@@ -17,8 +17,10 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     @IBOutlet weak var definitionLabel : UILabel!
     
     @IBOutlet weak var playAudioButton: UIButton!
+    @IBOutlet weak var bookmarkImageView: UIImageView!
     
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    
     let defaultBottomConstraint = CGFloat(-40)
     let searchingBottomConstraint = CGFloat(0)
 
@@ -46,6 +48,8 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     }
     
     func loadData(_ dictionaryItem:NDDictionaryEntry, isSearchResult: Bool) {
+        
+        bookmarkImageView.isHidden = !dictionaryItem.isBookmarked
         
         titleLabel.text = dictionaryItem.navi
         subtitleLabel.text = dictionaryItem.IPA + "  " + dictionaryItem.partOfSpeech

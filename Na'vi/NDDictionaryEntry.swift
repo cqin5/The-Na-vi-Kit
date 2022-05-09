@@ -10,6 +10,9 @@ import UIKit
 
 class NDDictionaryEntry: NSObject {
 
+    
+    var isBookmarked = false
+    
     var navi:String = ""
     var partOfSpeechShort:String = ""
     var partOfSpeech:String {

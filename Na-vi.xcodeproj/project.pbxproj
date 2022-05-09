@@ -5458,7 +5458,7 @@
 		A699F8942828EFE60067D977 /* 7876.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 7876.mp3; sourceTree = "<group>"; };
 		A699F8952828EFE70067D977 /* vocabulary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = vocabulary.json; path = Resources1/vocabulary.json; sourceTree = SOURCE_ROOT; };
 		A699F8962828EFE70067D977 /* Eywa.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; name = Eywa.sketch; path = Resources1/Eywa.sketch; sourceTree = SOURCE_ROOT; };
-		A699F8972828EFE70067D977 /* vocabulary-20220106.csv */ = {isa = PBXFileReference; lastKnownFileType = file; name = "vocabulary-20220106.csv"; path = "Resources1/vocabulary-20220106.csv"; sourceTree = SOURCE_ROOT; };
+		A699F8972828EFE70067D977 /* vocabulary-20220106.csv */ = {isa = PBXFileReference; lastKnownFileType = text; name = "vocabulary-20220106.csv"; path = "Resources1/vocabulary-20220106.csv"; sourceTree = SOURCE_ROOT; };
 		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -11468,7 +11468,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = Eywa;
 				SUPPORTS_MACCATALYST = NO;
@@ -11493,7 +11493,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4.0;
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = Eywa;
 				SUPPORTS_MACCATALYST = NO;

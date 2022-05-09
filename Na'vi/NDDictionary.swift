@@ -10,6 +10,17 @@ import UIKit
 
 class NDDictionary: NSObject {
     
+//    static var savedEntries: [NDDictionaryEntry] {
+//        set {
+//            let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
+//            UserDefaults.standard.set(data, forKey: "savedEntries")
+//        }
+//        
+//        get {
+//            NSKeyedUnarchiver.unarchivedObject(ofClass: <#T##NSCoding.Protocol#>, from: <#T##Data#>)
+//        }
+//    }
+    
     var defaultDictionary: [NDDictionaryEntry] = [NDDictionaryEntry]()
     var defaultClassifiedDictionary: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
     var defaultSectionIndices: [String] = [String]()
@@ -84,7 +95,18 @@ class NDDictionary: NSObject {
     }
     
     class func categories(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        return NSSet(array: entries.map{$0.first!.partOfSpeech.lowercased()}).allObjects as! [String]
+        let returnValue = NSSet(array: entries.map{$0.first!.partOfSpeech.lowercased()}).allObjects as! [String]
+        return returnValue
     }
+    
+}
+
+
+
+extension NDDictionary {
+    
+    
+    
+    
     
 }

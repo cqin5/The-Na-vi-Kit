@@ -46,6 +46,8 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     let minimumRowHeight = CGFloat(140)
     
+    var bookmarkedItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -55,7 +57,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
 
         dictionaryItems = defaultClassifiedDictionary
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
-        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
+//        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
         
     }
     
@@ -84,7 +86,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     func updateDictionaryData() {
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
-        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
+//        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
         
         self.tableView.reloadData()
         if self.tableView.numberOfSections != 0 {
@@ -117,7 +119,6 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
             return cell
         }
         
-        print("isSearching = ", isSearching)
         cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: !isSearching)
         
         return cell
@@ -174,7 +175,8 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
                     || dictionaryItem.english.uppercased().contains(searchText.uppercased())
             }
         }
-        self.dictionaryItems = self.dictionaryItems.filter{$0.count > 0}
+        self.dictionaryItems = self.dictionaryItems.filter {$0.count > 0}
+//        self.dictionaryItems = self.dictionaryItems.compactMap { $0 }
         
         if searchText.count == 0 {
             self.loadDefaultDictionary()
