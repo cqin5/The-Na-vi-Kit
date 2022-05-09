@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="InputMethodInstructionViewController" id="BYZ-38-t0r" customClass="MainViewController" customModule="Na_vi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InputMethodInstructionViewController" id="BYZ-38-t0r" customClass="MainViewController" customModule="Eywa" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Na'vi Input Method" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHx-nY-Vxy">
-                                <rect key="frame" x="72" y="30" width="231" height="60"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn on Na'vi Keyboard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHx-nY-Vxy">
+                                <rect key="frame" x="81" y="74" width="252.5" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="SBt-5r-tzz"/>
-                                    <constraint firstAttribute="width" constant="231" id="lIE-et-zju"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="26"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A5E-VV-bfR">
-                                <rect key="frame" x="106" y="611" width="163" height="36"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A5E-VV-bfR">
+                                <rect key="frame" x="125.5" y="826" width="163" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="163" id="fDe-nw-7DV"/>
                                     <constraint firstAttribute="height" constant="36" id="ffq-9y-tfb"/>
@@ -42,9 +43,9 @@
                                     <action selector="sendEmailButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7Ng-Xz-mEr"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aL0-R8-ZH3">
-                                <rect key="frame" x="56" y="541" width="263" height="50"/>
-                                <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aL0-R8-ZH3">
+                                <rect key="frame" x="60" y="756" width="294" height="50"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="7Qd-Y3-WGg"/>
                                 </constraints>
@@ -62,20 +63,95 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sD3-M8-asq">
-                                <rect key="frame" x="56" y="147" width="263" height="105.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="yQN-0t-m79"/>
-                                </constraints>
+                                <rect key="frame" x="60" y="154" width="294" height="20.5"/>
                                 <attributedString key="attributedText">
-                                    <fragment>
-                                        <string key="content">To enable, go to: 
-1. Settings - General - Keyboards
-2. Add New Keyboard
-3. Choose Na'vi Keyboard</string>
+                                    <fragment content="1. Go to Settings - General">
                                         <attributes>
                                             <color key="NSColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" metaFont="system" size="17"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-1" translatesAutoresizingMaskIntoConstraints="NO" id="qO7-D5-EuF">
+                                <rect key="frame" x="20" y="178.5" width="374" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="fes-YC-B9n"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-2" translatesAutoresizingMaskIntoConstraints="NO" id="8sB-Ch-W0X">
+                                <rect key="frame" x="20" y="283" width="374" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="QKV-ri-l35"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-3" translatesAutoresizingMaskIntoConstraints="NO" id="9F0-Aq-yMI">
+                                <rect key="frame" x="20" y="387.5" width="374" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="mAR-zp-e0Q"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-4" translatesAutoresizingMaskIntoConstraints="NO" id="rn3-e6-f0x">
+                                <rect key="frame" x="20" y="498" width="374" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="HMi-P6-k7a"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E8o-4u-6dS">
+                                <rect key="frame" x="60" y="258.5" width="294" height="20.5"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="2. Go to Keyboard">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFs-w0-dL7">
+                                <rect key="frame" x="134.5" y="363" width="145.5" height="20.5"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="3. Go to Keyboards">
+                                        <attributes>
+                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eln-KI-X6O">
+                                <rect key="frame" x="124.5" y="467.5" width="165" height="20.5"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="4. Add New Keyboard">
+                                        <attributes>
+                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-5" translatesAutoresizingMaskIntoConstraints="NO" id="yjo-lq-LwM">
+                                <rect key="frame" x="20" y="608.5" width="374" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="QeK-uQ-EGA"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3P-BT-WoS">
+                                <rect key="frame" x="160.5" y="578" width="93.5" height="20.5"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="5. Add Eywa">
+                                        <attributes>
+                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
@@ -84,19 +160,43 @@
                         </subviews>
                         <color key="backgroundColor" red="0.066666666666666666" green="0.066666666666666666" blue="0.066666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="yjo-lq-LwM" firstAttribute="top" secondItem="g3P-BT-WoS" secondAttribute="bottom" constant="10" id="1JS-d4-eDJ"/>
                             <constraint firstItem="JHx-nY-Vxy" firstAttribute="baseline" secondItem="aL0-R8-ZH3" secondAttribute="baseline" id="2T9-yB-xiO"/>
+                            <constraint firstItem="rn3-e6-f0x" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="2Zd-5g-7Ar"/>
+                            <constraint firstItem="E8o-4u-6dS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="40" id="6ba-e2-NsT"/>
+                            <constraint firstItem="SFs-w0-dL7" firstAttribute="top" secondItem="8sB-Ch-W0X" secondAttribute="bottom" constant="20" id="6sL-2j-gIm"/>
                             <constraint firstItem="A5E-VV-bfR" firstAttribute="top" secondItem="aL0-R8-ZH3" secondAttribute="bottom" constant="20" id="7Cx-Zt-7g1"/>
+                            <constraint firstItem="SFs-w0-dL7" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7wK-Nx-lSP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="E8o-4u-6dS" secondAttribute="trailing" constant="40" id="9tg-rK-cQP"/>
+                            <constraint firstAttribute="trailing" secondItem="9F0-Aq-yMI" secondAttribute="trailing" constant="20" id="BJv-ou-Zea"/>
                             <constraint firstItem="aL0-R8-ZH3" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="40" id="Bw2-ZI-yGX"/>
-                            <constraint firstItem="sD3-M8-asq" firstAttribute="top" secondItem="JHx-nY-Vxy" secondAttribute="bottom" constant="57" id="CWM-vK-bSx"/>
+                            <constraint firstItem="sD3-M8-asq" firstAttribute="top" secondItem="JHx-nY-Vxy" secondAttribute="bottom" constant="20" id="CWM-vK-bSx"/>
+                            <constraint firstItem="9F0-Aq-yMI" firstAttribute="top" secondItem="SFs-w0-dL7" secondAttribute="bottom" constant="4" id="Cjl-hS-K9P"/>
                             <constraint firstItem="JHx-nY-Vxy" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="30" id="HFo-ik-fJG"/>
+                            <constraint firstItem="8sB-Ch-W0X" firstAttribute="top" secondItem="E8o-4u-6dS" secondAttribute="bottom" constant="4" id="HbC-0g-RpJ"/>
                             <constraint firstItem="sD3-M8-asq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HeO-YN-bUh"/>
                             <constraint firstAttribute="trailingMargin" secondItem="aL0-R8-ZH3" secondAttribute="trailing" constant="40" id="J6O-TQ-iT1"/>
+                            <constraint firstItem="g3P-BT-WoS" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="KLx-Mu-3Rs"/>
+                            <constraint firstItem="Eln-KI-X6O" firstAttribute="top" secondItem="9F0-Aq-yMI" secondAttribute="bottom" constant="20" id="LJl-Ff-rCu"/>
+                            <constraint firstItem="yjo-lq-LwM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="LfY-1C-99M"/>
                             <constraint firstAttribute="trailingMargin" secondItem="sD3-M8-asq" secondAttribute="trailing" constant="40" id="Q3u-MQ-a6h"/>
+                            <constraint firstItem="E8o-4u-6dS" firstAttribute="top" secondItem="qO7-D5-EuF" secondAttribute="bottom" constant="20" id="SJ1-Ip-Sb4"/>
+                            <constraint firstAttribute="trailing" secondItem="qO7-D5-EuF" secondAttribute="trailing" constant="20" id="VBi-cu-TcO"/>
                             <constraint firstItem="A5E-VV-bfR" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="YYT-Nr-YXB"/>
+                            <constraint firstAttribute="trailing" secondItem="8sB-Ch-W0X" secondAttribute="trailing" constant="20" id="Zyu-Hh-m1s"/>
                             <constraint firstItem="sD3-M8-asq" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="40" id="eNx-mw-kBG"/>
                             <constraint firstItem="JHx-nY-Vxy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fh9-Fh-XrW"/>
+                            <constraint firstItem="qO7-D5-EuF" firstAttribute="top" secondItem="sD3-M8-asq" secondAttribute="bottom" constant="4" id="gP7-I9-l4e"/>
                             <constraint firstItem="JHx-nY-Vxy" firstAttribute="centerY" secondItem="aL0-R8-ZH3" secondAttribute="centerY" id="iSU-nm-pNA"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="A5E-VV-bfR" secondAttribute="bottom" constant="20" id="ydw-o5-Vwp"/>
+                            <constraint firstItem="8sB-Ch-W0X" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="lfR-63-Ulz"/>
+                            <constraint firstItem="Eln-KI-X6O" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="qmw-aY-hKe"/>
+                            <constraint firstItem="qO7-D5-EuF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="sBa-mv-Qpz"/>
+                            <constraint firstAttribute="trailing" secondItem="rn3-e6-f0x" secondAttribute="trailing" constant="20" id="sPy-ZO-2X5"/>
+                            <constraint firstItem="g3P-BT-WoS" firstAttribute="top" secondItem="rn3-e6-f0x" secondAttribute="bottom" constant="20" id="tHA-k4-07A"/>
+                            <constraint firstItem="9F0-Aq-yMI" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" id="x4Q-bn-QV6"/>
+                            <constraint firstItem="rn3-e6-f0x" firstAttribute="top" secondItem="Eln-KI-X6O" secondAttribute="bottom" constant="10" id="xt9-q5-IGb"/>
+                            <constraint firstAttribute="trailing" secondItem="yjo-lq-LwM" secondAttribute="trailing" constant="20" id="ycG-AN-vHs"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="A5E-VV-bfR" secondAttribute="bottom" id="ydw-o5-Vwp"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -108,7 +208,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="575" y="371"/>
+            <point key="canvasLocation" x="573.60000000000002" y="370.16491754122939"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Add-Keyboard-Step-1" width="1170" height="300"/>
+        <image name="Add-Keyboard-Step-2" width="1170" height="300"/>
+        <image name="Add-Keyboard-Step-3" width="1170" height="300"/>
+        <image name="Add-Keyboard-Step-4" width="1170" height="300"/>
+        <image name="Add-Keyboard-Step-5" width="1170" height="300"/>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

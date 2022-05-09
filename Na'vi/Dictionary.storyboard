@@ -72,7 +72,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great Leonopteryx | Last Shadow | [Leonopteryx rex]" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnN-DF-6S1">
-                                                    <rect key="frame" x="33" y="42" width="306" height="36"/>
+                                                    <rect key="frame" x="33" y="34" width="306" height="38.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="1fH-qL-Jcm"/>
                                                     </constraints>
@@ -81,7 +81,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cpt-4H-aFB" userLabel="Separator">
-                                                    <rect key="frame" x="26" y="88" width="293" height="1"/>
+                                                    <rect key="frame" x="26" y="82.5" width="293" height="1"/>
                                                     <color key="backgroundColor" red="0.8748590528350515" green="0.8748590528350515" blue="0.8748590528350515" alpha="0.731000212585034" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <color key="tintColor" name="standardKeyboardBackground"/>
                                                     <constraints>
@@ -118,7 +118,7 @@
                                                 <constraint firstItem="FSt-bR-DeF" firstAttribute="leading" secondItem="mry-eW-YvN" secondAttribute="trailing" constant="8" id="blT-jL-vZb"/>
                                                 <constraint firstItem="fnN-DF-6S1" firstAttribute="leading" secondItem="mry-eW-YvN" secondAttribute="leading" constant="2" id="dhD-7t-MIk"/>
                                                 <constraint firstItem="mry-eW-YvN" firstAttribute="top" secondItem="8mE-RN-HJq" secondAttribute="topMargin" id="qyx-sh-Chq"/>
-                                                <constraint firstItem="fnN-DF-6S1" firstAttribute="top" secondItem="mry-eW-YvN" secondAttribute="bottom" constant="10" id="xlQ-UC-aJC"/>
+                                                <constraint firstItem="fnN-DF-6S1" firstAttribute="top" secondItem="mry-eW-YvN" secondAttribute="bottom" constant="2" id="xlQ-UC-aJC"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
