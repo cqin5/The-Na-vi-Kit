@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVFAudio
+import AVFoundation
 
 class NDDictionaryMainTableViewCell: UITableViewCell {
 
@@ -14,28 +16,39 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var definitionLabel : UILabel!
     
+    @IBOutlet weak var playAudioButton: UIButton!
+    
     let titleFont : UIFont = UIFont.boldSystemFont(ofSize: 18)
     let subtitleFont : UIFont = UIFont.systemFont(ofSize: 14)
+    
     var titleLabelColourLightMode : UIColor = UIColor(white: 0.0, alpha: 1.0)
     var subtitleLabelColourLightMode : UIColor = UIColor(white: 0.2, alpha: 0.5)
-        
+    var definitionLabelColourLightMode : UIColor = UIColor(white: 0.2, alpha: 0.5)
+
+    var titleLabelColourDarkMode : UIColor = UIColor(white: 1.0, alpha: 1.0)
+    var subtitleLabelColourDarkMode : UIColor = UIColor(white: 1.0, alpha: 0.5)
+    var definitionLabelColourDarkMode : UIColor = UIColor(white: 1.0, alpha: 0.8)
+
+    var audioFileLocation = ""
+    var localAudioFileName = ""
+    
+    var audioPlayer: AVAudioPlayer?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        playAudioButton.imageView?.contentMode = .scaleAspectFit
         setColoursToInterfaceStyle()
     }
     
     func loadData(_ dictionaryItem:NDDictionaryEntry) {
         
-        
         titleLabel.text = dictionaryItem.navi
-        subtitleLabel.text = dictionaryItem.IPA
+        subtitleLabel.text = dictionaryItem.IPA + "  " + dictionaryItem.partOfSpeech
         
-        let titleLabelAttributedString = NSMutableAttributedStringMake(string: dictionaryItem.navi, font:titleFont, colour: titleLabelColourLightMode)
-        let subtitleLabelAttributedString = NSMutableAttributedStringMake(string: "" + dictionaryItem.IPA + "  " + dictionaryItem.partOfSpeech, font:subtitleFont, colour: subtitleLabelColourLightMode)
-        
-        titleLabel.attributedText = titleLabelAttributedString
-        subtitleLabel.attributedText = subtitleLabelAttributedString
         definitionLabel.text = dictionaryItem.english
+        
+        audioFileLocation = dictionaryItem.audioFileLocation
+        localAudioFileName = dictionaryItem.localAudioFileName
         
     }
 
@@ -52,10 +65,29 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     
     
     func setColoursToInterfaceStyle() {
-        titleLabelColourLightMode      = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 1.0, alpha: 1.0) : titleLabelColourLightMode
-        subtitleLabelColourLightMode  = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 0.6, alpha: 0.0) : subtitleLabelColourLightMode
+        titleLabel.textColor = traitCollection.userInterfaceStyle == .dark ? titleLabelColourDarkMode : titleLabelColourLightMode
+        subtitleLabel.textColor = traitCollection.userInterfaceStyle == .dark ? subtitleLabelColourDarkMode : subtitleLabelColourLightMode
+        definitionLabel.textColor = traitCollection.userInterfaceStyle == .dark ? definitionLabelColourDarkMode : definitionLabelColourLightMode
         
-        definitionLabel.textColor = traitCollection.userInterfaceStyle == .dark ? UIColor(white: 0.6, alpha: 1.0) : UIColor(white: 0.2, alpha: 1.0)
     }
 
+    @IBAction func playAudioButtonPressed(_ sender: Any) {
+        
+        
+        guard let path = Bundle.main.path(forResource: localAudioFileName, ofType: nil) else {
+            return
+        }
+        
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            // couldn't load file :(
+            print("couldn't load file :(")
+        }
+            
+       
+    }
 }
