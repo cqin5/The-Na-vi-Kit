@@ -36,7 +36,7 @@ class NDDictionarySectionTableViewCell: UITableViewCell {
     }
     
     func updateSectionTitle(_ title:String) {
-        sectionLabel.text = title
+        sectionLabel.text = title.uppercased()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

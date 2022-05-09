@@ -56,6 +56,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         dictionaryItems = defaultClassifiedDictionary
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
         categories = NDDictionary.categories(ofDictionary: dictionaryItems)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

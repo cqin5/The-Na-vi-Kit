@@ -33,13 +33,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ä" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C4r-Lx-A0f">
-                                                    <rect key="frame" x="31" y="12" width="100" height="15"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ä" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C4r-Lx-A0f">
+                                                    <rect key="frame" x="137.5" y="12" width="100" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="KJU-sp-VEB"/>
                                                         <constraint firstAttribute="height" constant="21" id="nZG-9V-sJy"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
                                                     <color key="textColor" systemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -47,7 +47,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" secondItem="C4r-Lx-A0f" secondAttribute="bottom" constant="2" id="A60-VG-tai"/>
                                                 <constraint firstItem="C4r-Lx-A0f" firstAttribute="top" secondItem="BbD-Gq-KLB" secondAttribute="topMargin" constant="1" id="M7E-CP-lVi"/>
-                                                <constraint firstItem="C4r-Lx-A0f" firstAttribute="leading" secondItem="BbD-Gq-KLB" secondAttribute="leadingMargin" constant="15" id="nzn-Fh-cy5"/>
+                                                <constraint firstItem="C4r-Lx-A0f" firstAttribute="centerX" secondItem="BbD-Gq-KLB" secondAttribute="centerX" id="Zsp-6e-zcR"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="0.79864804964539005" colorSpace="custom" customColorSpace="sRGB"/>
@@ -72,7 +72,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great Leonopteryx | Last Shadow | [Leonopteryx rex]" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fnN-DF-6S1">
-                                                    <rect key="frame" x="33" y="34" width="306" height="38.5"/>
+                                                    <rect key="frame" x="33" y="34" width="252" height="38.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="1fH-qL-Jcm"/>
                                                     </constraints>
@@ -106,20 +106,19 @@
                                                         <action selector="playAudioButtonPressed:" destination="kyo-0Q-MVX" eventType="touchUpInside" id="k8G-sz-FdI"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FSt-bR-DeF">
-                                                    <rect key="frame" x="69" y="13" width="49" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FSt-bR-DeF">
+                                                    <rect key="frame" x="69" y="13" width="48.5" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="fnN-DF-6S1" secondAttribute="trailing" constant="20" id="1hP-HB-GNv"/>
                                                 <constraint firstItem="Cpt-4H-aFB" firstAttribute="leading" secondItem="8mE-RN-HJq" secondAttribute="leadingMargin" constant="10" id="2pQ-1d-q2L"/>
                                                 <constraint firstItem="Cpt-4H-aFB" firstAttribute="top" secondItem="fnN-DF-6S1" secondAttribute="bottom" constant="10" id="5IE-VE-txR"/>
-                                                <constraint firstItem="FSt-bR-DeF" firstAttribute="bottom" secondItem="mry-eW-YvN" secondAttribute="bottom" constant="-2" id="AFY-CX-uHp"/>
                                                 <constraint firstItem="mry-eW-YvN" firstAttribute="top" secondItem="8mE-RN-HJq" secondAttribute="topMargin" id="C2K-t4-3ez"/>
                                                 <constraint firstItem="Cpt-4H-aFB" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="8mE-RN-HJq" secondAttribute="bottomMargin" constant="-40" id="Enm-AI-cIR"/>
+                                                <constraint firstItem="gjP-Ee-kva" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FSt-bR-DeF" secondAttribute="trailing" constant="10" id="IYg-eY-zdx"/>
                                                 <constraint firstItem="mry-eW-YvN" firstAttribute="top" secondItem="8mE-RN-HJq" secondAttribute="topMargin" id="JPS-yz-h7d"/>
                                                 <constraint firstItem="gjP-Ee-kva" firstAttribute="top" secondItem="mry-eW-YvN" secondAttribute="top" constant="4" id="NvK-h7-i0p"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Cpt-4H-aFB" secondAttribute="trailing" constant="40" id="R3g-7n-oXC"/>
@@ -127,7 +126,9 @@
                                                 <constraint firstItem="mry-eW-YvN" firstAttribute="leading" secondItem="8mE-RN-HJq" secondAttribute="leadingMargin" constant="15" id="YlQ-U5-ItT"/>
                                                 <constraint firstItem="FSt-bR-DeF" firstAttribute="leading" secondItem="mry-eW-YvN" secondAttribute="trailing" constant="8" id="blT-jL-vZb"/>
                                                 <constraint firstItem="fnN-DF-6S1" firstAttribute="leading" secondItem="mry-eW-YvN" secondAttribute="leading" constant="2" id="dhD-7t-MIk"/>
+                                                <constraint firstItem="FSt-bR-DeF" firstAttribute="top" secondItem="mry-eW-YvN" secondAttribute="top" constant="2" id="fLB-BL-to9"/>
                                                 <constraint firstItem="mry-eW-YvN" firstAttribute="top" secondItem="8mE-RN-HJq" secondAttribute="topMargin" id="qyx-sh-Chq"/>
+                                                <constraint firstItem="gjP-Ee-kva" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fnN-DF-6S1" secondAttribute="trailing" constant="10" id="u9F-jT-f9P"/>
                                                 <constraint firstItem="fnN-DF-6S1" firstAttribute="top" secondItem="mry-eW-YvN" secondAttribute="bottom" constant="2" id="xlQ-UC-aJC"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -167,11 +168,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Na'vi-English" id="z7c-gs-vpd">
-                        <barButtonItem key="leftBarButtonItem" image="InfoIcon" id="p3v-oh-4aX">
+                        <barButtonItem key="leftBarButtonItem" image="Keyboard Icon" style="plain" id="p3v-oh-4aX">
                             <connections>
                                 <segue destination="rxl-et-ybn" kind="presentation" id="b6K-tJ-LTU"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="bookmark" catalog="system" style="plain" id="0dA-dd-jkj"/>
                     </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="6ah-g4-Ied" id="SpS-A9-Dew"/>
@@ -278,8 +280,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="InfoIcon" width="22" height="22"/>
+        <image name="Keyboard Icon" width="30" height="30"/>
         <image name="Play Audio" width="60" height="60"/>
+        <image name="bookmark" catalog="system" width="112" height="128"/>
         <namedColor name="standardKeyboardBackground">
             <color red="0.83499997854232788" green="0.83899998664855957" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

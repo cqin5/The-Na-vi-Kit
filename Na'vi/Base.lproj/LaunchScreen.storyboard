@@ -1,66 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="flJ-Sn-7Sm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="qqn-PI-ZVz">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="NoZ-FV-ULg">
+        <!--Na'vi-English-->
+        <scene sceneID="pM8-In-e1X">
             <objects>
-                <viewController id="flJ-Sn-7Sm" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DictionaryMainViewController" id="qqn-PI-ZVz" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="YtM-A7-hJV"/>
-                        <viewControllerLayoutGuide type="bottom" id="O9R-sQ-N7C"/>
+                        <viewControllerLayoutGuide type="top" id="9p9-H0-LlR"/>
+                        <viewControllerLayoutGuide type="bottom" id="4M5-MR-QkR"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="b9q-z1-869">
+                    <view key="view" contentMode="scaleToFill" id="num-3r-SCp">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Na'vi Input Method" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dv2-dU-B69">
-                                <rect key="frame" x="91.5" y="94" width="231" height="100"/>
+                            <searchBar contentMode="redraw" placeholder="Look up" translatesAutoresizingMaskIntoConstraints="NO" id="K44-uK-gKp">
+                                <rect key="frame" x="0.0" y="782" width="414" height="80"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="231" id="IQf-Yv-aF6"/>
-                                    <constraint firstAttribute="height" constant="100" id="y6N-JV-zUV"/>
+                                    <constraint firstAttribute="height" constant="80" id="HF2-a8-IXf"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="26"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HN5-AE-Kub">
-                                <rect key="frame" x="80.5" y="251" width="253" height="105.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="VMf-2l-0Xs"/>
-                                </constraints>
-                                <attributedString key="attributedText">
-                                    <fragment>
-                                        <string key="content">To enable, go to: 
-1. Settings - General - Keyboards
-2. Add New Keyboard
-3. Choose Na'vi Keyboard</string>
-                                        <attributes>
-                                            <color key="NSColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" metaFont="system" size="17"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="8" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
+                                <connections>
+                                    <outlet property="delegate" destination="qqn-PI-ZVz" id="3wb-on-6VT"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="0.066666666669999999" green="0.066666666669999999" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="HN5-AE-Kub" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="0Ub-Uz-fWj"/>
-                            <constraint firstItem="HN5-AE-Kub" firstAttribute="top" secondItem="dv2-dU-B69" secondAttribute="bottom" constant="57" id="Ies-NV-gjE"/>
-                            <constraint firstItem="dv2-dU-B69" firstAttribute="top" secondItem="YtM-A7-hJV" secondAttribute="bottom" constant="50" id="RzC-YO-qCs"/>
-                            <constraint firstItem="dv2-dU-B69" firstAttribute="centerX" secondItem="b9q-z1-869" secondAttribute="centerX" id="ble-QK-nJa"/>
+                            <constraint firstAttribute="trailing" secondItem="K44-uK-gKp" secondAttribute="trailing" id="lSR-g4-Hhw"/>
+                            <constraint firstItem="K44-uK-gKp" firstAttribute="leading" secondItem="num-3r-SCp" secondAttribute="leading" id="phg-MO-VPX"/>
+                            <constraint firstItem="4M5-MR-QkR" firstAttribute="top" secondItem="K44-uK-gKp" secondAttribute="bottom" id="t6Z-o8-Cqe"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Na'vi-English" id="H83-s2-PuK">
+                        <barButtonItem key="leftBarButtonItem" image="InfoIcon" id="gva-N1-dJw"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="searchBar" destination="K44-uK-gKp" id="A0i-gw-OFl"/>
+                        <outlet property="searchBarBottomConstraint" destination="t6Z-o8-Cqe" id="03p-19-uJv"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PkV-gP-CGP" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H7Z-HU-DKL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="575" y="371"/>
+            <point key="canvasLocation" x="1281" y="367"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="InfoIcon" width="22" height="22"/>
+    </resources>
 </document>
