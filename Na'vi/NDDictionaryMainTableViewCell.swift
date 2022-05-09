@@ -18,6 +18,11 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     
     @IBOutlet weak var playAudioButton: UIButton!
     
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    let defaultBottomConstraint = CGFloat(-40)
+    let searchingBottomConstraint = CGFloat(0)
+
+    
     let titleFont : UIFont = UIFont.boldSystemFont(ofSize: 18)
     let subtitleFont : UIFont = UIFont.systemFont(ofSize: 14)
     
@@ -40,7 +45,7 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
         setColoursToInterfaceStyle()
     }
     
-    func loadData(_ dictionaryItem:NDDictionaryEntry) {
+    func loadData(_ dictionaryItem:NDDictionaryEntry, isSearchResult: Bool) {
         
         titleLabel.text = dictionaryItem.navi
         subtitleLabel.text = dictionaryItem.IPA + "  " + dictionaryItem.partOfSpeech
@@ -50,6 +55,7 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
         audioFileLocation = dictionaryItem.audioFileLocation
         localAudioFileName = dictionaryItem.localAudioFileName
         
+        bottomConstraint.constant = isSearchResult ? searchingBottomConstraint : defaultBottomConstraint
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

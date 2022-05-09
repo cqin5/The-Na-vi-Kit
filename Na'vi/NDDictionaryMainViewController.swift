@@ -111,7 +111,15 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainDictionaryCell", for: indexPath) as! NDDictionaryMainTableViewCell
-        cell.loadData(dictionaryItems[indexPath.section][indexPath.row])
+        
+        guard let isSearching = searchBar.text?.isEmpty else {
+            cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: false)
+            return cell
+        }
+        
+        print("isSearching = ", isSearching)
+        cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: !isSearching)
+        
         return cell
     }
     

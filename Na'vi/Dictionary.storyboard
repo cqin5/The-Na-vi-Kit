@@ -133,6 +133,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="bottomConstraint" destination="Enm-AI-cIR" id="zQE-UY-G8y"/>
                                             <outlet property="definitionLabel" destination="fnN-DF-6S1" id="nqI-Ij-obj"/>
                                             <outlet property="playAudioButton" destination="gjP-Ee-kva" id="Qbq-kB-lhu"/>
                                             <outlet property="subtitleLabel" destination="FSt-bR-DeF" id="880-BJ-ISx"/>
