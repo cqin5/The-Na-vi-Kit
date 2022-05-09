@@ -18,6 +18,7 @@
 		A699EE12282810D40067D977 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = A699EE11282810D40067D977 /* KeyboardKit */; };
 		A699EE1528281D9A0067D977 /* KeyboardKitPro in Frameworks */ = {isa = PBXBuildFile; productRef = A699EE1428281D9A0067D977 /* KeyboardKitPro */; };
 		A699EE172828282E0067D977 /* vocabulary.json in Resources */ = {isa = PBXBuildFile; fileRef = A699EE162828282E0067D977 /* vocabulary.json */; };
+		A699EE192828B65F0067D977 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = A699EE182828B65F0067D977 /* audio */; };
 		A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */; };
 		A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */; };
 		A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */; };
@@ -95,6 +96,7 @@
 		A617909B2149214C00C7ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
 		A699EE162828282E0067D977 /* vocabulary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = vocabulary.json; path = Resources/vocabulary.json; sourceTree = SOURCE_ROOT; };
+		A699EE182828B65F0067D977 /* audio */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = audio; path = Resources/audio; sourceTree = SOURCE_ROOT; };
 		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 				A6CB924F1D1C92D60030D414 /* NDDictionary.swift */,
 				A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */,
 				A699EE162828282E0067D977 /* vocabulary.json */,
+				A699EE182828B65F0067D977 /* audio */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 			files = (
 				A6AE8B041D1AD43E00345E2E /* LaunchScreen.storyboard in Resources */,
 				A6AE8B011D1AD43E00345E2E /* Assets.xcassets in Resources */,
+				A699EE192828B65F0067D977 /* audio in Resources */,
 				A699EE172828282E0067D977 /* vocabulary.json in Resources */,
 				A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */,
 				A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */,
