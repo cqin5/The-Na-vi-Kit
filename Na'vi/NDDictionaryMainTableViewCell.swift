@@ -87,11 +87,17 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
         guard let path = Bundle.main.path(forResource: localAudioFileName, ofType: nil) else {
             return
         }
-        
+
+
         let url = URL(fileURLWithPath: path)
 
         do {
+            
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
             audioPlayer = try AVAudioPlayer(contentsOf: url)
+                        
             audioPlayer?.play()
         } catch {
             // couldn't load file :(
