@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn on Na'vi Keyboard" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JHx-nY-Vxy">
-                                <rect key="frame" x="81" y="74" width="252.5" height="60"/>
+                                <rect key="frame" x="81" y="78" width="252.5" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="SBt-5r-tzz"/>
                                 </constraints>
@@ -36,7 +36,7 @@
                                     <constraint firstAttribute="height" constant="36" id="ffq-9y-tfb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <state key="normal" title="Contact">
+                                <state key="normal" title="Contact Developer">
                                     <color key="titleColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -63,61 +63,61 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1. In Settings, go to General" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sD3-M8-asq">
-                                <rect key="frame" x="60" y="154" width="294" height="17"/>
+                                <rect key="frame" x="60" y="158" width="294" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-1" translatesAutoresizingMaskIntoConstraints="NO" id="qO7-D5-EuF">
-                                <rect key="frame" x="20" y="175" width="374" height="60"/>
+                                <rect key="frame" x="20" y="179" width="374" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="fes-YC-B9n"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-2" translatesAutoresizingMaskIntoConstraints="NO" id="8sB-Ch-W0X">
-                                <rect key="frame" x="20" y="276" width="374" height="60"/>
+                                <rect key="frame" x="20" y="280" width="374" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="QKV-ri-l35"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-3" translatesAutoresizingMaskIntoConstraints="NO" id="9F0-Aq-yMI">
-                                <rect key="frame" x="20" y="377" width="374" height="60"/>
+                                <rect key="frame" x="20" y="381" width="374" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="mAR-zp-e0Q"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-4" translatesAutoresizingMaskIntoConstraints="NO" id="rn3-e6-f0x">
-                                <rect key="frame" x="20" y="484" width="374" height="60"/>
+                                <rect key="frame" x="20" y="488" width="374" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="HMi-P6-k7a"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2. Go to Keyboard" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E8o-4u-6dS">
-                                <rect key="frame" x="60" y="255" width="294" height="17"/>
+                                <rect key="frame" x="60" y="259" width="294" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3. Go to Keyboards" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFs-w0-dL7">
-                                <rect key="frame" x="145.5" y="356" width="123.5" height="17"/>
+                                <rect key="frame" x="145.5" y="360" width="123.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4. Add New Keyboard" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eln-KI-X6O">
-                                <rect key="frame" x="137" y="457" width="140" height="17"/>
+                                <rect key="frame" x="137" y="461" width="140" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" image="Add-Keyboard-Step-5" translatesAutoresizingMaskIntoConstraints="NO" id="yjo-lq-LwM">
-                                <rect key="frame" x="20" y="591" width="374" height="60"/>
+                                <rect key="frame" x="20" y="595" width="374" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="QeK-uQ-EGA"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5. Add Eywa" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3P-BT-WoS">
-                                <rect key="frame" x="167.5" y="564" width="79.5" height="17"/>
+                                <rect key="frame" x="167.5" y="568" width="79.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		11087954DA923448819C6115 /* Pods_Na_vi_Keyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4570A86B8BDE69E63DE92847 /* Pods_Na_vi_Keyboard.framework */; };
 		5D82B63F2FBF5AFA44BDFFC6 /* Pods_Na_vi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A47F0676EA4884095F19FD1 /* Pods_Na_vi.framework */; };
-		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A61790992149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
 		A617909A2149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
 		A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
@@ -2750,15 +2750,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A614202E1D1AD5DC001C0FBD /* Embed App Extensions */ = {
+		A614202E1D1AD5DC001C0FBD /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed App Extensions */,
+				A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -8416,7 +8416,7 @@
 				A6AE8AEF1D1AD43E00345E2E /* Sources */,
 				A6AE8AF01D1AD43E00345E2E /* Frameworks */,
 				A6AE8AF11D1AD43E00345E2E /* Resources */,
-				A614202E1D1AD5DC001C0FBD /* Embed App Extensions */,
+				A614202E1D1AD5DC001C0FBD /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -8439,7 +8439,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 1140;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = CQ;
 				TargetAttributes = {
 					A61420221D1AD5DC001C0FBD = {
@@ -11376,6 +11376,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -11400,7 +11401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -11433,6 +11434,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -11451,7 +11453,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -11470,12 +11472,13 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = Eywa;
 				SUPPORTS_MACCATALYST = NO;
@@ -11495,12 +11498,13 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.0;
+				MARKETING_VERSION = 1.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
 				PRODUCT_NAME = Eywa;
 				SUPPORTS_MACCATALYST = NO;
