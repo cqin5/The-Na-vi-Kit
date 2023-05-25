@@ -44,7 +44,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     var sectionTitles: [String] = [String]()
     var categories: [String] = [String]()
     
-    let minimumRowHeight = CGFloat(140)
+    let minimumRowHeight = CGFloat(150)
     
     var bookmarkedItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
     
@@ -63,12 +63,14 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if searchBar.text?.count > 0 {
-            self.searchText(searchBar.text!)
+        
+        if let searchText = searchBar.text, !searchText.isEmpty {
+            self.searchText(searchText)
         }
+        
         setColoursToInterfaceStyle()
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setColoursToInterfaceStyle()
     }
@@ -114,15 +116,17 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MainDictionaryCell", for: indexPath) as! NDDictionaryMainTableViewCell
         
-        guard let isSearching = searchBar.text?.isEmpty else {
-            cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: false)
+        guard indexPath.section < dictionaryItems.count,
+              indexPath.row < dictionaryItems[indexPath.section].count else {
+            // In case of an invalid indexPath, return an empty cell
             return cell
         }
         
-        cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: !isSearching)
-        
+        let isSearching = !(searchBar.text?.isEmpty ?? true)
+        cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: isSearching)
         return cell
     }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         return
@@ -148,41 +152,53 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        if searchBar.text?.count > 0 {
+        if let searchText = searchBar.text, !searchText.isEmpty {
             self.loadDefaultDictionary()
         }
         return true
     }
-    
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.searchBar.endEditing(true)
-        if searchBar.text!.count == 0 {
+        
+        if let searchText = searchBar.text, searchText.isEmpty {
             self.loadDefaultDictionary()
         }
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.searchText(searchBar.text!)
+        if let searchText = searchBar.text {
+            self.searchText(searchText)
+        }
+        
         searchBar.endEditing(true)
     }
-    
-    func searchText(_ searchText:String) {
-        self.loadDefaultDictionary()
 
-        for (i,_) in self.dictionaryItems.enumerated() {
-            self.dictionaryItems[i] = self.dictionaryItems[i].filter { (dictionaryItem) -> Bool in
-                return dictionaryItem.navi.uppercased().contains(searchText.uppercased())
-                    || dictionaryItem.english.uppercased().contains(searchText.uppercased())
+    func searchText(_ searchText: String) {
+        // If the search text is empty, load the default dictionary and return
+        if searchText.isEmpty {
+            self.dictionaryItems = defaultClassifiedDictionary
+            updateDictionaryData()
+            return
+        }
+        
+        // Filter the default dictionary based on the search text
+        var filteredDictionaryItems: [[NDDictionaryEntry]] = []
+        for section in defaultClassifiedDictionary {
+            let filteredSection = section.filter { dictionaryItem in
+                dictionaryItem.navi.uppercased().contains(searchText.uppercased()) ||
+                dictionaryItem.english.uppercased().contains(searchText.uppercased())
+            }
+            if !filteredSection.isEmpty {
+                filteredDictionaryItems.append(filteredSection)
             }
         }
-        self.dictionaryItems = self.dictionaryItems.filter {$0.count > 0}
-//        self.dictionaryItems = self.dictionaryItems.compactMap { $0 }
         
-        if searchText.count == 0 {
-            self.loadDefaultDictionary()
-        }
+        // Update dictionaryItems with the filtered results and update the UI
+        self.dictionaryItems = filteredDictionaryItems
         updateDictionaryData()
     }
+
 
     @objc func keyboardWillShow(_ notification: NSNotification) {
         
