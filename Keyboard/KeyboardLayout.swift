@@ -158,6 +158,13 @@ class LayoutConstants: NSObject {
 }
 
 class GlobalColors: NSObject {
+    // Glass mode colors (semi-transparent for iOS 18 glassmorphism)
+    class var glassLightModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(0.6) }}
+    class var glassDarkModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(0.15) }}
+    class var glassLightModeSpecialKey: UIColor { get { return UIColor.systemGray.withAlphaComponent(0.5) }}
+    class var glassDarkModeSpecialKey: UIColor { get { return UIColor.systemGray.withAlphaComponent(0.2) }}
+
+    // Original solid colors (kept for solid color mode)
     class var lightModeRegularKey: UIColor { get { return UIColor.white }}
     class var darkModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(CGFloat(0.3)) }}
     class var darkModeSolidColorRegularKey: UIColor { get { return UIColor(red: CGFloat(83)/CGFloat(255), green: CGFloat(83)/CGFloat(255), blue: CGFloat(83)/CGFloat(255), alpha: 1) }}
@@ -169,7 +176,7 @@ class GlobalColors: NSObject {
     class var lightModePopup: UIColor { get { return GlobalColors.lightModeRegularKey }}
     class var darkModePopup: UIColor { get { return UIColor.gray }}
     class var darkModeSolidColorPopup: UIColor { get { return GlobalColors.darkModeSolidColorRegularKey }}
-    
+
     class var lightModeUnderColor: UIColor { get { return UIColor(hue: (220/360.0), saturation: 0.04, brightness: 0.56, alpha: 1) }}
     class var darkModeUnderColor: UIColor { get { return UIColor(red: CGFloat(38.6)/CGFloat(255), green: CGFloat(18)/CGFloat(255), blue: CGFloat(39.3)/CGFloat(255), alpha: 0.4) }}
     class var lightModeTextColor: UIColor { get { return UIColor.black }}
@@ -178,16 +185,13 @@ class GlobalColors: NSObject {
     class var darkModeBorderColor: UIColor { get { return UIColor.clear }}
     
     class func regularKey(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if darkMode {
-            if solidColorMode {
-                return self.darkModeSolidColorRegularKey
-            }
-            else {
-                return self.darkModeRegularKey
-            }
+        if solidColorMode {
+            // Use solid colors for accessibility mode
+            return darkMode ? self.darkModeSolidColorRegularKey : self.lightModeRegularKey
         }
         else {
-            return self.lightModeRegularKey
+            // Use glass colors for modern iOS 18 aesthetic
+            return darkMode ? self.glassDarkModeRegularKey : self.glassLightModeRegularKey
         }
     }
     
@@ -206,21 +210,13 @@ class GlobalColors: NSObject {
     }
     
     class func specialKey(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if darkMode {
-            if solidColorMode {
-                return self.darkModeSolidColorSpecialKey
-            }
-            else {
-                return self.darkModeSpecialKey
-            }
+        if solidColorMode {
+            // Use solid colors for accessibility mode
+            return darkMode ? self.darkModeSolidColorSpecialKey : self.lightModeSolidColorSpecialKey
         }
         else {
-            if solidColorMode {
-                return self.lightModeSolidColorSpecialKey
-            }
-            else {
-                return self.lightModeSpecialKey
-            }
+            // Use glass colors for modern iOS 18 aesthetic
+            return darkMode ? self.glassDarkModeSpecialKey : self.glassLightModeSpecialKey
         }
     }
 }

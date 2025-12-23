@@ -12,13 +12,13 @@ import AVFoundation
 
 class NDDictionaryMainTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var titleLabel : UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var definitionLabel : UILabel!
-    
+    @IBOutlet weak var definitionLabel: UILabel!
+
     @IBOutlet weak var playAudioButton: UIButton!
     @IBOutlet weak var bookmarkImageView: UIImageView!
-    
+
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     let defaultBottomConstraint = CGFloat(-40)
@@ -40,11 +40,42 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     var localAudioFileName = ""
     
     var audioPlayer: AVAudioPlayer?
-    
+
+    // Lazy blur view for performance optimization
+    private lazy var glassBackgroundView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .systemMaterial)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.alpha = 0.95
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return blurView
+    }()
+
     override func awakeFromNib() {
         super.awakeFromNib()
         playAudioButton.imageView?.contentMode = .scaleAspectFit
+
+        // Setup glass background (lazy loaded)
+        setupGlassBackground()
+
         setColoursToInterfaceStyle()
+    }
+
+    func setupGlassBackground() {
+        // Use lazy-loaded blur view for better performance
+        self.backgroundView = glassBackgroundView
+        self.backgroundColor = .clear
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        // Reuse blur view instead of recreating
+        // Just update frame if needed
+        glassBackgroundView.frame = self.bounds
+
+        // Stop any playing audio
+        audioPlayer?.stop()
+        audioPlayer = nil
     }
     
     func loadData(_ dictionaryItem:NDDictionaryEntry, isSearchResult: Bool) {
@@ -75,10 +106,20 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     
     
     func setColoursToInterfaceStyle() {
-        titleLabel.textColor = traitCollection.userInterfaceStyle == .dark ? titleLabelColourDarkMode : titleLabelColourLightMode
-        subtitleLabel.textColor = traitCollection.userInterfaceStyle == .dark ? subtitleLabelColourDarkMode : subtitleLabelColourLightMode
-        definitionLabel.textColor = traitCollection.userInterfaceStyle == .dark ? definitionLabelColourDarkMode : definitionLabelColourLightMode
-        
+        let isDark = traitCollection.userInterfaceStyle == .dark
+
+        // Enhanced glass-appropriate text colors for better readability
+        titleLabel.textColor = isDark ?
+            UIColor.white.withAlphaComponent(0.95) :
+            UIColor.black.withAlphaComponent(0.9)
+
+        subtitleLabel.textColor = isDark ?
+            UIColor.white.withAlphaComponent(0.7) :
+            UIColor.black.withAlphaComponent(0.6)
+
+        definitionLabel.textColor = isDark ?
+            UIColor.white.withAlphaComponent(0.85) :
+            UIColor.black.withAlphaComponent(0.75)
     }
 
     @IBAction func playAudioButtonPressed(_ sender: Any) {

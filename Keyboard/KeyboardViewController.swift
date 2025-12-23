@@ -171,21 +171,41 @@ class KeyboardViewController: UIInputViewController {
     var constraintsAdded: Bool = false
     func setupLayout() {
         if !constraintsAdded {
+            // Setup glass background for keyboard
+            setupGlassKeyboardBackground()
+
             self.layout = type(of: self).layoutClass.init(model: self.keyboard, superview: self.forwardingView, layoutConstants: type(of: self).layoutConstants, globalColors: type(of: self).globalColors, darkMode: self.darkMode(), solidColorMode: self.solidColorMode())
-            
+
             self.layout?.initialize()
             self.setMode(0)
-            
+
             self.setupKludge()
-            
+
             self.updateKeyCaps(self.shiftState.uppercase())
             _ = self.setCapsIfNeeded()
-            
+
             self.updateAppearances(self.darkMode())
             self.addInputTraitsObservers()
-            
+
             self.constraintsAdded = true
         }
+    }
+
+    func setupGlassKeyboardBackground() {
+        // Apply heavy glass blur to keyboard background
+        let blurEffect = UIBlurEffect(style: .systemThickMaterial)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = forwardingView.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        forwardingView.insertSubview(blurView, at: 0)
+
+        // Add subtle tint overlay based on dark mode
+        let tintOverlay = UIView(frame: forwardingView.bounds)
+        tintOverlay.backgroundColor = darkMode() ?
+            UIColor.black.withAlphaComponent(0.2) :
+            UIColor.white.withAlphaComponent(0.3)
+        tintOverlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        forwardingView.insertSubview(tintOverlay, at: 1)
     }
     
     // only available after frame becomes non-zero

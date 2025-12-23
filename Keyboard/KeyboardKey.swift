@@ -173,8 +173,9 @@ class KeyboardKey: UIControl {
             self.underView?.isOpaque = false
             self.borderView?.isOpaque = false
             
-            self.shadowLayer.shadowOpacity = Float(0.2)
-            self.shadowLayer.shadowRadius = 4
+            // Enhanced shadow for glass effect (iOS 18)
+            self.shadowLayer.shadowOpacity = Float(0.3)  // Increased from 0.2
+            self.shadowLayer.shadowRadius = 6  // Increased from 4
             self.shadowLayer.shadowOffset = CGSize(width: 0, height: 3)
             
             self.borderView?.lineWidth = CGFloat(0.5)
@@ -441,11 +442,27 @@ class KeyboardKey: UIControl {
     func showPopup() {
         if self.popup == nil {
             self.layer.zPosition = 1000
-            
+
             let popup = KeyboardKeyBackground(cornerRadius: 9.0, underOffset: self.underOffset)
             self.popup = popup
+
+            // Add glass blur effect to popup for iOS 18
+            let blurEffect = UIBlurEffect(style: .systemThinMaterial)
+            let blurView = UIVisualEffectView(effect: blurEffect)
+            blurView.frame = popup.bounds
+            blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            blurView.layer.cornerRadius = 9.0
+            blurView.clipsToBounds = true
+            popup.insertSubview(blurView, at: 0)
+
+            // Enhanced shadow for popup glass effect
+            popup.layer.shadowOpacity = 0.4  // Increased from default
+            popup.layer.shadowRadius = 8  // Increased for more depth
+            popup.layer.shadowOffset = CGSize(width: 0, height: 4)
+            popup.layer.shadowColor = UIColor.black.cgColor
+
             self.addSubview(popup)
-            
+
             let popupLabel = UILabel()
             popupLabel.textAlignment = self.label.textAlignment
             popupLabel.baselineAdjustment = self.label.baselineAdjustment
@@ -458,7 +475,7 @@ class KeyboardKey: UIControl {
             popupLabel.text = self.label.text
             popup.addSubview(popupLabel)
             self.popupLabel = popupLabel
-            
+
             self.label.isHidden = true
         }
     }

@@ -10,23 +10,41 @@ import UIKit
 
 class NDDictionarySectionTableViewCell: UITableViewCell {
 
-    @IBOutlet var sectionLabel : UILabel!
-    
-    
+    @IBOutlet private var sectionLabel: UILabel!
+
+    // Lazy blur view for performance optimization
+    private lazy var glassBackgroundView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.alpha = 1.0
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        return blurView
+    }()
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setColoursToInterfaceStyle()
-        
-        let blurEffect = UIBlurEffect(style: .systemChromeMaterial)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        
-        blurEffectView.alpha = 0.95
-        //always fill the view
-        blurEffectView.frame = self.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        addSubview(blurEffectView)
-        sendSubviewToBack(blurEffectView)
+
+        // Setup glass background (lazy loaded)
+        setupGlassBackground()
+    }
+
+    func setupGlassBackground() {
+        // Add subtle tint based on interface style
+        glassBackgroundView.backgroundColor = traitCollection.userInterfaceStyle == .dark ?
+            UIColor.systemBlue.withAlphaComponent(0.05) :
+            UIColor.systemBlue.withAlphaComponent(0.02)
+
+        glassBackgroundView.frame = self.bounds
+        addSubview(glassBackgroundView)
+        sendSubviewToBack(glassBackgroundView)
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        // Reuse blur view, just update frame
+        glassBackgroundView.frame = self.bounds
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -44,8 +62,13 @@ class NDDictionarySectionTableViewCell: UITableViewCell {
     }
     
     func setColoursToInterfaceStyle() {
-        backgroundColor         = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#242424", alpha: 0.6) : UIColor(white: 0.8, alpha: 1.0)
-        sectionLabel.textColor  = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#ffffff", alpha: 1.0) : UIColor(white: 0.0, alpha: 1.0)
+        // Remove solid background - rely on glass blur effect
+        backgroundColor = .clear
+
+        // High contrast text for glass backgrounds
+        sectionLabel.textColor = traitCollection.userInterfaceStyle == .dark ?
+            UIColor.white.withAlphaComponent(1.0) :
+            UIColor.black.withAlphaComponent(0.9)
     }
     
 }

@@ -22,8 +22,9 @@ class DefaultSettings: ExtraView, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    let cellBackgroundColorDark = UIColor.white.withAlphaComponent(CGFloat(0.25))
-    let cellBackgroundColorLight = UIColor.white.withAlphaComponent(CGFloat(1))
+    // Enhanced glass effect for iOS 18 - more transparent cells
+    let cellBackgroundColorDark = UIColor.white.withAlphaComponent(CGFloat(0.15))  // Reduced from 0.25
+    let cellBackgroundColorLight = UIColor.white.withAlphaComponent(CGFloat(0.8))  // Reduced from 1.0
     let cellLabelColorDark = UIColor.white
     let cellLabelColorLight = UIColor.black
     let cellLongLabelColorDark = UIColor.lightGray
@@ -148,13 +149,14 @@ class DefaultSettings: ExtraView, UITableViewDataSource, UITableViewDelegate {
     }
     
     func updateAppearance(_ dark: Bool) {
+        // Update blur effect intensity for iOS 18 glass UI
         if dark {
-            _ = self.effectsView?.effect
+            self.effectsView?.effect = UIBlurEffect(style: .systemThickMaterialDark)
             let blueColor = UIColor(red: 135/CGFloat(255), green: 206/CGFloat(255), blue: 250/CGFloat(255), alpha: 1)
             self.pixelLine?.backgroundColor = blueColor.withAlphaComponent(CGFloat(0.5))
             self.backButton?.setTitleColor(blueColor, for: UIControl.State())
             self.settingsLabel?.textColor = UIColor.white
-            
+
             if let visibleCells = self.tableView?.visibleCells {
                 for cell in visibleCells {
                     cell.backgroundColor = cellBackgroundColorDark
@@ -166,11 +168,12 @@ class DefaultSettings: ExtraView, UITableViewDataSource, UITableViewDelegate {
             }
         }
         else {
+            self.effectsView?.effect = UIBlurEffect(style: .systemThickMaterialLight)
             let blueColor = UIColor(red: 0/CGFloat(255), green: 122/CGFloat(255), blue: 255/CGFloat(255), alpha: 1)
             self.pixelLine?.backgroundColor = blueColor.withAlphaComponent(CGFloat(0.5))
             self.backButton?.setTitleColor(blueColor, for: UIControl.State())
             self.settingsLabel?.textColor = UIColor.gray
-            
+
             if let visibleCells = self.tableView?.visibleCells {
                 for cell in visibleCells {
                     cell.backgroundColor = cellBackgroundColorLight

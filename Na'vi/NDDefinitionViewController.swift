@@ -10,9 +10,9 @@ import UIKit
 
 class NDDefinitionViewController: UIViewController {
 
-    @IBOutlet var naviLabel : UILabel!
-    @IBOutlet var categoryLabel : UILabel!
-    @IBOutlet var definitionView : UITextView!
+    @IBOutlet private var naviLabel: UILabel!
+    @IBOutlet private var categoryLabel: UILabel!
+    @IBOutlet private var definitionView: UITextView!
     
     let naviFont : UIFont = UIFont.systemFont(ofSize: 18)
     let IPAFont : UIFont = UIFont.systemFont(ofSize: 16)
@@ -22,9 +22,26 @@ class NDDefinitionViewController: UIViewController {
     let definitionColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
     
     var entry : NDDictionaryEntry!
-    
+
+    // Styling manager to reduce view controller responsibilities
+    private lazy var stylingManager = ViewStylingManager(viewController: self)
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Setup glass UI via styling manager
+        stylingManager.setupDefinitionGlassUI(textView: definitionView)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Update gradient frame via styling manager
+        stylingManager.updateGradientFrame(view.bounds)
+    }
+
+    deinit {
+        stylingManager.cleanup()
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -7,50 +7,28 @@
 //
 
 import UIKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
-    @IBOutlet var tableView: UITableView!
-    @IBOutlet var searchBar: UISearchBar!
-    
-    @IBOutlet weak var searchBarBottomConstraint: NSLayoutConstraint!
-    
+    @IBOutlet private var tableView: UITableView!
+    @IBOutlet private var searchBar: UISearchBar!
+    @IBOutlet private weak var searchBarBottomConstraint: NSLayoutConstraint!
+
     var defaultClassifiedDictionary: [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
     var dictionaryItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
     var sectionTitles: [String] = [String]()
     var categories: [String] = [String]()
-    
+
     let minimumRowHeight = CGFloat(150)
-    
+
     var bookmarkedItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
-    
+
+    // Styling manager to reduce view controller responsibilities
+    private lazy var stylingManager = ViewStylingManager(viewController: self)
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIWindow.keyboardWillShowNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIWindow.keyboardWillHideNotification, object: nil)
@@ -58,7 +36,13 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         dictionaryItems = defaultClassifiedDictionary
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
 //        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
-        
+
+        // Setup glass UI via styling manager
+        stylingManager.setupDictionaryGlassUI(
+            tableView: tableView,
+            searchBar: searchBar,
+            navigationController: navigationController
+        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,8 +60,22 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func setColoursToInterfaceStyle() {
-        view.backgroundColor        = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#000000", alpha: 1.0) : UIColor(hex: "#ffffff", alpha: 1.0)
-        tableView.backgroundColor   = traitCollection.userInterfaceStyle == .dark ? UIColor(hex: "#000000", alpha: 1.0) : UIColor(hex: "#ffffff", alpha: 1.0)
+        // Update gradient colors via styling manager
+        stylingManager.updateGradientColors(for: traitCollection)
+
+        // Table view should be clear to show gradient
+        tableView.backgroundColor = .clear
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Update gradient frame via styling manager
+        stylingManager.updateGradientFrame(view.bounds)
+    }
+
+    deinit {
+        stylingManager.cleanup()
     }
 
     

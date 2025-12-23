@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,10 @@
 		A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */; };
 		A699EE12282810D40067D977 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = A699EE11282810D40067D977 /* KeyboardKit */; };
 		A699EE1528281D9A0067D977 /* KeyboardKitPro in Frameworks */ = {isa = PBXBuildFile; productRef = A699EE1428281D9A0067D977 /* KeyboardKitPro */; };
+		A6A8DD8E2EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */; };
+		A6A8DD8F2EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */; };
+		A6A8DD902EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */; };
+		A6A8DD912EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */; };
 		A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */; };
 		A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */; };
 		A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */; };
@@ -2777,6 +2781,8 @@
 		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
 		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
 		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
+		A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GlassUIHelper.swift; path = "Na'vi/GlassUIHelper.swift"; sourceTree = "<group>"; };
+		A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewStylingManager.swift; path = "Na'vi/ViewStylingManager.swift"; sourceTree = "<group>"; };
 		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -5556,6 +5562,8 @@
 		A6AE8AEA1D1AD43E00345E2E = {
 			isa = PBXGroup;
 			children = (
+				A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */,
+				A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */,
 				A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */,
 				A699EE1A2828C6D50067D977 /* Na-vi.entitlements */,
 				A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */,
@@ -8438,8 +8446,9 @@
 		A6AE8AEB1D1AD43E00345E2E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 2620;
 				ORGANIZATIONNAME = CQ;
 				TargetAttributes = {
 					A61420221D1AD5DC001C0FBD = {
@@ -11227,6 +11236,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6CB921E1D1B32050030D414 /* ExtraView.swift in Sources */,
+				A6A8DD902EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */,
+				A6A8DD912EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */,
 				A6CB92231D1B32050030D414 /* KeyboardInputTraits.swift in Sources */,
 				A6CB92351D1B358E0030D414 /* CQMPHelper.swift in Sources */,
 				A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */,
@@ -11262,6 +11273,8 @@
 				A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */,
 				A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */,
 				A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */,
+				A6A8DD8E2EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */,
+				A6A8DD8F2EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */,
 				A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */,
 				A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */,
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
@@ -11310,9 +11323,10 @@
 				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MJS6LB37T9;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -11325,7 +11339,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -11337,9 +11351,10 @@
 				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MJS6LB37T9;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -11352,7 +11367,7 @@
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -11390,8 +11405,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = MJS6LB37T9;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -11406,10 +11423,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -11448,8 +11466,10 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = MJS6LB37T9;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -11458,9 +11478,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -11471,15 +11492,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FD00EFE03337A0DC5C84F592 /* Pods-Na-vi.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MJS6LB37T9;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -11490,7 +11511,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -11499,15 +11520,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 270E4AC96688ADDE651506D9 /* Pods-Na-vi.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = MJS6LB37T9;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -11518,7 +11539,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

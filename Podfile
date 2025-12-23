@@ -1,4 +1,4 @@
-platform :ios, '11.0'
+platform :ios, '18.0'
 source 'https://github.com/CocoaPods/Specs.git'
 project 'Na-vi.xcodeproj'
 use_frameworks!
