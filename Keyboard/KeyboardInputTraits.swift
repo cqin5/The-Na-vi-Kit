@@ -19,13 +19,28 @@ import UIKit
 
 var traitPollingTimer: CADisplayLink?
 
+// Weak proxy so the CADisplayLink does NOT retain the keyboard view controller.
+// A strong target kept the whole keyboard alive after dismissal (a leak), and the
+// link kept firing pollTraits every frame forever.
+final class DisplayLinkProxy: NSObject {
+    weak var target: KeyboardViewController?
+    init(target: KeyboardViewController) {
+        self.target = target
+        super.init()
+    }
+    @objc func tick() {
+        target?.pollTraits()
+    }
+}
+
 extension KeyboardViewController {
-    
+
     func addInputTraitsObservers() {
         // note that KVO doesn't work on textDocumentProxy, so we have to poll
         traitPollingTimer?.invalidate()
-        traitPollingTimer = UIScreen.main.displayLink(withTarget: self, selector: #selector(KeyboardViewController.pollTraits))
-        traitPollingTimer?.add(to: RunLoop.current, forMode: RunLoop.Mode.default)
+        let link = CADisplayLink(target: DisplayLinkProxy(target: self), selector: #selector(DisplayLinkProxy.tick))
+        link.add(to: RunLoop.current, forMode: RunLoop.Mode.default)
+        traitPollingTimer = link
     }
     
     @objc func pollTraits() {

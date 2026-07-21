@@ -121,7 +121,9 @@ class KeyboardViewController: UIInputViewController {
     deinit {
         backspaceDelayTimer?.invalidate()
         backspaceRepeatTimer?.invalidate()
-        
+        traitPollingTimer?.invalidate()
+        traitPollingTimer = nil
+
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -226,7 +228,17 @@ class KeyboardViewController: UIInputViewController {
     func solidColorMode() -> Bool {
         return UIAccessibility.isReduceTransparencyEnabled
     }
-    
+
+    // Modern replacement for the deprecated `interfaceOrientation`: use the
+    // window scene when available, else fall back to the screen aspect ratio.
+    var currentInterfaceOrientationIsPortrait: Bool {
+        if let scene = self.view.window?.windowScene {
+            return scene.interfaceOrientation.isPortrait
+        }
+        return UIScreen.main.bounds.height >= UIScreen.main.bounds.width
+    }
+
+    var lastKnownPortrait: Bool?
     var lastLayoutBounds: CGRect?
     override func viewDidLayoutSubviews() {
         if view.bounds == CGRect.zero {
@@ -234,8 +246,17 @@ class KeyboardViewController: UIInputViewController {
         }
         
         self.setupLayout()
-        
-        let orientationSavvyBounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.heightForOrientation(self.interfaceOrientation, withTopBanner: false))
+
+        let isPortrait = self.currentInterfaceOrientationIsPortrait
+        // Update the keyboard's own height constraint when the orientation
+        // actually changes. Guarded so it runs once per change (no layout loop);
+        // willRotate/didRotate are gone — iOS 13+ never calls them.
+        if isPortrait != self.lastKnownPortrait {
+            self.lastKnownPortrait = isPortrait
+            self.keyboardHeight = self.heightForOrientation(portrait: isPortrait, withTopBanner: false)
+        }
+
+        let orientationSavvyBounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.heightForOrientation(portrait: isPortrait, withTopBanner: false))
         
         if (lastLayoutBounds != nil && lastLayoutBounds == orientationSavvyBounds) {
             // do nothing
@@ -270,43 +291,19 @@ class KeyboardViewController: UIInputViewController {
         self.bannerView?.isHidden = true
         // withTopBanner:false — the banner is disabled (createBanner returns nil),
         // so reserving 30pt for it just left an empty strip above the keys.
-        self.keyboardHeight = self.heightForOrientation(self.interfaceOrientation, withTopBanner: false)
+        self.keyboardHeight = self.heightForOrientation(portrait: self.currentInterfaceOrientationIsPortrait, withTopBanner: false)
     }
     
-    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        self.forwardingView.resetTrackedViews()
-        self.shiftStartingState = nil
-        self.shiftWasMultitapped = false
-        
-        // optimization: ensures smooth animation
-        if let keyPool = self.layout?.keyPool {
-            for view in keyPool {
-                view.shouldRasterize = true
-            }
-        }
-        
-        self.keyboardHeight = self.heightForOrientation(toInterfaceOrientation, withTopBanner: false)
-    }
-    
-    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-        // optimization: ensures quick mode and shift transitions
-        if let keyPool = self.layout?.keyPool {
-            for view in keyPool {
-                view.shouldRasterize = false
-            }
-        }
-    }
-    
-    func heightForOrientation(_ orientation: UIInterfaceOrientation, withTopBanner: Bool) -> CGFloat {
+    func heightForOrientation(portrait isPortrait: Bool, withTopBanner: Bool) -> CGFloat {
         let isPad = UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
-        
+
         //TODO: hardcoded stuff
         let actualScreenWidth = (UIScreen.main.nativeBounds.size.width / UIScreen.main.nativeScale)
-        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(orientation.isPortrait && actualScreenWidth >= 400 ? 226 : 216))
+        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(isPortrait && actualScreenWidth >= 400 ? 226 : 216))
         let canonicalLandscapeHeight = (isPad ? CGFloat(352) : CGFloat(162))
         let topBannerHeight = (withTopBanner ? metric("topBanner") : 0)
-        
-        return CGFloat(orientation.isPortrait ? canonicalPortraitHeight + topBannerHeight : canonicalLandscapeHeight + topBannerHeight)
+
+        return CGFloat(isPortrait ? canonicalPortraitHeight + topBannerHeight : canonicalLandscapeHeight + topBannerHeight)
     }
     
     /*
@@ -823,11 +820,10 @@ class KeyboardViewController: UIInputViewController {
         if !UserDefaults.standard.bool(forKey: kKeyboardClicks) {
             return
         }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            AudioServicesPlaySystemSound(1104)
-        }
-                
+        // playInputClick() plays the standard key click WITHOUT Full Access
+        // (unlike AudioServicesPlaySystemSound). Requires the
+        // UIInputViewAudioFeedback conformance at the bottom of this file.
+        UIDevice.current.playInputClick()
     }
     
     //////////////////////////////////////
@@ -856,4 +852,9 @@ class KeyboardViewController: UIInputViewController {
         settingsView.backButton?.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: UIControl.Event.touchUpInside)
         return settingsView
     }
+}
+
+// Enables UIDevice.current.playInputClick() to produce key clicks without Full Access.
+extension KeyboardViewController: UIInputViewAudioFeedback {
+    var enableInputClicksWhenVisible: Bool { return true }
 }
