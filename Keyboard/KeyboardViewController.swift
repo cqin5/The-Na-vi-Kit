@@ -192,20 +192,25 @@ class KeyboardViewController: UIInputViewController {
     }
 
     func setupGlassKeyboardBackground() {
-        // Apply heavy glass blur to keyboard background
-        let blurEffect = UIBlurEffect(style: .systemThickMaterial)
+        // Glass must live BEHIND the keys on self.view — never inside
+        // forwardingView. forwardingView routes touches via findNearestView,
+        // and a full-bounds subview there intercepts every key tap (the
+        // keyboard would render but type nothing).
+        let blurEffect = UIBlurEffect(style: darkMode() ? .systemThickMaterialDark : .systemThickMaterialLight)
         let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = forwardingView.bounds
+        blurView.frame = self.view.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        forwardingView.insertSubview(blurView, at: 0)
+        blurView.isUserInteractionEnabled = false
+        self.view.insertSubview(blurView, at: 0)
 
         // Add subtle tint overlay based on dark mode
-        let tintOverlay = UIView(frame: forwardingView.bounds)
+        let tintOverlay = UIView(frame: self.view.bounds)
         tintOverlay.backgroundColor = darkMode() ?
             UIColor.black.withAlphaComponent(0.2) :
             UIColor.white.withAlphaComponent(0.3)
         tintOverlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        forwardingView.insertSubview(tintOverlay, at: 1)
+        tintOverlay.isUserInteractionEnabled = false
+        self.view.insertSubview(tintOverlay, at: 1)
     }
     
     // only available after frame becomes non-zero
@@ -238,7 +243,7 @@ class KeyboardViewController: UIInputViewController {
         else {
             let uppercase = self.shiftState.uppercase()
             let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
-            
+
             self.forwardingView.frame = orientationSavvyBounds
             self.layout?.layoutKeys(self.currentMode, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
             self.lastLayoutBounds = orientationSavvyBounds
@@ -263,7 +268,9 @@ class KeyboardViewController: UIInputViewController {
     
     override func viewWillAppear(_ animated: Bool) {        
         self.bannerView?.isHidden = true
-        self.keyboardHeight = self.heightForOrientation(self.interfaceOrientation, withTopBanner: true)
+        // withTopBanner:false — the banner is disabled (createBanner returns nil),
+        // so reserving 30pt for it just left an empty strip above the keys.
+        self.keyboardHeight = self.heightForOrientation(self.interfaceOrientation, withTopBanner: false)
     }
     
     override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
@@ -278,7 +285,7 @@ class KeyboardViewController: UIInputViewController {
             }
         }
         
-        self.keyboardHeight = self.heightForOrientation(toInterfaceOrientation, withTopBanner: true)
+        self.keyboardHeight = self.heightForOrientation(toInterfaceOrientation, withTopBanner: false)
     }
     
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -346,7 +353,7 @@ class KeyboardViewController: UIInputViewController {
                         if key.isCharacter {
                             if UIDevice.current.userInterfaceIdiom != UIUserInterfaceIdiom.pad {
                                 keyView.addTarget(self, action: #selector(KeyboardViewController.showPopup(_:)), for: [.touchDown, .touchDragInside, .touchDragEnter])
-                                keyView.addTarget(keyView, action: Selector("hidePopup"), for: [.touchDragExit, .touchCancel])
+                                keyView.addTarget(keyView, action: #selector(KeyboardKey.hidePopup), for: [.touchDragExit, .touchCancel])
                                 keyView.addTarget(self, action: #selector(KeyboardViewController.hidePopupDelay(_:)), for: [.touchUpInside, .touchUpOutside, .touchDragOutside])
                             }
                         }
@@ -633,7 +640,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func updateKeyCaps(_ uppercase: Bool) {
-        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? !uppercase : uppercase)
+        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
         self.layout?.updateKeyCaps(false, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
     }
     
@@ -649,7 +656,7 @@ class KeyboardViewController: UIInputViewController {
         self.shiftWasMultitapped = false
         
         let uppercase = self.shiftState.uppercase()
-        let characterUppercase = uppercase// (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
+        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
         self.layout?.layoutKeys(mode, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
         
         self.setupKeys()
@@ -762,6 +769,7 @@ class KeyboardViewController: UIInputViewController {
                 return false
             case .words:
                 if let beforeContext = documentProxy.documentContextBeforeInput {
+                    if beforeContext.isEmpty { return true }
                     let previousCharacter = beforeContext[beforeContext.index(before: beforeContext.endIndex)]
                     return self.characterIsWhitespace(previousCharacter)
                 }

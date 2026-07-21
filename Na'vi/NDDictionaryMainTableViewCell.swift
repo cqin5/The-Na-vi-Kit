@@ -38,8 +38,6 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
 
     var audioFileLocation = ""
     var localAudioFileName = ""
-    
-    var audioPlayer: AVAudioPlayer?
 
     // Lazy blur view for performance optimization
     private lazy var glassBackgroundView: UIVisualEffectView = {
@@ -72,10 +70,6 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
         // Reuse blur view instead of recreating
         // Just update frame if needed
         glassBackgroundView.frame = self.bounds
-
-        // Stop any playing audio
-        audioPlayer?.stop()
-        audioPlayer = nil
     }
     
     func loadData(_ dictionaryItem:NDDictionaryEntry, isSearchResult: Bool) {
@@ -123,28 +117,49 @@ class NDDictionaryMainTableViewCell: UITableViewCell {
     }
 
     @IBAction func playAudioButtonPressed(_ sender: Any) {
-        
-        
-        guard let path = Bundle.main.path(forResource: localAudioFileName, ofType: nil) else {
+        NDAudioController.shared.play(localFileName: localAudioFileName)
+    }
+}
+
+/// Single owner of dictionary audio playback: only one pronunciation plays at a
+/// time, and the audio session is deactivated when playback ends so it stops
+/// ducking the user's background audio.
+final class NDAudioController: NSObject, AVAudioPlayerDelegate {
+    static let shared = NDAudioController()
+    private var player: AVAudioPlayer?
+
+    private override init() { super.init() }
+
+    func play(localFileName: String) {
+        guard !localFileName.isEmpty,
+              let path = Bundle.main.path(forResource: localFileName, ofType: nil) else {
             return
         }
-
-
-        let url = URL(fileURLWithPath: path)
-
+        stop()   // stop any clip already playing before starting a new one
         do {
-            
             try AVAudioSession.sharedInstance().setCategory(.playback)
             try AVAudioSession.sharedInstance().setActive(true)
-            
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-                        
-            audioPlayer?.play()
+            let newPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
+            newPlayer.delegate = self
+            player = newPlayer
+            newPlayer.play()
         } catch {
-            // couldn't load file :(
-            print("couldn't load file :(")
+            print("NDAudioController: couldn't play \(localFileName): \(error)")
+            deactivateSession()
         }
-            
-       
+    }
+
+    func stop() {
+        player?.stop()
+        player = nil
+    }
+
+    private func deactivateSession() {
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+    }
+
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        self.player = nil
+        deactivateSession()
     }
 }

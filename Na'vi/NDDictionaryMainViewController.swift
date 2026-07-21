@@ -43,6 +43,10 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
             searchBar: searchBar,
             navigationController: navigationController
         )
+
+        // iOS 15+ inserts ~22pt of padding above every section header by
+        // default; this design predates that and wants headers flush.
+        tableView.sectionHeaderTopPadding = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,7 +94,7 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         
         self.tableView.reloadData()
         if self.tableView.numberOfSections != 0 {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: false)
         }
     }
     
@@ -127,11 +131,14 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        return
-//        let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
-//        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewController(withIdentifier: "NDDefinitionViewController") as! NDDefinitionViewController
-//        definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
-//        self.navigationController?.pushViewController(definitionViewController, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard indexPath.section < dictionaryItems.count,
+              indexPath.row < dictionaryItems[indexPath.section].count else { return }
+
+        let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
+        guard let definitionViewController = storyboard.instantiateViewController(withIdentifier: "NDDefinitionViewController") as? NDDefinitionViewController else { return }
+        definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
+        self.navigationController?.pushViewController(definitionViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -150,18 +157,16 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        if let searchText = searchBar.text, !searchText.isEmpty {
-            self.loadDefaultDictionary()
-        }
+        // Do NOT mutate the data source here. The old code reset dictionaryItems
+        // to the full list without refreshing sectionTitles or reloading, which
+        // desynced section counts and could trap sectionTitles[section].
         return true
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.searchBar.endEditing(true)
-        
-        if let searchText = searchBar.text, searchText.isEmpty {
-            self.loadDefaultDictionary()
-        }
+        searchBar.text = ""
+        self.searchText("")            // resets data + sectionTitles + reloads consistently
+        searchBar.endEditing(true)
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -172,7 +177,13 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         searchBar.endEditing(true)
     }
 
-    func searchText(_ searchText: String) {
+    func searchText(_ rawSearchText: String) {
+        // Normalize smart quotes (U+2019/U+2018) to the straight apostrophe that
+        // Na'vi entries use, so iOS Smart Punctuation doesn't break apostrophe lookups.
+        let searchText = rawSearchText
+            .replacingOccurrences(of: "\u{2019}", with: "'")
+            .replacingOccurrences(of: "\u{2018}", with: "'")
+
         // If the search text is empty, load the default dictionary and return
         if searchText.isEmpty {
             self.dictionaryItems = defaultClassifiedDictionary

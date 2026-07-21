@@ -156,7 +156,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="qyA-M4-HG9"/>
                                 </constraints>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartQuotesType="no" smartDashesType="no" returnKeyType="search"/>
                                 <connections>
                                     <outlet property="delegate" destination="eb5-g9-aSJ" id="XRr-qv-AKJ"/>
                                 </connections>

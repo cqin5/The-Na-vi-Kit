@@ -71,13 +71,19 @@ class ForwardingView: UIView {
             if view.isHidden {
                 continue
             }
-            
+            // Only interactable keys (UIControls) can receive input. Skip any
+            // decorative sibling (e.g. a glass/blur view) that would otherwise
+            // swallow every touch by spanning the full bounds.
+            if !(view is UIControl) {
+                continue
+            }
+
             view.alpha = 1
-            
+
             let distance = distanceBetween(view.frame, point: position)
-            
+
             if closest != nil {
-                if distance < closest!.1 {
+                if distance <= closest!.1 {
                     closest = (view, distance)
                 }
             }

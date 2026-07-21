@@ -60,10 +60,10 @@ class NDDictionary: NSObject {
             }
         }
         defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sort{$0.first!.navi.uppercased() < $1.first!.navi.uppercased()}
+        defaultClassifiedDictionary.sort{ NDDictionary.naviIsOrderedBefore($0.first!.navi, $1.first!.navi) }
         
         for (i,_) in defaultClassifiedDictionary.enumerated() {
-            defaultClassifiedDictionary[i].sort{$0.navi.uppercased() < $1.navi.uppercased()}
+            defaultClassifiedDictionary[i].sort{ NDDictionary.naviIsOrderedBefore($0.navi, $1.navi) }
         }
     }
     
@@ -80,13 +80,35 @@ class NDDictionary: NSObject {
             }
         }
         defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sort{$0.first!.navi.uppercased() < $1.first!.navi.uppercased()}
+        defaultClassifiedDictionary.sort{ NDDictionary.naviIsOrderedBefore($0.first!.navi, $1.first!.navi) }
         
         for (i,_) in defaultClassifiedDictionary.enumerated() {
-            defaultClassifiedDictionary[i].sort{$0.navi.uppercased() < $1.navi.uppercased()}
+            defaultClassifiedDictionary[i].sort{ NDDictionary.naviIsOrderedBefore($0.navi, $1.navi) }
         }
     }
     
+    // MARK: - Na'vi collation
+    // Orders by the Na'vi alphabet: apostrophe first, then `ä` immediately after
+    // `a` and `ì` immediately after `i`. Plain scalar `<` wrongly sorts Ä (U+00C4)
+    // and Ì (U+00CC) after Z, misfiling ~1/3 of within-section words.
+    private static let naviCollationRank: [Character: Int] = {
+        var map: [Character: Int] = [:]
+        for (i, ch) in Array("'aäbcdefghiìjklmnopqrstuvwxyz").enumerated() { map[ch] = i }
+        return map
+    }()
+
+    static func naviIsOrderedBefore(_ lhs: String, _ rhs: String) -> Bool {
+        let a = Array(lhs.lowercased())
+        let b = Array(rhs.lowercased())
+        let count = min(a.count, b.count)
+        for i in 0..<count {
+            let ra = naviCollationRank[a[i]] ?? (100 + Int(a[i].unicodeScalars.first?.value ?? 0))
+            let rb = naviCollationRank[b[i]] ?? (100 + Int(b[i].unicodeScalars.first?.value ?? 0))
+            if ra != rb { return ra < rb }
+        }
+        return a.count < b.count
+    }
+
     class func sectionIndices(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
         let indices: [String] = entries.map{String($0.first!.navi.lowercased().first ?? Character(" "))}
         

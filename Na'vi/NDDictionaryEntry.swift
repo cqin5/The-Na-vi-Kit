@@ -15,64 +15,52 @@ class NDDictionaryEntry: NSObject {
     
     var navi:String = ""
     var partOfSpeechShort:String = ""
-    var partOfSpeech:String {
-        switch partOfSpeechShort {
-        case "adj.", "adj. ":
-            return "Adjective"
-        case "adv.", "adv. ":
-            return "Adverb"
-        case "conj.", "conj. ":
-            return "Conjunction"
-        case "inter", "inter ":
-            return "Interrogative"
-        case "inter., intj. ":
-            return "Interrogative, interjection"
-        case "intj.", "intj. ":
-            return "Interjection"
-        case "n.", "n. ":
-            return "Noun"
-        case "n., adv. ":
-            return "Noun, adverb"
-        case "n., intj. ":
-            return "Noun, interjection"
-        case "num.", "num. ":
-            return "Number"
-        case "part.", "part. ":
-            return "Particle"
-        case "part., intj. ":
-            return "Particle, interjection"
-        case "ph.", "ph. ":
-            return "Phrase"
-        case "pn.", "pn. ":
-            return "Pronoun"
-        case "pn., adv. ":
-            return "Pronoun, adverb"
-        case "pn., sbd. ":
-            return "Pronoun, subordinator"
-        case "prop.n.", "prop.n. ":
-            return "Proper noun"
-        case "sbd.", "sbd. ":
-            return "Subordinator"
-        case "svin.", "svin. ":
-            return "Intransitive verb" // TODO
-        case "v.", "v. ":
-            return "Verb"
-        case "vim.", "vim. ":
-            return "Intransitive modal verb"
-        case "vin.", "vin. ":
-            return "Intransitive verb"
-        case "vtr.", "vtr. ":
-            return "Transitive verb"
-        case "vtr., vin. ":
-            return "Transitive verb, intransitive verb"
-        case "vtrm.", "vtrm. ":
-            return "Transitive modal verb"
-        case "vtrm., vtr. ":
-            return "Transitive modal verb, transitive verb"
+    // Base part-of-speech abbreviations → full names. Compound codes such as
+    // "n., adv." or "vtr., vin." are split on "," and each part expanded, so
+    // any combination (present or future) renders without a hardcoded case.
+    private static let posNames: [String: String] = [
+        "n.": "Noun",
+        "adj.": "Adjective",
+        "adv.": "Adverb",
+        "adp.": "Adposition",
+        "conj.": "Conjunction",
+        "dem.": "Demonstrative",
+        "inter.": "Interrogative",
+        "inter": "Interrogative",
+        "intj.": "Interjection",
+        "num.": "Numeral",
+        "part.": "Particle",
+        "ph.": "Phrase",
+        "pn.": "Pronoun",
+        "prop.n.": "Proper noun",
+        "sbd.": "Subordinator",
+        "v.": "Verb",
+        "vin.": "Intransitive verb",
+        "svin.": "Stative intransitive verb",
+        "vim.": "Intransitive modal verb",
+        "vtr.": "Transitive verb",
+        "vtrm.": "Transitive modal verb",
+    ]
 
-        default:
-            return partOfSpeechShort
+    var partOfSpeech:String {
+        let raw = partOfSpeechShort.trimmingCharacters(in: .whitespaces)
+        if raw.isEmpty { return "" }
+
+        var expanded: [String] = []
+        for part in raw.components(separatedBy: ",") {
+            let token = part.trimmingCharacters(in: .whitespaces)
+            if token.isEmpty { continue }
+            guard let name = NDDictionaryEntry.posNames[token] else {
+                return partOfSpeechShort   // unknown token: show the raw code rather than a wrong label
+            }
+            expanded.append(name)
         }
+        if expanded.isEmpty { return partOfSpeechShort }
+
+        // First segment capitalized, later segments lowercased: "Noun, adverb".
+        return expanded.enumerated().map { index, name in
+            index == 0 ? name : name.prefix(1).lowercased() + name.dropFirst()
+        }.joined(separator: ", ")
     }
     var english:String = ""
     var IPA:String = ""
