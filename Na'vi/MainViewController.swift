@@ -6,64 +6,62 @@
 //  Copyright © 2016 CQ. All rights reserved.
 //
 
-import UIKit
 import MessageUI
+import UIKit
 
-class MainViewController: UIViewController, MFMailComposeViewControllerDelegate {
+final class MainViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private let supportAddress = "cqin@me.com"
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    @IBAction func dismissViewController(){
-        self.dismiss(animated: true, completion: nil)
+    @IBAction func dismissViewController() {
+        dismiss(animated: true)
     }
 
     @IBAction func sendEmailButtonTapped(_ sender: AnyObject) {
-        let mailComposeViewController = configuredMailComposeViewController()
-        if MFMailComposeViewController.canSendMail() {
-            self.present(mailComposeViewController, animated: true, completion: nil)
-        } else {
-            self.showSendMailErrorAlert()
+        guard MFMailComposeViewController.canSendMail() else {
+            presentMailUnavailableAlert()
+            return
         }
+
+        present(makeMailComposeViewController(), animated: true)
     }
-    
-    override var preferredStatusBarStyle : UIStatusBarStyle {
-        return .lightContent
+
+    // MARK: - Mail
+
+    private func makeMailComposeViewController() -> MFMailComposeViewController {
+        let composer = MFMailComposeViewController()
+        // The compose delegate is a separate property from `delegate`; setting the
+        // wrong one leaves the composer with no way to dismiss itself.
+        composer.mailComposeDelegate = self
+        composer.setToRecipients([supportAddress])
+        composer.setSubject("Na'vi App: ")
+        return composer
     }
-    
-    
-    // *** Send Email ***
-    func configuredMailComposeViewController() -> MFMailComposeViewController {
-        let mailComposerVC = MFMailComposeViewController()
-        mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
-        
-        mailComposerVC.setToRecipients(["cqin@me.com"])
-        mailComposerVC.setSubject("Na'vi App: ")
-        
-        return mailComposerVC
+
+    private func presentMailUnavailableAlert() {
+        let alert = UIAlertController(
+            title: "Could Not Send Email",
+            message: "This device is not set up to send email. Check your mail account and try again.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
-    
-    func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertView(title: "Could Not Send Email", message: "Your device could not send e-mail.  Please check e-mail configuration and try again.", delegate: self, cancelButtonTitle: "OK")
-        sendMailErrorAlert.show()
-    }
-    
-    // MARK: MFMailComposeViewControllerDelegate
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        controller.dismiss(animated: true, completion: nil)
-        
-    }
-    
-    
 }
 
+// MARK: - MFMailComposeViewControllerDelegate
+
+extension MainViewController: MFMailComposeViewControllerDelegate {
+
+    func mailComposeController(
+        _ controller: MFMailComposeViewController,
+        didFinishWith result: MFMailComposeResult,
+        error: Error?
+    ) {
+        controller.dismiss(animated: true)
+    }
+}

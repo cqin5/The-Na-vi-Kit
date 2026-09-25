@@ -6,107 +6,57 @@
 //  Copyright © 2016 CQ. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class NDDictionary: NSObject {
-    
-//    static var savedEntries: [NDDictionaryEntry] {
-//        set {
-//            let data = try? NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: false)
-//            UserDefaults.standard.set(data, forKey: "savedEntries")
-//        }
-//        
-//        get {
-//            NSKeyedUnarchiver.unarchivedObject(ofClass: <#T##NSCoding.Protocol#>, from: <#T##Data#>)
-//        }
-//    }
-    
-    var defaultDictionary: [NDDictionaryEntry] = [NDDictionaryEntry]()
-    var defaultClassifiedDictionary: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
-    var defaultSectionIndices: [String] = [String]()
-    
-    override init(){
-        super.init()
-        loadDictionaryFile()
-        classifyDictionaryV2()
-        defaultSectionIndices = NDDictionary.sectionIndices(ofDictionary: defaultClassifiedDictionary)
+/// Loads the bundled Na'vi vocabulary and groups it for display.
+final class NDDictionary {
+
+    /// Every entry, grouped by the first letter of the Na'vi headword. Sections and
+    /// the entries inside them are both sorted.
+    private(set) var classifiedEntries: [[NDDictionaryEntry]] = []
+
+    init(resourceName: String = "vocabulary", bundle: Bundle = .main) {
+        classifiedEntries = Self.group(Self.loadEntries(named: resourceName, in: bundle))
     }
 
-    // *** Na'vi Dictionary Data ***
-    func loadDictionaryFile() {
-        defaultDictionary.removeAll()
+    /// The section index titles for a grouped dictionary.
+    static func sectionIndices(ofDictionary entries: [[NDDictionaryEntry]]) -> [String] {
+        entries.map { section in
+            guard let initial = section.first?.navi.lowercased().first else { return " " }
+            return String(initial)
+        }
+    }
+
+    // MARK: - Loading
+
+    private struct VocabularyFile: Decodable {
+        let dict: [NDDictionaryEntry]
+    }
+
+    private static func loadEntries(named name: String, in bundle: Bundle) -> [NDDictionaryEntry] {
+        guard let url = bundle.url(forResource: name, withExtension: "json") else {
+            assertionFailure("\(name).json is missing from the app bundle.")
+            return []
+        }
+
         do {
-            let path = Bundle.main.url(forResource: "vocabulary", withExtension: "json")
-            let jsonData = try? Data(contentsOf: path!)
-            let jsonResult: NSDictionary = try JSONSerialization.jsonObject(with: jsonData!, options: JSONSerialization.ReadingOptions.mutableContainers) as! NSDictionary
-            
-            for jsonItem in (jsonResult["dict"]! as AnyObject).allObjects {
-                defaultDictionary.append(NDDictionaryEntry.createEntry((jsonItem as! NSDictionary)))
-            }
-            
-        } catch let error as NSError {
-            print(error)
+            let data = try Data(contentsOf: url)
+            return try JSONDecoder().decode(VocabularyFile.self, from: data).dict
+        } catch {
+            assertionFailure("Could not read \(name).json: \(error)")
+            return []
         }
     }
-    
-    func classifyDictionary() {
-        defaultClassifiedDictionary.removeAll()
-        var currentFirstLetter : Character = Character(" ")
-        for dictionaryEntry in defaultDictionary {
-            if !dictionaryEntry.navi.uppercased().contains(currentFirstLetter) { // if the current first letter has been scanned before, skip
-                currentFirstLetter = dictionaryEntry.navi.uppercased().first ?? Character(" ")
-                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().first == currentFirstLetter }
-                defaultClassifiedDictionary.append(entry)
-            }
-        }
-        defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sort{$0.first!.navi.uppercased() < $1.first!.navi.uppercased()}
-        
-        for (i,_) in defaultClassifiedDictionary.enumerated() {
-            defaultClassifiedDictionary[i].sort{$0.navi.uppercased() < $1.navi.uppercased()}
-        }
-    }
-    
-    func classifyDictionaryV2() {
-        defaultClassifiedDictionary.removeAll()
-        var firstLettersScanned : [Character] = [Character]()
-        
-        for dictionaryEntry in defaultDictionary {
-            let currentFirstLetter : Character = dictionaryEntry.navi.uppercased().first ?? Character(" ")
-            if !firstLettersScanned.contains(currentFirstLetter) {
-                firstLettersScanned.append(currentFirstLetter)
-                let entry : [NDDictionaryEntry] = defaultDictionary.filter{ $0.navi.uppercased().first == currentFirstLetter }
-                defaultClassifiedDictionary.append(entry)
-            }
-        }
-        defaultClassifiedDictionary = NSSet(array: defaultClassifiedDictionary).allObjects as! [[NDDictionaryEntry]]
-        defaultClassifiedDictionary.sort{$0.first!.navi.uppercased() < $1.first!.navi.uppercased()}
-        
-        for (i,_) in defaultClassifiedDictionary.enumerated() {
-            defaultClassifiedDictionary[i].sort{$0.navi.uppercased() < $1.navi.uppercased()}
-        }
-    }
-    
-    class func sectionIndices(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        let indices: [String] = entries.map{String($0.first!.navi.lowercased().first ?? Character(" "))}
-        
-        
-        return indices
-    }
-    
-    class func categories(ofDictionary entries:[[NDDictionaryEntry]]) -> [String] {
-        let returnValue = NSSet(array: entries.map{$0.first!.partOfSpeech.lowercased()}).allObjects as! [String]
-        return returnValue
-    }
-    
-}
 
+    // MARK: - Grouping
 
+    private static func group(_ entries: [NDDictionaryEntry]) -> [[NDDictionaryEntry]] {
+        let grouped = Dictionary(grouping: entries) { entry in
+            entry.navi.uppercased().first ?? " "
+        }
 
-extension NDDictionary {
-    
-    
-    
-    
-    
+        return grouped
+            .sorted { $0.key < $1.key }
+            .map { $0.value.sorted { $0.navi.uppercased() < $1.navi.uppercased() } }
+    }
 }

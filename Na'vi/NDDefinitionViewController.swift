@@ -8,71 +8,66 @@
 
 import UIKit
 
-class NDDefinitionViewController: UIViewController {
+final class NDDefinitionViewController: UIViewController {
 
     @IBOutlet private var naviLabel: UILabel!
     @IBOutlet private var categoryLabel: UILabel!
     @IBOutlet private var definitionView: UITextView!
-    
-    let naviFont : UIFont = UIFont.systemFont(ofSize: 18)
-    let IPAFont : UIFont = UIFont.systemFont(ofSize: 16)
-    let definitionFont : UIFont = UIFont.systemFont(ofSize: 16)
-    let naviColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
-    let IPAColour : UIColor = UIColor(white: 0.5, alpha: 1.0)
-    let definitionColour : UIColor = UIColor(white: 0.0, alpha: 1.0)
-    
-    var entry : NDDictionaryEntry!
 
-    // Styling manager to reduce view controller responsibilities
+    var entry: NDDictionaryEntry!
+
+    private let naviFont = UIFont.preferredFont(forTextStyle: .title3)
+    private let ipaFont = UIFont.preferredFont(forTextStyle: .subheadline)
+    private let definitionFont = UIFont.preferredFont(forTextStyle: .body)
+
     private lazy var stylingManager = ViewStylingManager(viewController: self)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Setup glass UI via styling manager
         stylingManager.setupDefinitionGlassUI(textView: definitionView)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        // Update gradient frame via styling manager
-        stylingManager.updateGradientFrame(view.bounds)
+        stylingManager.updateLayout()
     }
 
-    deinit {
-        stylingManager.cleanup()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadEntry()
     }
-    
-    func loadEntry() {
-        let firstLine = NSMutableAttributedStringMake(string: entry.navi, font:naviFont, colour: naviColour)
-        let firstLineSecondPart = NSMutableAttributedStringMake(string: " \t|" + entry.IPA + "| " , font:IPAFont, colour: IPAColour)
-        firstLine.append(firstLineSecondPart)
-        
-        naviLabel.attributedText = firstLine
+
+    private func loadEntry() {
+        guard let entry else { return }
+
+        let headword = NSMutableAttributedStringMake(
+            string: entry.navi,
+            font: naviFont,
+            colour: .label
+        )
+        headword.append(
+            NSMutableAttributedStringMake(
+                string: " \t|" + entry.ipa + "| ",
+                font: ipaFont,
+                colour: .secondaryLabel
+            )
+        )
+
+        naviLabel.attributedText = headword
         categoryLabel.text = entry.partOfSpeech
-        
-        definitionView.attributedText = NSAttributedStringMake(string: entry.english, font: definitionFont, colour: definitionColour)
-    }
-    
-    @IBAction func backButtonTapped(_ sender:AnyObject?) {
-        self.dismiss(animated: true, completion: nil)
-        self.navigationController?.popViewController(animated: true)
+
+        definitionView.attributedText = NSAttributedStringMake(
+            string: entry.english,
+            font: definitionFont,
+            colour: .label
+        )
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func backButtonTapped(_ sender: AnyObject?) {
+        if let navigationController, navigationController.viewControllers.count > 1 {
+            navigationController.popViewController(animated: true)
+        } else {
+            dismiss(animated: true)
+        }
     }
-    */
-
 }

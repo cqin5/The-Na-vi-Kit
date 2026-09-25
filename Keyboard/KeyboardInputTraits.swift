@@ -17,14 +17,14 @@ import UIKit
 //        optional var returnKeyType: UIReturnKeyType { get set } // default is UIReturnKeyDefault (See note under UIReturnKeyType enum)
 //        optional var enablesReturnKeyAutomatically: Bool { get set } // default is NO (when YES, will automatically disable return key when text widget has zero-length contents, and will automatically enable when text widget has non-zero-length contents)
 
-var traitPollingTimer: CADisplayLink?
+@MainActor var traitPollingTimer: CADisplayLink?
 
 extension KeyboardViewController {
-    
+
     func addInputTraitsObservers() {
         // note that KVO doesn't work on textDocumentProxy, so we have to poll
         traitPollingTimer?.invalidate()
-        traitPollingTimer = UIScreen.main.displayLink(withTarget: self, selector: #selector(KeyboardViewController.pollTraits))
+        traitPollingTimer = CADisplayLink(target: self, selector: #selector(KeyboardViewController.pollTraits))
         traitPollingTimer?.add(to: RunLoop.current, forMode: RunLoop.Mode.default)
     }
     

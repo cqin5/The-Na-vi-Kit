@@ -3,20 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		11087954DA923448819C6115 /* Pods_Na_vi_Keyboard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4570A86B8BDE69E63DE92847 /* Pods_Na_vi_Keyboard.framework */; };
-		5D82B63F2FBF5AFA44BDFFC6 /* Pods_Na_vi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A47F0676EA4884095F19FD1 /* Pods_Na_vi.framework */; };
+		A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */; };
+		A6E100062F0000000000AA06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */; };
+		A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100032F0000000000AA03 /* PronunciationPlayer.swift */; };
+		A6E100022F0000000000AA02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100012F0000000000AA01 /* SceneDelegate.swift */; };
 		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A61790992149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
-		A617909A2149099200C7ECFE /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61790982149099200C7ECFE /* UIDevice.swift */; };
 		A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
 		A617909D2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
 		A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */; };
-		A699EE12282810D40067D977 /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = A699EE11282810D40067D977 /* KeyboardKit */; };
-		A699EE1528281D9A0067D977 /* KeyboardKitPro in Frameworks */ = {isa = PBXBuildFile; productRef = A699EE1428281D9A0067D977 /* KeyboardKitPro */; };
 		A6A8DD8E2EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */; };
 		A6A8DD8F2EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */; };
 		A6A8DD902EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */; };
@@ -2709,7 +2707,6 @@
 		A6BB17B5282A344A0071BD1E /* 7876.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3B282A34480071BD1E /* 7876.mp3 */; };
 		A6BB17B6282A344A0071BD1E /* vocabulary-2016.json in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3C282A34480071BD1E /* vocabulary-2016.json */; };
 		A6BB17B7282A344A0071BD1E /* Eywa.sketch in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3D282A34490071BD1E /* Eywa.sketch */; };
-		A6CB92181D1B32050030D414 /* Na'vi Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92031D1B32050030D414 /* Na'vi Keyboard.swift */; };
 		A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */; };
 		A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92061D1B32050030D414 /* DefaultSettings.swift */; };
 		A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92071D1B32050030D414 /* DefaultSettings.xib */; };
@@ -2727,12 +2724,8 @@
 		A6CB92291D1B32050030D414 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92141D1B32050030D414 /* Media.xcassets */; };
 		A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92161D1B32050030D414 /* Shapes.swift */; };
 		A6CB922C1D1B32050030D414 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92171D1B32050030D414 /* Utilities.swift */; };
-		A6CB92341D1B358E0030D414 /* CQMPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92301D1B358E0030D414 /* CQMPHelper.swift */; };
-		A6CB92351D1B358E0030D414 /* CQMPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92301D1B358E0030D414 /* CQMPHelper.swift */; };
 		A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
 		A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
-		A6CB92381D1B358E0030D414 /* CQStdHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92321D1B358E0030D414 /* CQStdHelper.swift */; };
-		A6CB92391D1B358E0030D414 /* CQStdHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92321D1B358E0030D414 /* CQStdHelper.swift */; };
 		A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
 		A6CB923B1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
 		A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6CB923C1D1B64960030D414 /* Dictionary.storyboard */; };
@@ -2768,13 +2761,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		10945C1AF3BB21C523C035C1 /* Pods-Na'vi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na'vi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Na'vi/Pods-Na'vi.debug.xcconfig"; sourceTree = "<group>"; };
-		1A47F0676EA4884095F19FD1 /* Pods_Na_vi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Na_vi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		270E4AC96688ADDE651506D9 /* Pods-Na-vi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na-vi.release.xcconfig"; path = "Pods/Target Support Files/Pods-Na-vi/Pods-Na-vi.release.xcconfig"; sourceTree = "<group>"; };
-		4570A86B8BDE69E63DE92847 /* Pods_Na_vi_Keyboard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Na_vi_Keyboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5E70AB7B24B17FB7D16F9073 /* Pods-Na-vi Keyboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na-vi Keyboard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Na-vi Keyboard/Pods-Na-vi Keyboard.debug.xcconfig"; sourceTree = "<group>"; };
-		671C372633A56DC8DD03679D /* Pods-Na-vi Keyboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na-vi Keyboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-Na-vi Keyboard/Pods-Na-vi Keyboard.release.xcconfig"; sourceTree = "<group>"; };
-		7299C7BC47657556EFB0EA31 /* Pods-Na'vi Keyboard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na'vi Keyboard.release.xcconfig"; path = "Pods/Target Support Files/Pods-Na'vi Keyboard/Pods-Na'vi Keyboard.release.xcconfig"; sourceTree = "<group>"; };
+		A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = "Na'vi Keyboard/PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
+		A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A6E100032F0000000000AA03 /* PronunciationPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PronunciationPlayer.swift; sourceTree = "<group>"; };
+		A6E100012F0000000000AA01 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na-vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A61790982149099200C7ECFE /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		A617909B2149214C00C7ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -5502,9 +5492,6 @@
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDefinitionViewController.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
-		BAA995F2605402DDC8582737 /* Pods-Na'vi Keyboard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na'vi Keyboard.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Na'vi Keyboard/Pods-Na'vi Keyboard.debug.xcconfig"; sourceTree = "<group>"; };
-		E57E30BE89B5EFB3F491163F /* Pods-Na'vi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na'vi.release.xcconfig"; path = "Pods/Target Support Files/Pods-Na'vi/Pods-Na'vi.release.xcconfig"; sourceTree = "<group>"; };
-		FD00EFE03337A0DC5C84F592 /* Pods-Na-vi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Na-vi.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Na-vi/Pods-Na-vi.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5512,7 +5499,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11087954DA923448819C6115 /* Pods_Na_vi_Keyboard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5520,24 +5506,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A699EE12282810D40067D977 /* KeyboardKit in Frameworks */,
-				A699EE1528281D9A0067D977 /* KeyboardKitPro in Frameworks */,
-				5D82B63F2FBF5AFA44BDFFC6 /* Pods_Na_vi.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4D6EEE16EA68B908F628BBD3 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				1A47F0676EA4884095F19FD1 /* Pods_Na_vi.framework */,
-				4570A86B8BDE69E63DE92847 /* Pods_Na_vi_Keyboard.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		A65A932D1D1CAA3F0058FB19 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -5562,6 +5536,7 @@
 		A6AE8AEA1D1AD43E00345E2E = {
 			isa = PBXGroup;
 			children = (
+				A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */,
 				A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */,
 				A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */,
 				A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */,
@@ -5572,8 +5547,6 @@
 				A6CB924E1D1C6E420030D414 /* Shared Resources */,
 				A699EE1C2828EFB00067D977 /* Resources */,
 				A6AE8AF41D1AD43E00345E2E /* Products */,
-				FC5AD84527B6CE13CF7CE16F /* Pods */,
-				4D6EEE16EA68B908F628BBD3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -5589,6 +5562,8 @@
 		A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */ = {
 			isa = PBXGroup;
 			children = (
+				A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */,
+				A6E100012F0000000000AA01 /* SceneDelegate.swift */,
 				A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */,
 				A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */,
 				A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */,
@@ -8345,6 +8320,7 @@
 		A6CB92421D1B66E60030D414 /* Na'vi Dictionary */ = {
 			isa = PBXGroup;
 			children = (
+				A6E100032F0000000000AA03 /* PronunciationPlayer.swift */,
 				A6CB923C1D1B64960030D414 /* Dictionary.storyboard */,
 				A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */,
 				A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */,
@@ -8380,21 +8356,6 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		FC5AD84527B6CE13CF7CE16F /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				10945C1AF3BB21C523C035C1 /* Pods-Na'vi.debug.xcconfig */,
-				E57E30BE89B5EFB3F491163F /* Pods-Na'vi.release.xcconfig */,
-				BAA995F2605402DDC8582737 /* Pods-Na'vi Keyboard.debug.xcconfig */,
-				7299C7BC47657556EFB0EA31 /* Pods-Na'vi Keyboard.release.xcconfig */,
-				FD00EFE03337A0DC5C84F592 /* Pods-Na-vi.debug.xcconfig */,
-				270E4AC96688ADDE651506D9 /* Pods-Na-vi.release.xcconfig */,
-				5E70AB7B24B17FB7D16F9073 /* Pods-Na-vi Keyboard.debug.xcconfig */,
-				671C372633A56DC8DD03679D /* Pods-Na-vi Keyboard.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -8402,7 +8363,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A614202D1D1AD5DC001C0FBD /* Build configuration list for PBXNativeTarget "Na-vi Keyboard" */;
 			buildPhases = (
-				B0B4C6F4A29595416CF68FB3 /* [CP] Check Pods Manifest.lock */,
 				A614201F1D1AD5DC001C0FBD /* Sources */,
 				A61420201D1AD5DC001C0FBD /* Frameworks */,
 				A61420211D1AD5DC001C0FBD /* Resources */,
@@ -8420,7 +8380,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A6AE8B1E1D1AD43E00345E2E /* Build configuration list for PBXNativeTarget "Na-vi" */;
 			buildPhases = (
-				ECB7EC116EA118B43A552214 /* [CP] Check Pods Manifest.lock */,
 				A6AE8AEF1D1AD43E00345E2E /* Sources */,
 				A6AE8AF01D1AD43E00345E2E /* Frameworks */,
 				A6AE8AF11D1AD43E00345E2E /* Resources */,
@@ -8432,10 +8391,6 @@
 				A61420291D1AD5DC001C0FBD /* PBXTargetDependency */,
 			);
 			name = "Na-vi";
-			packageProductDependencies = (
-				A699EE11282810D40067D977 /* KeyboardKit */,
-				A699EE1428281D9A0067D977 /* KeyboardKitPro */,
-			);
 			productName = "Na'vi";
 			productReference = A6AE8AF31D1AD43E00345E2E /* Eywa.app */;
 			productType = "com.apple.product-type.application";
@@ -8462,7 +8417,7 @@
 				};
 			};
 			buildConfigurationList = A6AE8AEE1D1AD43E00345E2E /* Build configuration list for PBXProject "Na-vi" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -8470,10 +8425,6 @@
 				Base,
 			);
 			mainGroup = A6AE8AEA1D1AD43E00345E2E;
-			packageReferences = (
-				A699EE10282810D40067D977 /* XCRemoteSwiftPackageReference "KeyboardKit" */,
-				A699EE1328281D9A0067D977 /* XCRemoteSwiftPackageReference "KeyboardKitPro" */,
-			);
 			productRefGroup = A6AE8AF41D1AD43E00345E2E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -8489,6 +8440,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */,
 				A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */,
 				A617909D2149214D00C7ECFE /* GoogleService-Info.plist in Resources */,
 				A6CB92291D1B32050030D414 /* Media.xcassets in Resources */,
@@ -8499,6 +8451,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6E100062F0000000000AA06 /* PrivacyInfo.xcprivacy in Resources */,
 				A6BB10A6282A34490071BD1E /* 2220.mp3 in Resources */,
 				A6BB1698282A344A0071BD1E /* 10720.mp3 in Resources */,
 				A6BB1721282A344A0071BD1E /* 9872.mp3 in Resources */,
@@ -11191,44 +11144,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		B0B4C6F4A29595416CF68FB3 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Na-vi Keyboard-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		ECB7EC116EA118B43A552214 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Na-vi-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A614201F1D1AD5DC001C0FBD /* Sources */ = {
@@ -11239,9 +11154,7 @@
 				A6A8DD902EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */,
 				A6A8DD912EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */,
 				A6CB92231D1B32050030D414 /* KeyboardInputTraits.swift in Sources */,
-				A6CB92351D1B358E0030D414 /* CQMPHelper.swift in Sources */,
 				A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */,
-				A6CB92181D1B32050030D414 /* Na'vi Keyboard.swift in Sources */,
 				A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */,
 				A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */,
 				A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */,
@@ -11250,9 +11163,7 @@
 				A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6CB92251D1B32050030D414 /* KeyboardKeyBackground.swift in Sources */,
 				A6CB921D1D1B32050030D414 /* DirectionEnum.swift in Sources */,
-				A617909A2149099200C7ECFE /* UIDevice.swift in Sources */,
 				A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */,
-				A6CB92391D1B358E0030D414 /* CQStdHelper.swift in Sources */,
 				A6CB92271D1B32050030D414 /* KeyboardModel.swift in Sources */,
 				A6CB923B1D1B358E0030D414 /* CQUIHelper.swift in Sources */,
 				A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */,
@@ -11265,9 +11176,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6CB92341D1B358E0030D414 /* CQMPHelper.swift in Sources */,
+				A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */,
+				A6E100022F0000000000AA02 /* SceneDelegate.swift in Sources */,
 				A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */,
-				A6CB92381D1B358E0030D414 /* CQStdHelper.swift in Sources */,
 				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
 				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
 				A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */,
@@ -11280,7 +11191,6 @@
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
 				A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */,
 				A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */,
-				A61790992149099200C7ECFE /* UIDevice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11318,8 +11228,8 @@
 /* Begin XCBuildConfiguration section */
 		A614202B1D1AD5DC001C0FBD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5E70AB7B24B17FB7D16F9073 /* Pods-Na-vi Keyboard.debug.xcconfig */;
 			buildSettings = {
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -11332,22 +11242,21 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.9;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		A614202C1D1AD5DC001C0FBD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 671C372633A56DC8DD03679D /* Pods-Na-vi Keyboard.release.xcconfig */;
 			buildSettings = {
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -11360,14 +11269,13 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.9;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -11375,10 +11283,11 @@
 		A6AE8B1C1D1AD43E00345E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 5;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -11402,14 +11311,14 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -11436,10 +11345,11 @@
 		A6AE8B1D1D1AD43E00345E2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 5;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -11463,14 +11373,14 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -11490,7 +11400,6 @@
 		};
 		A6AE8B1F1D1AD43E00345E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FD00EFE03337A0DC5C84F592 /* Pods-Na-vi.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
@@ -11510,15 +11419,13 @@
 				PRODUCT_NAME = Eywa;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.9;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		A6AE8B201D1AD43E00345E2E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 270E4AC96688ADDE651506D9 /* Pods-Na-vi.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
@@ -11538,8 +11445,7 @@
 				PRODUCT_NAME = Eywa;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 5.9;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -11576,37 +11482,7 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		A699EE10282810D40067D977 /* XCRemoteSwiftPackageReference "KeyboardKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/KeyboardKit/KeyboardKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.0.0;
-			};
-		};
-		A699EE1328281D9A0067D977 /* XCRemoteSwiftPackageReference "KeyboardKitPro" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/KeyboardKit/KeyboardKitPro.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		A699EE11282810D40067D977 /* KeyboardKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A699EE10282810D40067D977 /* XCRemoteSwiftPackageReference "KeyboardKit" */;
-			productName = KeyboardKit;
-		};
-		A699EE1428281D9A0067D977 /* KeyboardKitPro */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A699EE1328281D9A0067D977 /* XCRemoteSwiftPackageReference "KeyboardKitPro" */;
-			productName = KeyboardKitPro;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */ = {

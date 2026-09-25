@@ -1,306 +1,250 @@
-# Code Improvements Summary
+# The Na'vi Kit — Platform Modernization
 
-## Overview
-This document outlines the architectural and performance improvements made to The Na'vi Kit codebase to modernize it for iOS 18.0+ with glassmorphism design.
-
----
-
-## ✅ Completed Improvements
-
-### 1. Removed Technical Debt (Swift 2 Era)
-
-**Problem:** Outdated comparison operators from Swift 2 era causing warnings
-**Solution:** Removed obsolete `<` and `>` operator overloads
-
-**Files Changed:**
-- `Na'vi/NDDictionaryMainViewController.swift` - Removed 25 lines of FIXME code
-
-**Impact:** Cleaner codebase, no compiler warnings
+This document records the work that brings **Eywa** (the Na'vi dictionary app) and
+its **Na'vi Keyboard** extension up to the current Apple platform standard.
 
 ---
 
-### 2. Extracted Styling Responsibilities (Architecture)
+## 1. Platform baseline
 
-**Problem:** View controllers had mixed responsibilities - data management + UI + styling
-**Solution:** Created `ViewStylingManager` to handle all glass UI setup
+| Item | Before | After |
+| --- | --- | --- |
+| Build SDK | iOS 18 era settings | iOS 26 / 27 SDK (Xcode 26 or later) |
+| Deployment target | iOS 18.0 | iOS 18.0 (unchanged) |
+| Swift language mode | `5.9` — not a value Xcode accepts | `6.0` (app), `5.0` (keyboard) |
+| App life cycle | `UIApplicationDelegate` only | `UIScene` life cycle |
+| Design language | Hand-built blur and gradient | System Liquid Glass |
+| Dependency managers | CocoaPods + Swift Package Manager | None |
 
-**Files Changed:**
-- **NEW:** `Na'vi/ViewStylingManager.swift` - Centralized styling manager (145 lines)
-- `Na'vi/NDDictionaryMainViewController.swift` - Reduced from 150+ lines to ~80 lines of glass UI code
-- `Na'vi/NDDefinitionViewController.swift` - Reduced from 35 lines to ~10 lines of glass UI code
-
-**Benefits:**
-- ✅ Single Responsibility Principle - View controllers focus on their core job
-- ✅ Easier testing - Styling logic isolated
-- ✅ Reusability - Can apply same styling to new view controllers
-- ✅ Maintainability - Glass UI changes in one place
-
-**Usage Example:**
-```swift
-class MyViewController: UIViewController {
-    private lazy var stylingManager = ViewStylingManager(viewController: self)
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // One line instead of 50!
-        stylingManager.setupDictionaryGlassUI(
-            tableView: tableView,
-            searchBar: searchBar,
-            navigationController: navigationController
-        )
-    }
-
-    deinit {
-        stylingManager.cleanup()
-    }
-}
-```
+The deployment target stays at iOS 18.0. Apple's SDK requirement governs what the
+app is *built with*, not what it runs on, so no existing user loses access.
 
 ---
 
-### 3. Performance Optimizations (Lazy Loading + Reuse)
+## 2. App Store and SDK compliance
 
-**Problem:** Blur views created on every cell dequeue, causing memory pressure and jank
-**Solution:** Lazy-loaded blur views with `prepareForReuse()` optimization
+These items block submission or correct behaviour on current systems.
 
-**Files Changed:**
-- `Na'vi/NDDictionaryMainTableViewCell.swift`
-- `Na'vi/NDDictionarySectionTableViewCell.swift`
+### 2.1 UIScene life cycle
 
-**Before:**
-```swift
-func setupGlassBackground() {
-    // Created NEW blur view every time cell is dequeued!
-    let blurView = UIVisualEffectView(effect: blurEffect)
-    self.backgroundView = blurView
-}
-```
+An app built against the iOS 27 SDK without the scene life cycle does not launch.
+The app now declares and implements it:
 
-**After:**
-```swift
-private lazy var glassBackgroundView: UIVisualEffectView = {
-    // Created ONCE, reused forever
-    let blurEffect = UIBlurEffect(style: .systemMaterial)
-    let blurView = UIVisualEffectView(effect: blurEffect)
-    blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    return blurView
-}()
+- `Na'vi/SceneDelegate.swift` — new `UIWindowSceneDelegate`.
+- `Na'vi/AppDelegate.swift` — `@main`, with `configurationForConnecting` and
+  `didDiscardSceneSessions`.
+- `Na'vi/Info.plist` — `UIApplicationSceneManifest` naming the delegate and
+  `Dictionary.storyboard` as the scene's initial interface.
 
-override func prepareForReuse() {
-    super.prepareForReuse()
-    // Just update frame, reuse the view
-    glassBackgroundView.frame = self.bounds
-}
-```
+### 2.2 Privacy manifests
 
-**Impact:**
-- ⚡ ~70% reduction in blur view allocations during scrolling
-- 📉 Lower memory usage (no repeated view creation)
-- 🎯 Smoother 60fps scrolling
-- 🔇 Proper audio cleanup (stops playing audio on cell reuse)
+Both targets now ship `PrivacyInfo.xcprivacy`. Each declares no tracking and no
+collected data. The keyboard additionally declares its use of `UserDefaults`
+under the required-reason category `NSPrivacyAccessedAPICategoryUserDefaults`
+(reason `CA92.1`, access to the app's own settings).
 
----
+### 2.3 Property list corrections
 
-### 4. Modernized IBOutlets (Code Quality)
+| Key | Change | Reason |
+| --- | --- | --- |
+| `UIRequiredDeviceCapabilities` | `armv7` → `arm64` | iOS has been 64-bit only since iOS 11; the old value described a device class that no longer exists. |
+| `CFBundleSignature` | Removed | A Carbon-era key with no meaning on iOS. |
+| `UIRequiresFullScreen` | Removed | No longer honoured on iPadOS 26 and later; the app is now resizable on iPad. |
+| `CFBundleVersion` | `4` → `$(CURRENT_PROJECT_VERSION)` | Build numbers now come from the project rather than a hard-coded literal. |
+| `ITSAppUsesNonExemptEncryption` | Added (`false`) | Removes the export-compliance prompt on every upload. |
+| `UIViewControllerBasedStatusBarAppearance` | Added (`true`) | Replaces the obsolete global `UIStatusBarStyle` key, which the system already ignored. |
 
-**Problem:** Force-unwrapped outlets (`!`) risky, no access control
-**Solution:** Added `private` access control for better encapsulation
+### 2.4 Version alignment
 
-**Files Changed:**
-- `Na'vi/NDDictionaryMainViewController.swift`
-- `Na'vi/NDDictionaryMainTableViewCell.swift`
-- `Na'vi/NDDefinitionViewController.swift`
-- `Na'vi/NDDictionarySectionTableViewCell.swift`
-
-**Before:**
-```swift
-@IBOutlet var tableView: UITableView!
-@IBOutlet var searchBar: UISearchBar!
-```
-
-**After:**
-```swift
-@IBOutlet private var tableView: UITableView!
-@IBOutlet private var searchBar: UISearchBar!
-```
-
-**Benefits:**
-- 🔒 Better encapsulation (private by default)
-- 📝 Clearer code intent
-- 🛡️ Prevents external access to internal views
+The keyboard extension declared marketing version `1.4.1` while the app declared
+`1.5.2`. An extension must carry the same short version string as its host app,
+so the extension now tracks `1.5.2`. Both bundles take their build number from
+`CURRENT_PROJECT_VERSION`, set to `5`.
 
 ---
 
-### 5. Performance Profiling Tools (Debug)
+## 3. Design: Liquid Glass
 
-**Problem:** No way to measure glass UI performance impact
-**Solution:** Added comprehensive profiling helpers in `GlassUIHelper`
+Building against the iOS 26 SDK or later makes the system apply Liquid Glass to
+standard controls on its own. The previous release worked against that: a
+blue-to-purple gradient sat behind every screen, a `UIVisualEffectView` sat behind
+every row, and the navigation and search bars were overridden with custom
+transparent appearances.
 
-**New Features:**
+The approach is now inverted — the system supplies the material, and the app
+styles only what it draws itself.
 
-#### A. Performance Timers
-```swift
-// Measure how long glass setup takes
-GlassUIHelper.startPerformanceTimer("Glass Setup")
-stylingManager.setupDictionaryGlassUI(...)
-GlassUIHelper.endPerformanceTimer("Glass Setup")
+**Removed**
 
-// Output: ⏱️ [Glass Setup] took 12.34ms
-```
+- The gradient background layer and the code that tracked its frame and colours.
+- Per-row blur views and their reuse bookkeeping.
+- Custom `UINavigationBarAppearance` overrides.
+- Hard-coded text colours built from black and white with alpha, in favour of
+  semantic colours (`.label`, `.secondaryLabel`). These track Dark Mode, Increase
+  Contrast and Reduce Transparency without any per-trait code, which is why the
+  three `traitCollectionDidChange` overrides could be removed rather than migrated.
+- `layer.shouldRasterize` on blurred views, which defeats the material it was
+  meant to accelerate.
 
-#### B. FPS Measurement
-```swift
-// Measure FPS during scrolling
-GlassUIHelper.measureFPS(duration: 2.0) { fps in
-    print("Average FPS: \(fps)")
-    // Goal: 60fps consistently
-}
-```
+**Retained, deliberately**
 
-#### C. Memory Profiling
-```swift
-GlassUIHelper.logMemoryUsage("After Glass UI Setup")
-// Output: 💾 [After Glass UI Setup] Memory: 45.67 MB
-```
+Two surfaces still use glass, because both float above scrolling content:
 
-#### D. Scroll Optimization
-```swift
-// Reduce blur during fast scrolling for performance
-func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    GlassUIHelper.reduceBlurDuringScroll(blurView)
-}
+- The search field at the bottom of the dictionary, as an interactive capsule.
+- The section headers in the dictionary list.
 
-func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-    GlassUIHelper.restoreBlurAfterScroll(blurView)
-}
-```
-
-**Note:** All profiling code is wrapped in `#if DEBUG` - zero impact on release builds!
+`Na'vi/GlassUIHelper.swift` now builds these with `UIGlassEffect` on iOS 26 and
+later and falls back to the closest system material on iOS 18 to 25, so one view
+hierarchy serves the whole deployment range.
 
 ---
 
-## 📊 Performance Metrics
+## 4. Deprecated API removed
 
-### Before Improvements:
-- ❌ ~150 blur view allocations during typical scrolling session
-- ❌ Mixed responsibilities in view controllers (~250 lines)
-- ❌ No performance monitoring tools
-- ❌ Swift 2 technical debt
-
-### After Improvements:
-- ✅ ~45 blur view allocations (70% reduction via lazy loading)
-- ✅ Separated concerns (~80 lines per view controller)
-- ✅ Comprehensive performance profiling suite
-- ✅ Modern Swift 5.9 code
-
----
-
-## 🎯 How to Use New Features
-
-### For View Controllers:
-```swift
-class NewViewController: UIViewController {
-    private lazy var stylingManager = ViewStylingManager(viewController: self)
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        #if DEBUG
-        GlassUIHelper.startPerformanceTimer("View Setup")
-        #endif
-
-        stylingManager.setupDictionaryGlassUI(...)
-
-        #if DEBUG
-        GlassUIHelper.endPerformanceTimer("View Setup")
-        GlassUIHelper.logMemoryUsage("After Setup")
-        #endif
-    }
-}
-```
-
-### For Table Cells:
-```swift
-class MyCell: UITableViewCell {
-    private lazy var glassBackgroundView: UIVisualEffectView = {
-        let blur = UIBlurEffect(style: .systemMaterial)
-        return UIVisualEffectView(effect: blur)
-    }()
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        glassBackgroundView.frame = bounds
-    }
-}
-```
+| API | Replacement | Location |
+| --- | --- | --- |
+| `@UIApplicationMain` | `@main` | `AppDelegate.swift` |
+| `UIAlertView` | `UIAlertController` | `MainViewController.swift` |
+| `traitCollectionDidChange(_:)` | Semantic colours (no override needed) | 3 call sites |
+| `UIScreen.main` | Window scene, or `traitCollection.displayScale` | `KeyboardLayout.swift`, `KeyboardKey.swift`, `KeyboardViewController.swift` |
+| `UIViewController.interfaceOrientation` | `UIWindowScene.interfaceOrientation`, with a size-class fallback | `KeyboardViewController.swift` |
+| `willRotate(to:duration:)` / `didRotate(from:)` | `viewWillTransition(to:with:)` | `KeyboardViewController.swift` |
+| `UIScreen.displayLink(withTarget:selector:)` | `CADisplayLink(target:selector:)` | `KeyboardInputTraits.swift` |
+| `String.substring(from:)` | Range subscripting | Removed with dead helper code |
+| `arc4random` / `arc4random_uniform` | Swift's random APIs | Removed with dead helper code |
+| `UIActivityIndicatorView.Style.white` | `.medium` | Removed with dead helper code |
+| `MPVolumeView.showsRouteButton` | — | Removed with dead helper code |
 
 ---
 
-## 🔄 Migration Guide
+## 5. Code quality
 
-### Updating Existing View Controllers:
+### 5.1 Dictionary loading
 
-**Old Code:**
-```swift
-override func viewDidLoad() {
-    super.viewDidLoad()
+`NDDictionary` parsed `vocabulary.json` through `NSDictionary`, `AnyObject` and a
+chain of forced unwraps and `as!` casts, then de-duplicated sections by round-
+tripping arrays through `NSSet`. Malformed or missing data crashed the app on
+launch.
 
-    // 50+ lines of glass UI setup code
-    let gradient = GlassUIHelper.createGradientBackground(...)
-    view.layer.insertSublayer(gradient, at: 0)
+It now decodes into `NDDictionaryEntry` with `Codable` and groups entries with
+`Dictionary(grouping:)`. Section and entry ordering are unchanged. A missing or
+malformed file yields an empty dictionary rather than a crash.
 
-    if let navigationBar = navigationController?.navigationBar {
-        let appearance = GlassUIHelper.createGlassNavigationAppearance(...)
-        // ... more setup
-    }
-    // ... etc
-}
-```
+### 5.2 Pronunciation playback
 
-**New Code:**
-```swift
-private lazy var stylingManager = ViewStylingManager(viewController: self)
+Playback was owned by the table view cell that started it, so scrolling cut a
+recording short as soon as that cell was reused. Each tap also reconfigured and
+re-activated the audio session, which was then never released.
 
-override func viewDidLoad() {
-    super.viewDidLoad()
+`Na'vi/PronunciationPlayer.swift` moves playback to a single shared player. The
+playback category is configured once — recordings stay audible when the ring
+switch is silenced — and the session is released when the clip ends so any audio
+the listener had playing can resume.
 
-    // Just 3 lines!
-    stylingManager.setupDictionaryGlassUI(
-        tableView: tableView,
-        searchBar: searchBar,
-        navigationController: navigationController
-    )
-}
-```
+### 5.3 Search
 
----
+The list view held a mutable copy of the dictionary that one delegate path reset
+without reloading the table, leaving the data source and the table disagreeing
+about row counts. Filtering now derives from an immutable source list, and
+matching uses `localizedCaseInsensitiveContains` rather than `uppercased()`
+comparison, which is correct for the diacritics in the Na'vi alphabet.
 
-## 📈 Future Optimization Opportunities
+### 5.4 Globe key
 
-1. **Consider SwiftUI for New Features**
-   - Keep keyboard in UIKit (too complex to migrate)
-   - New screens could use SwiftUI with better performance
+The keyboard decided whether to draw a globe key by comparing the screen's pixel
+height against `2436` — the iPhone X. The comparison has not matched any device
+shipped since, and on the iPhone X itself it suppressed the only way to switch
+keyboards. Every page now carries a globe key, as a custom keyboard requires.
 
-2. **Profile with Instruments**
-   - Use new profiling tools to measure in real scenarios
-   - Target: Consistent 60fps during scrolling
+### 5.5 Build settings
 
-3. **Implement Scroll Optimization**
-   - Reduce blur alpha during fast scrolling
-   - Restore after scrolling stops (see scroll helpers)
-
-4. **Investigate Core Animation Instruments**
-   - Check for off-screen rendering
-   - Optimize layer composition
+- `SWIFT_VERSION` was `5.9`, which is not one of the values Xcode accepts
+  (`4.0`, `4.2`, `5.0`, `6.0`). The app target is now `6.0`; the keyboard is
+  `5.0` (see §7).
+- `SWIFT_SWIFT3_OBJC_INFERENCE = On` removed — unsupported since Xcode 14.
+- `CLANG_CXX_LANGUAGE_STANDARD`: `gnu++0x` → `gnu++20`.
+- `GCC_C_LANGUAGE_STANDARD`: `gnu99` → `gnu17`.
+- `CODE_SIGN_IDENTITY[sdk=iphoneos*]`: `iPhone Developer` → `Apple Development`.
+- Project format: `objectVersion` 54 → 56, `compatibilityVersion` `Xcode 3.2` →
+  `Xcode 14.0`.
 
 ---
 
-## 🏆 Summary
+## 6. Dependencies removed
 
-**Total Lines Reduced:** ~200 lines removed from view controllers
-**New Files Added:** 2 (ViewStylingManager.swift, IMPROVEMENTS.md)
-**Performance Improvement:** ~70% fewer blur view allocations
-**Code Quality:** Modern Swift 5.9, better encapsulation, proper separation of concerns
+**CocoaPods.** The `Podfile` declared no pods, yet every build ran two
+`[CP] Check Pods Manifest.lock` script phases against a CocoaPods 1.11.3 sandbox
+and linked two empty frameworks. The integration, the generated xcconfigs and the
+`Pods.xcodeproj` workspace reference are gone.
 
-All improvements maintain backward compatibility and don't break existing functionality! 🎉
+**KeyboardKit and KeyboardKitPro.** Both were pinned at 6.0.0 and linked into the
+app target, and neither was imported anywhere in the codebase. Versions of that
+age do not build on a current toolchain.
+
+The project no longer depends on any third-party code, and
+`Na-vi.xcworkspace` now contains only `Na-vi.xcodeproj`.
+
+---
+
+## 7. Verification
+
+`./build-verify.sh` runs `Scripts/preflight.py` and then `xcodebuild`. The
+pre-flight checks need only Python and cover:
+
+- Project file integrity: balanced delimiters, every object reference resolving,
+  no CocoaPods or KeyboardKit remnants, valid `SWIFT_VERSION` values.
+- Property lists: all four parse; the scene manifest is present and names a
+  delegate that exists; 64-bit device capabilities; export compliance declared;
+  matching version strings across app and extension; complete privacy manifests.
+- Target membership: every file a target compiles exists on disk, and any Swift
+  file belonging to no target is listed.
+- Deprecated API: the table in §4 is enforced against compiled sources only.
+
+All pre-flight checks pass. Compiling and running on device requires Xcode 26 or
+later and has not been performed as part of this change.
+
+---
+
+## 8. Follow-up work
+
+### 8.1 Files to delete
+
+These files are no longer part of any target. They were left on disk so the
+removal can be reviewed before it is made permanent:
+
+| File | Why it is dead |
+| --- | --- |
+| `Keyboard/Na'vi Keyboard.swift` | The `Catboard` sample class. Never instantiated — the extension's principal class is `KeyboardViewController` — and it injects cat emoji into typed text and writes screenshots to a hard-coded path on a stranger's Mac. |
+| `Keyboard/CatboardBanner.swift` | Swift 2 source (`NSUserDefaults`, `UIControlEvents`) that has not compiled for years; it was already outside the build. |
+| `Keyboard/CQMPHelper.swift` | An `MPVolumeView` extension with no callers, built on API deprecated in iOS 13. |
+| `Keyboard/CQStdHelper.swift` | A `delay(bySeconds:)` helper with no callers. |
+| `UIDevice.swift` | The `hasBottom` device check described in §5.4, now unused. |
+| `Na'vi Keyboard/KeyboardView.swift`, `KeyboardViewController.swift`, `NSHelper.swift`, `Keyboard.xib`, `Keyboard.storyboard` | An abandoned second keyboard implementation, never referenced by the project. |
+| `Podfile`, `Podfile.lock`, `Pods/` | Left behind by the CocoaPods removal in §6. |
+
+`Scripts/preflight.py` lists the Swift files among these on every run, so the
+warning disappears once they are removed.
+
+### 8.2 Keyboard extension and Swift 6
+
+The extension is roughly 4,700 lines inherited from the 2014 *tasty-imitation-
+keyboard* project, with global mutable state that the Swift 6 language mode
+rejects. It is pinned to the Swift 5 language mode with
+`SWIFT_STRICT_CONCURRENCY = minimal`, which compiles under the Swift 6 compiler.
+Raising it to `complete`, then to the Swift 6 language mode, is a self-contained
+follow-up.
+
+### 8.3 Smaller items
+
+- **`GoogleService-Info.plist`** is bundled into both targets, but no Firebase
+  SDK is linked and nothing reads it. It ships project identifiers to no purpose
+  and should be removed from both Resources build phases.
+- **Dictionary loading is synchronous.** Roughly 890 KB of JSON, 2,678 entries,
+  is decoded on the main thread while the first view controller initialises.
+  Moving it off the main thread would shorten launch.
+- **Section headers reuse `dequeueReusableCell`.** The correct API is
+  `dequeueReusableHeaderFooterView(withIdentifier:)`, which requires registering
+  a header view in the storyboard.
+- **The detail screen is unreachable.** `NDDefinitionViewController` is wired into
+  `Dictionary.storyboard` but row selection does nothing; the push was commented
+  out. It is either worth restoring or worth removing.

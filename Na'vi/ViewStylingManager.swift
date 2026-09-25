@@ -2,131 +2,76 @@
 //  ViewStylingManager.swift
 //  Na'vi
 //
-//  Created for iOS 18.0+ glassmorphism design
-//  Manages view styling to reduce view controller responsibilities
+//  Keeps appearance work out of the view controllers.
 //
 
 import UIKit
 
-/// Manages glass UI styling for view controllers, reducing their responsibilities
-class ViewStylingManager {
+/// Applies the app's shared appearance to a view controller's subviews.
+///
+/// The app leans on the system appearance rather than re-creating it: navigation
+/// bars, table views and search fields take on Liquid Glass by themselves once the
+/// app is built against the iOS 26 SDK or later, and semantic colours track Dark
+/// Mode, Increase Contrast and Reduce Transparency without any help. What remains
+/// here is the one surface the app styles deliberately — the search field that
+/// floats above the dictionary list.
+@MainActor
+final class ViewStylingManager {
 
     private weak var viewController: UIViewController?
-    private var gradientLayer: CAGradientLayer?
+    private weak var searchFieldGlass: UIVisualEffectView?
 
     init(viewController: UIViewController) {
         self.viewController = viewController
     }
 
-    // MARK: - Dictionary View Styling
+    // MARK: - Dictionary list
 
-    /// Applies complete glass UI setup to dictionary main view controller
-    func setupDictionaryGlassUI(
-        tableView: UITableView,
-        searchBar: UISearchBar,
-        navigationController: UINavigationController?
-    ) {
-        guard let viewController = viewController else { return }
+    /// Prepares the dictionary list: system background, transparent table so the
+    /// background reads through, and a floating glass search field.
+    func setupDictionaryGlassUI(tableView: UITableView, searchBar: UISearchBar) {
+        viewController?.view.backgroundColor = .systemBackground
 
-        // Add gradient background
-        setupGradientBackground(for: viewController.view)
-
-        // Clear table view background to show gradient
         tableView.backgroundColor = .clear
+        tableView.backgroundView = nil
+        tableView.sectionHeaderTopPadding = 0
 
-        // Apply glass effect to navigation bar
-        setupGlassNavigationBar(navigationController)
-
-        // Apply glass styling to search bar
-        setupGlassSearchBar(searchBar)
+        applyFloatingGlass(to: searchBar)
     }
 
-    /// Applies glass UI setup to definition view controller
+    // MARK: - Definition
+
+    /// Prepares the definition screen.
     func setupDefinitionGlassUI(textView: UITextView) {
-        guard let viewController = viewController else { return }
+        viewController?.view.backgroundColor = .systemBackground
 
-        // Add gradient background
-        setupGradientBackground(for: viewController.view)
-
-        // Apply glass blur to entire view
-        let blurEffect = UIBlurEffect(style: .systemMaterial)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = viewController.view.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        viewController.view.insertSubview(blurView, at: 0)
-
-        // Update text view for glass background
         textView.backgroundColor = .clear
-        textView.textColor = GlassUIHelper.glassPrimaryTextColor(for: viewController.traitCollection)
+        textView.textColor = .label
     }
 
-    // MARK: - Individual Components
+    // MARK: - Layout
 
-    private func setupGradientBackground(for view: UIView) {
-        guard let viewController = viewController else { return }
-
-        let gradient = GlassUIHelper.createGradientBackground(
-            for: view.bounds,
-            traitCollection: viewController.traitCollection
-        )
-        gradientLayer = gradient
-        view.layer.insertSublayer(gradient, at: 0)
+    /// Keeps glass surfaces matched to their current bounds. Call from
+    /// `viewDidLayoutSubviews`.
+    func updateLayout() {
+        guard let glass = searchFieldGlass else { return }
+        GlassUIHelper.updateCornerRadius(of: glass)
     }
 
-    private func setupGlassNavigationBar(_ navigationController: UINavigationController?) {
-        guard let viewController = viewController,
-              let navigationBar = navigationController?.navigationBar else { return }
+    // MARK: - Search field
 
-        let appearance = GlassUIHelper.createGlassNavigationAppearance(
-            for: viewController.traitCollection
-        )
-        navigationBar.standardAppearance = appearance
-        navigationBar.scrollEdgeAppearance = appearance
-        navigationBar.compactAppearance = appearance
-    }
-
-    private func setupGlassSearchBar(_ searchBar: UISearchBar) {
-        // Remove default background
+    private func applyFloatingGlass(to searchBar: UISearchBar) {
+        // Clear the search bar's own chrome so the glass behind it is what shows.
         searchBar.backgroundImage = UIImage()
         searchBar.backgroundColor = .clear
+        searchBar.searchTextField.backgroundColor = .clear
 
-        // Apply glass blur to search bar
-        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = searchBar.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        searchBar.insertSubview(blurView, at: 0)
+        guard searchFieldGlass == nil else { return }
 
-        // Style search text field
-        if let textField = searchBar.searchTextField as UITextField? {
-            textField.backgroundColor = UIColor.systemGray6.withAlphaComponent(0.5)
-        }
-    }
-
-    // MARK: - Trait Collection Updates
-
-    /// Updates gradient colors when trait collection changes
-    func updateGradientColors(for traitCollection: UITraitCollection) {
-        guard let gradient = gradientLayer else { return }
-
-        let isDark = traitCollection.userInterfaceStyle == .dark
-        gradient.colors = isDark ?
-            [UIColor.systemBlue.withAlphaComponent(0.3).cgColor,
-             UIColor.systemPurple.withAlphaComponent(0.3).cgColor] :
-            [UIColor.systemBlue.withAlphaComponent(0.1).cgColor,
-             UIColor.systemPurple.withAlphaComponent(0.1).cgColor]
-    }
-
-    /// Updates gradient frame when view bounds change
-    func updateGradientFrame(_ bounds: CGRect) {
-        gradientLayer?.frame = bounds
-    }
-
-    // MARK: - Cleanup
-
-    func cleanup() {
-        gradientLayer?.removeFromSuperlayer()
-        gradientLayer = nil
-        viewController = nil
+        let glass = GlassUIHelper.glassView(.floating, isInteractive: true)
+        glass.frame = searchBar.bounds
+        glass.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        searchBar.insertSubview(glass, at: 0)
+        searchFieldGlass = glass
     }
 }

@@ -8,159 +8,190 @@
 
 import UIKit
 
-class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+final class NDDictionaryMainViewController: UIViewController {
 
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var searchBar: UISearchBar!
     @IBOutlet private weak var searchBarBottomConstraint: NSLayoutConstraint!
 
-    var defaultClassifiedDictionary: [[NDDictionaryEntry]] = NDDictionary().defaultClassifiedDictionary
-    var dictionaryItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
-    var sectionTitles: [String] = [String]()
-    var categories: [String] = [String]()
+    private let minimumRowHeight: CGFloat = 150
 
-    let minimumRowHeight = CGFloat(150)
+    /// Every entry, grouped by first letter. The search results are filtered from this.
+    private let allSections: [[NDDictionaryEntry]] = NDDictionary().classifiedEntries
 
-    var bookmarkedItems: [[NDDictionaryEntry]] = [[NDDictionaryEntry]]()
+    /// The sections currently on screen.
+    private var sections: [[NDDictionaryEntry]] = []
+    private var sectionTitles: [String] = []
 
-    // Styling manager to reduce view controller responsibilities
     private lazy var stylingManager = ViewStylingManager(viewController: self)
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIWindow.keyboardWillShowNotification, object: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIWindow.keyboardWillHideNotification, object: nil)
-
-        dictionaryItems = defaultClassifiedDictionary
-        sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
-//        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
-
-        // Setup glass UI via styling manager
-        stylingManager.setupDictionaryGlassUI(
-            tableView: tableView,
-            searchBar: searchBar,
-            navigationController: navigationController
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+
+        sections = allSections
+        sectionTitles = NDDictionary.sectionIndices(ofDictionary: sections)
+
+        stylingManager.setupDictionaryGlassUI(tableView: tableView, searchBar: searchBar)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if let searchText = searchBar.text, !searchText.isEmpty {
             self.searchText(searchText)
         }
-        
-        setColoursToInterfaceStyle()
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        setColoursToInterfaceStyle()
-    }
-    
-    func setColoursToInterfaceStyle() {
-        // Update gradient colors via styling manager
-        stylingManager.updateGradientColors(for: traitCollection)
-
-        // Table view should be clear to show gradient
-        tableView.backgroundColor = .clear
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        // Update gradient frame via styling manager
-        stylingManager.updateGradientFrame(view.bounds)
+        stylingManager.updateLayout()
     }
 
-    deinit {
-        stylingManager.cleanup()
-    }
+    // MARK: - Data
 
-    
-    // *** Dictionary Data ***
-    func loadDefaultDictionary() {
-        self.dictionaryItems = defaultClassifiedDictionary
-    }
-    
-    func updateDictionaryData() {
-        sectionTitles = NDDictionary.sectionIndices(ofDictionary: dictionaryItems)
-//        categories = NDDictionary.categories(ofDictionary: dictionaryItems)
-        
-        self.tableView.reloadData()
-        if self.tableView.numberOfSections != 0 {
-            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableView.ScrollPosition.top, animated: true)
+    private func reloadSections() {
+        sectionTitles = NDDictionary.sectionIndices(ofDictionary: sections)
+
+        tableView.reloadData()
+
+        if tableView.numberOfSections > 0, tableView.numberOfRows(inSection: 0) > 0 {
+            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         }
     }
-    
-    // *** Table View Data ***
+
+    private func searchText(_ searchText: String) {
+        guard !searchText.isEmpty else {
+            sections = allSections
+            reloadSections()
+            return
+        }
+
+        sections = allSections.compactMap { section in
+            let matches = section.filter {
+                $0.navi.localizedCaseInsensitiveContains(searchText)
+                    || $0.english.localizedCaseInsensitiveContains(searchText)
+            }
+            return matches.isEmpty ? nil : matches
+        }
+
+        reloadSections()
+    }
+
+    // MARK: - Keyboard
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+
+        let keyboardHeight = keyboardFrame.cgRectValue.height
+        animateWithKeyboard(notification: notification) { [weak self] _ in
+            self?.searchBarBottomConstraint.constant = keyboardHeight - 40
+        }
+    }
+
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        animateWithKeyboard(notification: notification) { [weak self] _ in
+            self?.searchBarBottomConstraint.constant = 0
+        }
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension NDDictionaryMainViewController: UITableViewDataSource {
+
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dictionaryItems.count
+        sections.count
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-        
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return minimumRowHeight
-    }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dictionaryItems[section].count
+        sections[section].count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MainDictionaryCell", for: indexPath) as! NDDictionaryMainTableViewCell
-        
-        guard indexPath.section < dictionaryItems.count,
-              indexPath.row < dictionaryItems[indexPath.section].count else {
-            // In case of an invalid indexPath, return an empty cell
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "MainDictionaryCell",
+            for: indexPath
+        ) as! NDDictionaryMainTableViewCell
+
+        guard indexPath.section < sections.count,
+              indexPath.row < sections[indexPath.section].count else {
             return cell
         }
-        
+
         let isSearching = !(searchBar.text?.isEmpty ?? true)
-        cell.loadData(dictionaryItems[indexPath.section][indexPath.row], isSearchResult: isSearching)
+        cell.loadData(sections[indexPath.section][indexPath.row], isSearchResult: isSearching)
         return cell
     }
 
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        return
-//        let storyboard = UIStoryboard(name: "Dictionary", bundle: nil)
-//        let definitionViewController : NDDefinitionViewController = storyboard.instantiateViewController(withIdentifier: "NDDefinitionViewController") as! NDDefinitionViewController
-//        definitionViewController.entry = dictionaryItems[indexPath.section][indexPath.row]
-//        self.navigationController?.pushViewController(definitionViewController, animated: true)
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        sectionTitles
     }
-    
+}
+
+// MARK: - UITableViewDelegate
+
+extension NDDictionaryMainViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        minimumRowHeight
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Entries are read in place; the row is only a container.
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView : NDDictionarySectionTableViewCell = tableView.dequeueReusableCell(withIdentifier: "NDDictionarySectionTableViewCell") as! NDDictionarySectionTableViewCell
+        guard let headerView = tableView.dequeueReusableCell(
+            withIdentifier: "NDDictionarySectionTableViewCell"
+        ) as? NDDictionarySectionTableViewCell else {
+            return nil
+        }
+
         headerView.updateSectionTitle(sectionTitles[section])
         return headerView
     }
-    
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return sectionTitles
-    }
-    
-    // *** Search Bar Actions ****
+}
+
+// MARK: - UISearchBarDelegate
+
+extension NDDictionaryMainViewController: UISearchBarDelegate {
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.searchText(searchText)
     }
-    
+
     func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        if let searchText = searchBar.text, !searchText.isEmpty {
-            self.loadDefaultDictionary()
-        }
-        return true
+        true
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.searchBar.endEditing(true)
-        
-        if let searchText = searchBar.text, searchText.isEmpty {
-            self.loadDefaultDictionary()
+        searchBar.endEditing(true)
+
+        if searchBar.text?.isEmpty ?? true {
+            sections = allSections
+            reloadSections()
         }
     }
 
@@ -168,58 +199,6 @@ class NDDictionaryMainViewController: UIViewController, UITableViewDelegate, UIT
         if let searchText = searchBar.text {
             self.searchText(searchText)
         }
-        
         searchBar.endEditing(true)
     }
-
-    func searchText(_ searchText: String) {
-        // If the search text is empty, load the default dictionary and return
-        if searchText.isEmpty {
-            self.dictionaryItems = defaultClassifiedDictionary
-            updateDictionaryData()
-            return
-        }
-        
-        // Filter the default dictionary based on the search text
-        var filteredDictionaryItems: [[NDDictionaryEntry]] = []
-        for section in defaultClassifiedDictionary {
-            let filteredSection = section.filter { dictionaryItem in
-                dictionaryItem.navi.uppercased().contains(searchText.uppercased()) ||
-                dictionaryItem.english.uppercased().contains(searchText.uppercased())
-            }
-            if !filteredSection.isEmpty {
-                filteredDictionaryItems.append(filteredSection)
-            }
-        }
-        
-        // Update dictionaryItems with the filtered results and update the UI
-        self.dictionaryItems = filteredDictionaryItems
-        updateDictionaryData()
-    }
-
-
-    @objc func keyboardWillShow(_ notification: NSNotification) {
-        
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-                let keyboardRectangle = keyboardFrame.cgRectValue
-                let keyboardHeight = keyboardRectangle.height
-            
-                animateWithKeyboard(notification: notification) { keyboardFrame in
-                    self.searchBarBottomConstraint.constant = keyboardHeight - 40
-                }
-            }
-        
-        
-        
-    }
-    
-    @objc func keyboardWillHide(_ notification: NSNotification) {
-        
-        animateWithKeyboard(notification: notification) { keyboardFrame in
-            self.searchBarBottomConstraint.constant = 0
-        }
-        
-    }
-    
 }
-

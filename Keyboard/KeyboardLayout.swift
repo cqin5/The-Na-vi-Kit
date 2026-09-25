@@ -731,8 +731,18 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     // LAYOUT FUNCTIONS //
     //////////////////////
     
+    /// The scale of the display the keyboard is currently on.
+    ///
+    /// Read from the trait collection rather than the main screen, so the value
+    /// follows the window the keyboard is actually in.
+    private var displayScale: CGFloat {
+        let scale = self.superview.traitCollection.displayScale
+        return scale > 0 ? scale : 1
+    }
+
     func rounded(_ measurement: CGFloat) -> CGFloat {
-        return round(measurement * UIScreen.main.scale) / UIScreen.main.scale
+        let scale = displayScale
+        return round(measurement * scale) / scale
     }
     
     func generateKeyFrames(_ model: Keyboard, bounds: CGRect, page pageToLayout: Int) -> [Key:CGRect]? {
@@ -1004,8 +1014,12 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     ////////////////
     
     func frameForPopup(_ key: KeyboardKey, direction: Direction) -> CGRect {
-        let actualScreenWidth = (UIScreen.main.nativeBounds.size.width / UIScreen.main.nativeScale)
-        let totalHeight = self.layoutConstants.popupTotalHeight(actualScreenWidth)
+        // The keyboard's own width is what the popup has to fit inside; the window
+        // scene's screen is only a fallback before the first layout pass.
+        let referenceWidth = self.superview.bounds.width > 0
+            ? self.superview.bounds.width
+            : (self.superview.window?.windowScene?.screen.bounds.width ?? 0)
+        let totalHeight = self.layoutConstants.popupTotalHeight(referenceWidth)
         
         let popupWidth = key.bounds.width + self.layoutConstants.popupWidthIncrement
         let popupHeight = totalHeight - self.layoutConstants.popupGap - key.bounds.height

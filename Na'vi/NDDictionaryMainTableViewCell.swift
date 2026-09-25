@@ -7,144 +7,54 @@
 //
 
 import UIKit
-import AVFAudio
-import AVFoundation
 
-class NDDictionaryMainTableViewCell: UITableViewCell {
+final class NDDictionaryMainTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var subtitleLabel: UILabel!
-    @IBOutlet weak var definitionLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var subtitleLabel: UILabel!
+    @IBOutlet private weak var definitionLabel: UILabel!
 
-    @IBOutlet weak var playAudioButton: UIButton!
-    @IBOutlet weak var bookmarkImageView: UIImageView!
+    @IBOutlet private weak var playAudioButton: UIButton!
+    @IBOutlet private weak var bookmarkImageView: UIImageView!
 
-    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
-    
-    let defaultBottomConstraint = CGFloat(-40)
-    let searchingBottomConstraint = CGFloat(0)
+    @IBOutlet private weak var bottomConstraint: NSLayoutConstraint!
 
-    
-    let titleFont : UIFont = UIFont.boldSystemFont(ofSize: 18)
-    let subtitleFont : UIFont = UIFont.systemFont(ofSize: 14)
-    
-    var titleLabelColourLightMode : UIColor = UIColor(white: 0.0, alpha: 1.0)
-    var subtitleLabelColourLightMode : UIColor = UIColor(white: 0.2, alpha: 0.5)
-    var definitionLabelColourLightMode : UIColor = UIColor(white: 0.2, alpha: 0.5)
+    private let defaultBottomConstraint: CGFloat = -40
+    private let searchingBottomConstraint: CGFloat = 0
 
-    var titleLabelColourDarkMode : UIColor = UIColor(white: 1.0, alpha: 1.0)
-    var subtitleLabelColourDarkMode : UIColor = UIColor(white: 1.0, alpha: 0.5)
-    var definitionLabelColourDarkMode : UIColor = UIColor(white: 1.0, alpha: 0.8)
-
-    var audioFileLocation = ""
-    var localAudioFileName = ""
-    
-    var audioPlayer: AVAudioPlayer?
-
-    // Lazy blur view for performance optimization
-    private lazy var glassBackgroundView: UIVisualEffectView = {
-        let blurEffect = UIBlurEffect(style: .systemMaterial)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.alpha = 0.95
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        return blurView
-    }()
+    private var localAudioFileName = ""
 
     override func awakeFromNib() {
         super.awakeFromNib()
+
         playAudioButton.imageView?.contentMode = .scaleAspectFit
 
-        // Setup glass background (lazy loaded)
-        setupGlassBackground()
+        // The list itself carries the material, so the row stays transparent.
+        backgroundColor = .clear
+        backgroundView = nil
+        selectionStyle = .none
 
-        setColoursToInterfaceStyle()
+        // Semantic colours track Dark Mode, Increase Contrast and Reduce
+        // Transparency without any per-trait bookkeeping.
+        titleLabel.textColor = .label
+        subtitleLabel.textColor = .secondaryLabel
+        definitionLabel.textColor = .label
     }
 
-    func setupGlassBackground() {
-        // Use lazy-loaded blur view for better performance
-        self.backgroundView = glassBackgroundView
-        self.backgroundColor = .clear
-    }
+    func loadData(_ entry: NDDictionaryEntry, isSearchResult: Bool) {
+        bookmarkImageView.isHidden = !entry.isBookmarked
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+        titleLabel.text = entry.navi
+        subtitleLabel.text = entry.ipa + "  " + entry.partOfSpeech
+        definitionLabel.text = entry.english
 
-        // Reuse blur view instead of recreating
-        // Just update frame if needed
-        glassBackgroundView.frame = self.bounds
+        localAudioFileName = entry.localAudioFileName
+        playAudioButton.accessibilityLabel = "Play pronunciation of \(entry.navi)"
 
-        // Stop any playing audio
-        audioPlayer?.stop()
-        audioPlayer = nil
-    }
-    
-    func loadData(_ dictionaryItem:NDDictionaryEntry, isSearchResult: Bool) {
-        
-        bookmarkImageView.isHidden = !dictionaryItem.isBookmarked
-        
-        titleLabel.text = dictionaryItem.navi
-        subtitleLabel.text = dictionaryItem.IPA + "  " + dictionaryItem.partOfSpeech
-        
-        definitionLabel.text = dictionaryItem.english
-        
-        audioFileLocation = dictionaryItem.audioFileLocation
-        localAudioFileName = dictionaryItem.localAudioFileName
-        
         bottomConstraint.constant = isSearchResult ? searchingBottomConstraint : defaultBottomConstraint
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        setColoursToInterfaceStyle()
-    }
-    
-    
-    func setColoursToInterfaceStyle() {
-        let isDark = traitCollection.userInterfaceStyle == .dark
-
-        // Enhanced glass-appropriate text colors for better readability
-        titleLabel.textColor = isDark ?
-            UIColor.white.withAlphaComponent(0.95) :
-            UIColor.black.withAlphaComponent(0.9)
-
-        subtitleLabel.textColor = isDark ?
-            UIColor.white.withAlphaComponent(0.7) :
-            UIColor.black.withAlphaComponent(0.6)
-
-        definitionLabel.textColor = isDark ?
-            UIColor.white.withAlphaComponent(0.85) :
-            UIColor.black.withAlphaComponent(0.75)
-    }
-
     @IBAction func playAudioButtonPressed(_ sender: Any) {
-        
-        
-        guard let path = Bundle.main.path(forResource: localAudioFileName, ofType: nil) else {
-            return
-        }
-
-
-        let url = URL(fileURLWithPath: path)
-
-        do {
-            
-            try AVAudioSession.sharedInstance().setCategory(.playback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-                        
-            audioPlayer?.play()
-        } catch {
-            // couldn't load file :(
-            print("couldn't load file :(")
-        }
-            
-       
+        PronunciationPlayer.shared.play(fileNamed: localAudioFileName)
     }
 }

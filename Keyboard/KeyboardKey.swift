@@ -75,9 +75,10 @@ class KeyboardKey: UIControl {
     
     var shouldRasterize: Bool = false {
         didSet {
+            let scale = self.traitCollection.displayScale > 0 ? self.traitCollection.displayScale : 1
             for view in [self.displayView, self.borderView, self.underView] {
                 view?.layer.shouldRasterize = shouldRasterize
-                view?.layer.rasterizationScale = UIScreen.main.scale
+                view?.layer.rasterizationScale = scale
             }
         }
     }

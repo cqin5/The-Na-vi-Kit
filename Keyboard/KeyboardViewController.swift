@@ -230,7 +230,7 @@ class KeyboardViewController: UIInputViewController {
         
         self.setupLayout()
         
-        let orientationSavvyBounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.heightForOrientation(self.interfaceOrientation, withTopBanner: false))
+        let orientationSavvyBounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.canonicalKeyboardHeight(withTopBanner: false))
         
         if (lastLayoutBounds != nil && lastLayoutBounds == orientationSavvyBounds) {
             // do nothing
@@ -261,45 +261,59 @@ class KeyboardViewController: UIInputViewController {
 //        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {        
+    override func viewWillAppear(_ animated: Bool) {
         self.bannerView?.isHidden = true
-        self.keyboardHeight = self.heightForOrientation(self.interfaceOrientation, withTopBanner: true)
+        self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
     }
-    
-    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+
         self.forwardingView.resetTrackedViews()
         self.shiftStartingState = nil
         self.shiftWasMultitapped = false
-        
+
         // optimization: ensures smooth animation
-        if let keyPool = self.layout?.keyPool {
-            for view in keyPool {
-                view.shouldRasterize = true
-            }
-        }
-        
-        self.keyboardHeight = self.heightForOrientation(toInterfaceOrientation, withTopBanner: true)
+        self.layout?.keyPool.forEach { $0.shouldRasterize = true }
+
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self = self else { return }
+            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
+        }, completion: { [weak self] _ in
+            // optimization: ensures quick mode and shift transitions
+            self?.layout?.keyPool.forEach { $0.shouldRasterize = false }
+        })
     }
-    
-    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
-        // optimization: ensures quick mode and shift transitions
-        if let keyPool = self.layout?.keyPool {
-            for view in keyPool {
-                view.shouldRasterize = false
-            }
+
+    /// The width of the space the keyboard has to lay out in, in points.
+    ///
+    /// The host app sizes the input view, so its own bounds are the authority.
+    /// The window scene is only a fallback for the first layout pass, before the
+    /// view has been given a size.
+    private var availableWidth: CGFloat {
+        if self.view.bounds.width > 0 {
+            return self.view.bounds.width
         }
+        return self.view.window?.windowScene?.screen.bounds.width ?? 0
     }
-    
-    func heightForOrientation(_ orientation: UIInterfaceOrientation, withTopBanner: Bool) -> CGFloat {
-        let isPad = UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
-        
+
+    /// Whether the keyboard is laying out in a portrait-shaped space.
+    private var isPortraitLayout: Bool {
+        if let scene = self.view.window?.windowScene {
+            return scene.interfaceOrientation.isPortrait
+        }
+        return self.traitCollection.verticalSizeClass != .compact
+    }
+
+    func canonicalKeyboardHeight(withTopBanner: Bool) -> CGFloat {
+        let isPad = self.traitCollection.userInterfaceIdiom == .pad
+
         //TODO: hardcoded stuff
-        let actualScreenWidth = (UIScreen.main.nativeBounds.size.width / UIScreen.main.nativeScale)
-        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(orientation.isPortrait && actualScreenWidth >= 400 ? 226 : 216))
+        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(availableWidth >= 400 ? 226 : 216))
         let canonicalLandscapeHeight = (isPad ? CGFloat(352) : CGFloat(162))
         let topBannerHeight = (withTopBanner ? metric("topBanner") : 0)
-        
-        return CGFloat(orientation.isPortrait ? canonicalPortraitHeight + topBannerHeight : canonicalLandscapeHeight + topBannerHeight)
+
+        return (isPortraitLayout ? canonicalPortraitHeight : canonicalLandscapeHeight) + topBannerHeight
     }
     
     /*
@@ -404,11 +418,6 @@ class KeyboardViewController: UIInputViewController {
     // POPUP DELAY END //
     /////////////////////
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated
-    }
-
     // TODO: this is currently not working as intended; only called when selection changed -- iOS bug
     override func textDidChange(_ textInput: UITextInput?) {
         self.contextChanged()
