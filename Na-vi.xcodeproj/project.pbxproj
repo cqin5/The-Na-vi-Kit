@@ -2723,11 +2723,8 @@
 		A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92131D1B32050030D414 /* KeyboardViewController.swift */; };
 		A6CB92291D1B32050030D414 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92141D1B32050030D414 /* Media.xcassets */; };
 		A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92161D1B32050030D414 /* Shapes.swift */; };
-		A6CB922C1D1B32050030D414 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92171D1B32050030D414 /* Utilities.swift */; };
 		A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
 		A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
-		A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
-		A6CB923B1D1B358E0030D414 /* CQUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92331D1B358E0030D414 /* CQUIHelper.swift */; };
 		A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6CB923C1D1B64960030D414 /* Dictionary.storyboard */; };
 		A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */; };
 		A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */; };
@@ -11158,14 +11155,12 @@
 				A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */,
 				A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */,
 				A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */,
-				A6CB922C1D1B32050030D414 /* Utilities.swift in Sources */,
 				A6CB92221D1B32050030D414 /* KeyboardConnector.swift in Sources */,
 				A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6CB92251D1B32050030D414 /* KeyboardKeyBackground.swift in Sources */,
 				A6CB921D1D1B32050030D414 /* DirectionEnum.swift in Sources */,
 				A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */,
 				A6CB92271D1B32050030D414 /* KeyboardModel.swift in Sources */,
-				A6CB923B1D1B358E0030D414 /* CQUIHelper.swift in Sources */,
 				A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */,
 				A6CB921F1D1B32050030D414 /* ForwardingView.swift in Sources */,
 				A6CB92261D1B32050030D414 /* KeyboardLayout.swift in Sources */,
@@ -11182,7 +11177,6 @@
 				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
 				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
 				A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */,
-				A6CB923A1D1B358E0030D414 /* CQUIHelper.swift in Sources */,
 				A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6A8DD8E2EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */,
 				A6A8DD8F2EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */,

@@ -105,9 +105,9 @@ class LayoutConstants: NSObject {
             return self.keyGapPortraitNormal
         }
     }
-    class func keyGapLandscape(_ width: CGFloat, rowCharacterCount: Int) -> CGFloat {
+    class func keyGapLandscape(_ width: CGFloat, rowCharacterCount: Int, isPad: Bool) -> CGFloat {
         let compressed = (rowCharacterCount >= self.keyCompressedThreshhold)
-        let shrunk = self.keyboardIsShrunk(width)
+        let shrunk = self.keyboardIsShrunk(width, isPad: isPad)
         if compressed || shrunk {
             return self.keyGapLandscapeSmall
         }
@@ -120,12 +120,11 @@ class LayoutConstants: NSObject {
         return self.findThreshhold(self.lastRowKeyGapLandscapeArray, threshholds: self.lastRowKeyGapLandscapeWidthThreshholds, measurement: width)
     }
     
-    class func keyboardIsShrunk(_ width: CGFloat) -> Bool {
-        let isPad = UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
+    // `isPad` comes from the keyboard's trait collection, supplied by the layout.
+    class func keyboardIsShrunk(_ width: CGFloat, isPad: Bool) -> Bool {
         return (isPad ? false : width >= self.keyboardShrunkSizeBaseWidthThreshhold)
     }
-    class func keyboardShrunkSize(_ width: CGFloat) -> CGFloat {
-        let isPad = UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
+    class func keyboardShrunkSize(_ width: CGFloat, isPad: Bool) -> CGFloat {
         if isPad {
             return width
         }
@@ -158,13 +157,6 @@ class LayoutConstants: NSObject {
 }
 
 class GlobalColors: NSObject {
-    // Glass mode colors (semi-transparent for iOS 18 glassmorphism)
-    class var glassLightModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(0.6) }}
-    class var glassDarkModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(0.15) }}
-    class var glassLightModeSpecialKey: UIColor { get { return UIColor.systemGray.withAlphaComponent(0.5) }}
-    class var glassDarkModeSpecialKey: UIColor { get { return UIColor.systemGray.withAlphaComponent(0.2) }}
-
-    // Original solid colors (kept for solid color mode)
     class var lightModeRegularKey: UIColor { get { return UIColor.white }}
     class var darkModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(CGFloat(0.3)) }}
     class var darkModeSolidColorRegularKey: UIColor { get { return UIColor(red: CGFloat(83)/CGFloat(255), green: CGFloat(83)/CGFloat(255), blue: CGFloat(83)/CGFloat(255), alpha: 1) }}
@@ -185,13 +177,11 @@ class GlobalColors: NSObject {
     class var darkModeBorderColor: UIColor { get { return UIColor.clear }}
     
     class func regularKey(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if solidColorMode {
-            // Use solid colors for accessibility mode
-            return darkMode ? self.darkModeSolidColorRegularKey : self.lightModeRegularKey
+        if darkMode {
+            return solidColorMode ? self.darkModeSolidColorRegularKey : self.darkModeRegularKey
         }
         else {
-            // Use glass colors for modern iOS 18 aesthetic
-            return darkMode ? self.glassDarkModeRegularKey : self.glassLightModeRegularKey
+            return self.lightModeRegularKey
         }
     }
     
@@ -210,13 +200,11 @@ class GlobalColors: NSObject {
     }
     
     class func specialKey(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if solidColorMode {
-            // Use solid colors for accessibility mode
-            return darkMode ? self.darkModeSolidColorSpecialKey : self.lightModeSolidColorSpecialKey
+        if darkMode {
+            return solidColorMode ? self.darkModeSolidColorSpecialKey : self.darkModeSpecialKey
         }
         else {
-            // Use glass colors for modern iOS 18 aesthetic
-            return darkMode ? self.glassDarkModeSpecialKey : self.glassLightModeSpecialKey
+            return solidColorMode ? self.lightModeSolidColorSpecialKey : self.lightModeSpecialKey
         }
     }
 }
@@ -225,19 +213,15 @@ class GlobalColors: NSObject {
 //"blueColor": UIColor(hue: (211/360.0), saturation: 1.0, brightness: 1.0, alpha: 1),
 //"blueShadowColor": UIColor(hue: (216/360.0), saturation: 0.05, brightness: 0.43, alpha: 1),
 
-extension CGRect: Hashable {
-    public var hashValue: Int {
-        get {
-            return (origin.x.hashValue ^ origin.y.hashValue ^ size.width.hashValue ^ size.height.hashValue)
-        }
-    }
-}
-
-extension CGSize: Hashable {
-    public var hashValue: Int {
-        get {
-            return (width.hashValue ^ height.hashValue)
-        }
+/// The dictionary key for grouping pooled key views by size. A local type avoids
+/// conforming CGSize, an imported type, to Hashable, an imported protocol.
+struct KeySize: Hashable {
+    let width: CGFloat
+    let height: CGFloat
+    
+    init(_ size: CGSize) {
+        self.width = size.width
+        self.height = size.height
     }
 }
 
@@ -256,7 +240,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     
     var keyPool: [KeyboardKey] = []
     var nonPooledMap: [String:KeyboardKey] = [:]
-    var sizeToKeyMap: [CGSize:[KeyboardKey]] = [:]
+    var sizeToKeyMap: [KeySize:[KeyboardKey]] = [:]
     var shapePool: [String:Shape] = [:]
     
     var darkMode: Bool
@@ -471,7 +455,6 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         }
         
         if model.type == Key.KeyType.shift {
-            print("🦁🦁🦁🦁")
             if key.shape == nil {
                 let shiftShape = self.getShape(ShiftShape.self)
                 key.shape = shiftShape
@@ -515,8 +498,8 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         Key.KeyType.character,
         Key.KeyType.specialCharacter,
         Key.KeyType.period:
-            key.color = self.self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
-            if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
+            key.color = self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
+            if self.superview.traitCollection.userInterfaceIdiom == .pad {
                 key.downColor = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
             }
             else {
@@ -618,14 +601,14 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
             }
         }
         else {
-            if var keyArray = self.sizeToKeyMap[frame.size] {
+            if var keyArray = self.sizeToKeyMap[KeySize(frame.size)] {
                 if let key = keyArray.last {
                     if keyArray.count == 1 {
-                        self.sizeToKeyMap.removeValue(forKey: frame.size)
+                        self.sizeToKeyMap.removeValue(forKey: KeySize(frame.size))
                     }
                     else {
                         keyArray.removeLast()
-                        self.sizeToKeyMap[frame.size] = keyArray
+                        self.sizeToKeyMap[KeySize(frame.size)] = keyArray
                     }
                     return key
                 }
@@ -693,14 +676,14 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
             self.sizeToKeyMap.removeAll(keepingCapacity: true)
             
             for key in self.keyPool {
-                if var keyArray = self.sizeToKeyMap[key.frame.size] {
+                if var keyArray = self.sizeToKeyMap[KeySize(key.frame.size)] {
                     keyArray.append(key)
-                    self.sizeToKeyMap[key.frame.size] = keyArray
+                    self.sizeToKeyMap[KeySize(key.frame.size)] = keyArray
                 }
                 else {
                     var keyArray = [KeyboardKey]()
                     keyArray.append(key)
-                    self.sizeToKeyMap[key.frame.size] = keyArray
+                    self.sizeToKeyMap[KeySize(key.frame.size)] = keyArray
                 }
                 key.isHidden = true
             }
@@ -730,6 +713,12 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     //////////////////////
     // LAYOUT FUNCTIONS //
     //////////////////////
+    
+    /// Whether the keyboard is laying out for iPad, read from the host's traits
+    /// rather than from the device.
+    private var isPad: Bool {
+        return self.superview.traitCollection.userInterfaceIdiom == .pad
+    }
     
     /// The scale of the display the keyboard is currently on.
     ///
@@ -761,7 +750,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         let bottomEdge = sideEdges
         
         let normalKeyboardSize = bounds.width - CGFloat(2) * sideEdges
-        let shrunkKeyboardSize = self.layoutConstants.keyboardShrunkSize(normalKeyboardSize)
+        let shrunkKeyboardSize = self.layoutConstants.keyboardShrunkSize(normalKeyboardSize, isPad: self.isPad)
         
         sideEdges += ((normalKeyboardSize - shrunkKeyboardSize) / CGFloat(2))
         
@@ -794,7 +783,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
             
             let rowGapTotal = CGFloat(numRows - 1 - 1) * rowGap + lastRowGap
             
-            let keyGap: CGFloat = (isLandscape ? self.layoutConstants.keyGapLandscape(bounds.width, rowCharacterCount: mostKeysInRow) : self.layoutConstants.keyGapPortrait(bounds.width, rowCharacterCount: mostKeysInRow))
+            let keyGap: CGFloat = (isLandscape ? self.layoutConstants.keyGapLandscape(bounds.width, rowCharacterCount: mostKeysInRow, isPad: self.isPad) : self.layoutConstants.keyGapPortrait(bounds.width, rowCharacterCount: mostKeysInRow))
             
             let keyHeight: CGFloat = {
                 let totalGaps = bottomEdge + topEdge + rowGapTotal
@@ -889,7 +878,9 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         var frames = [CGRect]()
 
         let standardFullKeyCount = Int(self.layoutConstants.keyCompressedThreshhold) - 1
-        let standardGap = (isLandscape ? self.layoutConstants.keyGapLandscape : self.layoutConstants.keyGapPortrait)(frame.width, standardFullKeyCount)
+        let standardGap = (isLandscape
+            ? self.layoutConstants.keyGapLandscape(frame.width, rowCharacterCount: standardFullKeyCount, isPad: self.isPad)
+            : self.layoutConstants.keyGapPortrait(frame.width, rowCharacterCount: standardFullKeyCount))
         let sideEdges = (isLandscape ? self.layoutConstants.sideEdgesLandscape : self.layoutConstants.sideEdgesPortrait(frame.width))
         var standardKeyWidth = (frame.width - sideEdges - (standardGap * CGFloat(standardFullKeyCount - 1)) - sideEdges)
         standardKeyWidth /= CGFloat(standardFullKeyCount)

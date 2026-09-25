@@ -110,7 +110,6 @@ class Shape: UIView {
         
         override func draw(_ rect: CGRect) {
             let ctx = UIGraphicsGetCurrentContext()
-            CGColorSpaceCreateDeviceRGB()
             
             ctx?.saveGState()
             

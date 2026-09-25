@@ -3,9 +3,10 @@
 Pre-flight checks for The Na'vi Kit.
 
 Covers the things that can go wrong without Xcode noticing until an archive is
-rejected: project file integrity, the scene life cycle that the iOS 27 SDK
-requires, App Store property list keys, privacy manifests, target membership and
-deprecated API in the sources that are actually compiled.
+rejected or a device misbehaves: project file integrity, the scene life cycle that
+the iOS 27 SDK requires, App Store property list keys, privacy manifests, the App
+Store icon, target membership, deprecated and legacy API in the sources that are
+actually compiled, and legacy layout guides in storyboards.
 
 Run from the project root, or via ./build-verify.sh.
 """
@@ -25,6 +26,12 @@ PRIVACY_MANIFESTS = [
     pathlib.Path("Na'vi Keyboard/PrivacyInfo.xcprivacy"),
 ]
 SCENE_DELEGATE = pathlib.Path("Na'vi/SceneDelegate.swift")
+APP_ICON_SET = pathlib.Path("Na'vi/Assets.xcassets/AppIcon.appiconset")
+INTERFACE_FILES = [
+    pathlib.Path("Na'vi/Dictionary.storyboard"),
+    pathlib.Path("Na'vi/Base.lproj/Main.storyboard"),
+    pathlib.Path("Na'vi/Base.lproj/LaunchScreen.storyboard"),
+]
 
 SOURCES_PHASES = {
     "Eywa": "A6AE8AEF1D1AD43E00345E2E",
@@ -47,6 +54,13 @@ DEPRECATED_API = {
     r"\bfunc willRotate\(to": "willRotate(to:duration:) — use viewWillTransition(to:with:)",
     r"\bfunc didRotate\(from": "didRotate(from:) — use viewWillTransition(to:with:)",
     r"\bfunc didReceiveMemoryWarning\b": "an empty didReceiveMemoryWarning override",
+    r"UIGraphicsBeginImageContext": "UIGraphicsBeginImageContext — use UIGraphicsImageRenderer",
+    r"\bSelector\(\"": "a string Selector — use #selector so the compiler checks the method is @objc",
+    r"\bprotocol\s+\w+\s*:\s*class\b": "a ': class' protocol constraint — use AnyObject",
+    r"\bvar hashValue\b": "a hashValue requirement — implement hash(into:)",
+    r"\bUIDevice\.current\.userInterfaceIdiom\b": "UIDevice idiom — use the trait collection",
+    r"\bkeyboardFrameEndUserInfoKey\b": "manual keyboard frame handling — use view.keyboardLayoutGuide",
+    r"^\s*print\(": "a debug print in shipping code",
 }
 
 
@@ -182,7 +196,10 @@ def check_project_file(report: Report, project: ProjectFile) -> None:
             report.ok(f"no {label} references")
 
     if "SWIFT_SWIFT3_OBJC_INFERENCE" in text:
-        report.fail("SWIFT_SWIFT3_OBJC_INFERENCE is set; Xcode has not supported it since Xcode 14")
+        report.fail(
+            "SWIFT_SWIFT3_OBJC_INFERENCE is set, but the current Xcode build system no longer "
+            "defines it, so it has no effect; mark Objective-C entry points @objc instead"
+        )
     else:
         report.ok("no Swift 3 @objc inference setting")
 
@@ -297,7 +314,7 @@ def check_target_membership(report: Report, project: ProjectFile) -> set[str]:
 
 
 def check_deprecated_api(report: Report, compiled: set[str]) -> None:
-    report.section("Deprecated API in compiled sources")
+    report.section("Deprecated and legacy API in compiled sources")
 
     hits = []
     for path in sorted(compiled):
@@ -308,7 +325,7 @@ def check_deprecated_api(report: Report, compiled: set[str]) -> None:
             if line.lstrip().startswith("//"):
                 continue
             for pattern, label in DEPRECATED_API.items():
-                if re.search(pattern, line):
+                if re.search(pattern, line, re.MULTILINE):
                     hits.append(f"{path}:{number}  {label}")
 
     if hits:
@@ -316,6 +333,79 @@ def check_deprecated_api(report: Report, compiled: set[str]) -> None:
             report.fail(hit)
     else:
         report.ok(f"none found across {len(compiled)} compiled sources")
+
+
+def check_app_store_icon(report: Report) -> None:
+    report.section("App Store icon")
+
+    contents = APP_ICON_SET / "Contents.json"
+    if not contents.exists():
+        report.fail(f"{contents} is missing")
+        return
+
+    import json
+
+    images = json.loads(contents.read_text(encoding="utf-8")).get("images", [])
+    marketing = [
+        image for image in images
+        if image.get("idiom") in ("ios-marketing", "universal") and image.get("size") == "1024x1024"
+    ]
+    if not marketing or not marketing[0].get("filename"):
+        report.fail("no 1024×1024 App Store icon is assigned in AppIcon")
+        return
+
+    icon = APP_ICON_SET / marketing[0]["filename"]
+    data = icon.read_bytes()
+    if data[:8] != b"\x89PNG\r\n\x1a\n":
+        report.fail(f"{icon.name} is not a PNG")
+        return
+
+    color_type = data[25]
+    has_transparency_chunk = b"tRNS" in data[: data.find(b"IDAT")]
+    if color_type in (4, 6) or has_transparency_chunk:
+        report.fail(
+            f"{icon.name} has an alpha channel; App Store Connect rejects it (ITMS-90717)"
+        )
+    else:
+        report.ok(f"{icon.name} is 1024×1024 with no alpha channel")
+
+
+def check_interface_files(report: Report) -> None:
+    report.section("Storyboards")
+
+    legacy = []
+    for path in INTERFACE_FILES:
+        if path.exists() and "viewControllerLayoutGuide" in path.read_text(encoding="utf-8"):
+            legacy.append(path.name)
+
+    if legacy:
+        report.warn(
+            "still pinned to the top and bottom layout guides deprecated in iOS 11: "
+            + ", ".join(legacy)
+            + " — enable “Use Safe Area Layout Guides” in Interface Builder"
+        )
+    else:
+        report.ok("all storyboards use safe area layout guides")
+
+
+def check_keyboard_touch_routing(report: Report) -> None:
+    report.section("Keyboard touch routing")
+
+    # ForwardingView hands every touch to the nearest subview. If it considers
+    # views that are not controls, a full-size background view claims every touch
+    # and the keyboard stops responding, with nothing to show for it but a device.
+    source = pathlib.Path("Keyboard/ForwardingView.swift")
+    if not source.exists():
+        report.fail(f"{source} is missing")
+        return
+
+    if re.search(r"for case let \w+ as UIControl in self\.subviews", source.read_text(encoding="utf-8")):
+        report.ok("touches are forwarded to controls only")
+    else:
+        report.fail(
+            "ForwardingView.findNearestView no longer limits itself to UIControl subviews; "
+            "a decorative subview can capture every touch"
+        )
 
 
 def main() -> int:
@@ -328,8 +418,11 @@ def main() -> int:
 
     check_project_file(report, project)
     check_property_lists(report)
+    check_app_store_icon(report)
     compiled = check_target_membership(report, project)
     check_deprecated_api(report, compiled)
+    check_keyboard_touch_routing(report)
+    check_interface_files(report)
 
     report.section("Result")
     if report.failures:

@@ -39,6 +39,18 @@ final class NDDictionaryMainTableViewCell: UITableViewCell {
         titleLabel.textColor = .label
         subtitleLabel.textColor = .secondaryLabel
         definitionLabel.textColor = .label
+
+        // Scale the storyboard fonts with the reader's text size setting. At the
+        // default size they render exactly as designed; rows grow to fit.
+        let scalableLabels: [(UILabel, UIFont.TextStyle)] = [
+            (titleLabel, .headline),
+            (subtitleLabel, .subheadline),
+            (definitionLabel, .body),
+        ]
+        for (label, textStyle) in scalableLabels {
+            label.font = UIFontMetrics(forTextStyle: textStyle).scaledFont(for: label.font)
+            label.adjustsFontForContentSizeCategory = true
+        }
     }
 
     func loadData(_ entry: NDDictionaryEntry, isSearchResult: Bool) {

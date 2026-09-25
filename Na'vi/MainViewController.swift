@@ -12,6 +12,7 @@ import UIKit
 final class MainViewController: UIViewController {
 
     private let supportAddress = "cqin@me.com"
+    private let supportSubject = "Na'vi App: "
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -22,12 +23,24 @@ final class MainViewController: UIViewController {
     }
 
     @IBAction func sendEmailButtonTapped(_ sender: AnyObject) {
-        guard MFMailComposeViewController.canSendMail() else {
+        if MFMailComposeViewController.canSendMail() {
+            present(makeMailComposeViewController(), animated: true)
+            return
+        }
+
+        // Mail isn't set up here, but the reader may use another app as their
+        // default mail app; hand the message to whichever one that is.
+        guard let url = supportMailURL else {
             presentMailUnavailableAlert()
             return
         }
 
-        present(makeMailComposeViewController(), animated: true)
+        Task {
+            let opened = await UIApplication.shared.open(url, options: [:])
+            if !opened {
+                presentMailUnavailableAlert()
+            }
+        }
     }
 
     // MARK: - Mail
@@ -38,14 +51,22 @@ final class MainViewController: UIViewController {
         // wrong one leaves the composer with no way to dismiss itself.
         composer.mailComposeDelegate = self
         composer.setToRecipients([supportAddress])
-        composer.setSubject("Na'vi App: ")
+        composer.setSubject(supportSubject)
         return composer
+    }
+
+    private var supportMailURL: URL? {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = supportAddress
+        components.queryItems = [URLQueryItem(name: "subject", value: supportSubject)]
+        return components.url
     }
 
     private func presentMailUnavailableAlert() {
         let alert = UIAlertController(
             title: "Could Not Send Email",
-            message: "This device is not set up to send email. Check your mail account and try again.",
+            message: "No mail app is set up on this device. Add a mail account and try again.",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -55,7 +76,10 @@ final class MainViewController: UIViewController {
 
 // MARK: - MFMailComposeViewControllerDelegate
 
-extension MainViewController: MFMailComposeViewControllerDelegate {
+// MessageUI's delegate protocol predates Swift concurrency and is not isolated to
+// the main actor, though UIKit only ever calls it there. `@preconcurrency` lets a
+// main-actor view controller conform without a Swift 6 isolation error.
+extension MainViewController: @preconcurrency MFMailComposeViewControllerDelegate {
 
     func mailComposeController(
         _ controller: MFMailComposeViewController,

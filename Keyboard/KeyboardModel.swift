@@ -8,8 +8,6 @@
 
 import Foundation
 
-var counter = 0
-
 enum ShiftState {
     case disabled
     case enabled
@@ -63,7 +61,7 @@ class Page {
     }
 }
 
-class Key: Hashable {
+class Key {
     enum KeyType {
         case character
         case specialCharacter
@@ -126,13 +124,8 @@ class Key: Hashable {
         }
     }
     
-    // TODO: this is kind of a hack
-    var hashValue: Int
-    
     init(_ type: KeyType) {
         self.type = type
-        self.hashValue = counter
-        counter += 1
     }
     
     convenience init(_ key: Key) {
@@ -203,6 +196,14 @@ class Key: Hashable {
     }
 }
 
-func ==(lhs: Key, rhs: Key) -> Bool {
-    return lhs.hashValue == rhs.hashValue
+// A key is identified by its instance: two keys with the same caps are still
+// different keys on the keyboard, and a copy made with init(_ key:) is a new key.
+extension Key: Hashable {
+    static func == (lhs: Key, rhs: Key) -> Bool {
+        return lhs === rhs
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
 }

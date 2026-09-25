@@ -139,11 +139,13 @@ class KeyboardViewController: UIInputViewController {
             kludge.translatesAutoresizingMaskIntoConstraints = false
             kludge.isHidden = true
             
-            let a = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.left, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1, constant: 0)
-            let b = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.right, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.left, multiplier: 1, constant: 0)
-            let c = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
-            let d = NSLayoutConstraint(item: kludge, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.top, multiplier: 1, constant: 0)
-            self.view.addConstraints([a, b, c, d])
+            // A zero-size view pinned to the top-left corner.
+            NSLayoutConstraint.activate([
+                kludge.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+                kludge.rightAnchor.constraint(equalTo: self.view.leftAnchor),
+                kludge.topAnchor.constraint(equalTo: self.view.topAnchor),
+                kludge.bottomAnchor.constraint(equalTo: self.view.topAnchor)
+            ])
             
             self.kludge = kludge
         }
@@ -171,9 +173,8 @@ class KeyboardViewController: UIInputViewController {
     var constraintsAdded: Bool = false
     func setupLayout() {
         if !constraintsAdded {
-            // Setup glass background for keyboard
-            setupGlassKeyboardBackground()
-
+            // No background is drawn here: the system supplies the keyboard's
+            // backdrop, which is Liquid Glass on iOS 26 and later.
             self.layout = type(of: self).layoutClass.init(model: self.keyboard, superview: self.forwardingView, layoutConstants: type(of: self).layoutConstants, globalColors: type(of: self).globalColors, darkMode: self.darkMode(), solidColorMode: self.solidColorMode())
 
             self.layout?.initialize()
@@ -191,31 +192,12 @@ class KeyboardViewController: UIInputViewController {
         }
     }
 
-    func setupGlassKeyboardBackground() {
-        // Apply heavy glass blur to keyboard background
-        let blurEffect = UIBlurEffect(style: .systemThickMaterial)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = forwardingView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        forwardingView.insertSubview(blurView, at: 0)
-
-        // Add subtle tint overlay based on dark mode
-        let tintOverlay = UIView(frame: forwardingView.bounds)
-        tintOverlay.backgroundColor = darkMode() ?
-            UIColor.black.withAlphaComponent(0.2) :
-            UIColor.white.withAlphaComponent(0.3)
-        tintOverlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        forwardingView.insertSubview(tintOverlay, at: 1)
-    }
-    
     // only available after frame becomes non-zero
     func darkMode() -> Bool {
-        let darkMode = { () -> Bool in
-            let proxy = self.textDocumentProxy
-            return proxy.keyboardAppearance == UIKeyboardAppearance.dark
-        }()
-        
-        return darkMode
+        // A field can ask for a dark keyboard explicitly, but most leave it to the
+        // system, which reports Dark Mode through the trait collection.
+        return self.textDocumentProxy.keyboardAppearance == UIKeyboardAppearance.dark
+            || self.traitCollection.userInterfaceStyle == .dark
     }
     
     func solidColorMode() -> Bool {
@@ -262,8 +244,11 @@ class KeyboardViewController: UIInputViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
         self.bannerView?.isHidden = true
         self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
+        self.refreshAppearance()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -358,9 +343,9 @@ class KeyboardViewController: UIInputViewController {
                         }
                         
                         if key.isCharacter {
-                            if UIDevice.current.userInterfaceIdiom != UIUserInterfaceIdiom.pad {
+                            if self.traitCollection.userInterfaceIdiom != .pad {
                                 keyView.addTarget(self, action: #selector(KeyboardViewController.showPopup(_:)), for: [.touchDown, .touchDragInside, .touchDragEnter])
-                                keyView.addTarget(keyView, action: Selector("hidePopup"), for: [.touchDragExit, .touchCancel])
+                                keyView.addTarget(keyView, action: #selector(KeyboardKey.hidePopup), for: [.touchDragExit, .touchCancel])
                                 keyView.addTarget(self, action: #selector(KeyboardViewController.hidePopupDelay(_:)), for: [.touchUpInside, .touchUpOutside, .touchDragOutside])
                             }
                         }
@@ -418,9 +403,11 @@ class KeyboardViewController: UIInputViewController {
     // POPUP DELAY END //
     /////////////////////
     
-    // TODO: this is currently not working as intended; only called when selection changed -- iOS bug
+    // Also called when focus moves to another field, which may ask for a
+    // different keyboard appearance.
     override func textDidChange(_ textInput: UITextInput?) {
         self.contextChanged()
+        self.refreshAppearance()
     }
     
     func contextChanged() {
@@ -430,17 +417,10 @@ class KeyboardViewController: UIInputViewController {
     
     func setHeight(_ height: CGFloat) {
         if self.heightConstraint == nil {
-            self.heightConstraint = NSLayoutConstraint(
-                item:self.view,
-                attribute:NSLayoutConstraint.Attribute.height,
-                relatedBy:NSLayoutConstraint.Relation.equal,
-                toItem:nil,
-                attribute:NSLayoutConstraint.Attribute.notAnAttribute,
-                multiplier:0,
-                constant:height)
-            self.heightConstraint!.priority = UILayoutPriority(rawValue: 1000)
-            
-            self.view.addConstraint(self.heightConstraint!) // TODO: what if view already has constraint added?
+            let heightConstraint = self.view.heightAnchor.constraint(equalToConstant: height)
+            heightConstraint.priority = .required
+            heightConstraint.isActive = true
+            self.heightConstraint = heightConstraint
         }
         else {
             self.heightConstraint?.constant = height
@@ -684,15 +664,12 @@ class KeyboardViewController: UIInputViewController {
                 
                 aSettings.translatesAutoresizingMaskIntoConstraints = false
                 
-                let widthConstraint = NSLayoutConstraint(item: aSettings, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.width, multiplier: 1, constant: 0)
-                let heightConstraint = NSLayoutConstraint(item: aSettings, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1, constant: 0)
-                let centerXConstraint = NSLayoutConstraint(item: aSettings, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-                let centerYConstraint = NSLayoutConstraint(item: aSettings, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: self.view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
-                
-                self.view.addConstraint(widthConstraint)
-                self.view.addConstraint(heightConstraint)
-                self.view.addConstraint(centerXConstraint)
-                self.view.addConstraint(centerYConstraint)
+                NSLayoutConstraint.activate([
+                    aSettings.widthAnchor.constraint(equalTo: self.view.widthAnchor),
+                    aSettings.heightAnchor.constraint(equalTo: self.view.heightAnchor),
+                    aSettings.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+                    aSettings.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
+                ])
             }
         }
         
@@ -812,6 +789,8 @@ class KeyboardViewController: UIInputViewController {
                 }
             case .allCharacters:
                 return true
+            @unknown default:
+                return false
             }
         }
         else {

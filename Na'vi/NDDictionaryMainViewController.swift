@@ -12,6 +12,9 @@ final class NDDictionaryMainViewController: UIViewController {
 
     @IBOutlet private var tableView: UITableView!
     @IBOutlet private var searchBar: UISearchBar!
+
+    /// The storyboard's constraint from the search bar to the bottom layout guide.
+    /// It is replaced at load time by one to the keyboard layout guide.
     @IBOutlet private weak var searchBarBottomConstraint: NSLayoutConstraint!
 
     private let minimumRowHeight: CGFloat = 150
@@ -30,18 +33,12 @@ final class NDDictionaryMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow(_:)),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide(_:)),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+        // The keyboard layout guide sits on the safe area when no keyboard is
+        // showing and on top of the keyboard when one is, animating with it. It
+        // accounts for the home indicator, floating and hardware keyboards, and
+        // resizable windows, none of which a fixed offset can.
+        searchBarBottomConstraint?.isActive = false
+        searchBar.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor).isActive = true
 
         sections = allSections
         sectionTitles = NDDictionary.sectionIndices(ofDictionary: sections)
@@ -90,25 +87,6 @@ final class NDDictionaryMainViewController: UIViewController {
         }
 
         reloadSections()
-    }
-
-    // MARK: - Keyboard
-
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
-            return
-        }
-
-        let keyboardHeight = keyboardFrame.cgRectValue.height
-        animateWithKeyboard(notification: notification) { [weak self] _ in
-            self?.searchBarBottomConstraint.constant = keyboardHeight - 40
-        }
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        animateWithKeyboard(notification: notification) { [weak self] _ in
-            self?.searchBarBottomConstraint.constant = 0
-        }
     }
 }
 

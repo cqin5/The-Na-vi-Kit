@@ -12,7 +12,7 @@ import UIKit
 // TODO: refactor
 
 // popup constraints have to be setup with the topmost view in mind; hence these callbacks
-protocol KeyboardKeyProtocol: class {
+protocol KeyboardKeyProtocol: AnyObject {
     func frameForPopup(_ key: KeyboardKey, direction: Direction) -> CGRect
     func willShowPopup(_ key: KeyboardKey, direction: Direction) //may be called multiple times during layout
     func willHidePopup(_ key: KeyboardKey)
@@ -444,24 +444,11 @@ class KeyboardKey: UIControl {
         if self.popup == nil {
             self.layer.zPosition = 1000
 
+            // The popup's fill and shadow are drawn together with the key and
+            // connector as one continuous shape (see refreshShapes()), and the
+            // shadow uses an explicit path so it never needs an offscreen pass.
             let popup = KeyboardKeyBackground(cornerRadius: 9.0, underOffset: self.underOffset)
             self.popup = popup
-
-            // Add glass blur effect to popup for iOS 18
-            let blurEffect = UIBlurEffect(style: .systemThinMaterial)
-            let blurView = UIVisualEffectView(effect: blurEffect)
-            blurView.frame = popup.bounds
-            blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            blurView.layer.cornerRadius = 9.0
-            blurView.clipsToBounds = true
-            popup.insertSubview(blurView, at: 0)
-
-            // Enhanced shadow for popup glass effect
-            popup.layer.shadowOpacity = 0.4  // Increased from default
-            popup.layer.shadowRadius = 8  // Increased for more depth
-            popup.layer.shadowOffset = CGSize(width: 0, height: 4)
-            popup.layer.shadowColor = UIColor.black.cgColor
-
             self.addSubview(popup)
 
             let popupLabel = UILabel()
@@ -481,7 +468,8 @@ class KeyboardKey: UIControl {
         }
     }
     
-    func hidePopup() {
+    // Exposed to Objective-C because it is registered as a control action.
+    @objc func hidePopup() {
         if self.popup != nil {
             self.delegate?.willHidePopup(self)
             

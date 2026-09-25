@@ -65,9 +65,10 @@ class ForwardingView: UIView {
         }
         
         var closest: (UIView, CGFloat)? = nil
-        
-        for anyView in self.subviews {
-            let view = anyView
+
+        // Only controls can act on a forwarded touch. Considering any other
+        // subview lets a full-size decorative view claim every touch.
+        for case let view as UIControl in self.subviews {
             if view.isHidden {
                 continue
             }
