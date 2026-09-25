@@ -3,10 +3,11 @@
 Pre-flight checks for The Na'vi Kit.
 
 Covers the things that can go wrong without Xcode noticing until an archive is
-rejected or a device misbehaves: project file integrity, the scene life cycle that
-the iOS 27 SDK requires, App Store property list keys, privacy manifests, the App
-Store icon, target membership, deprecated and legacy API in the sources that are
-actually compiled, and legacy layout guides in storyboards.
+rejected or a device misbehaves: project file integrity, the scene-based app life
+cycle that the iOS 27 SDK requires, the launch screen, App Store property list
+keys, privacy manifests, the App Store icon, target membership, deprecated and
+legacy API in the sources that are actually compiled, and any Interface Builder
+files still bundled.
 
 Run from the project root, or via ./build-verify.sh.
 """
@@ -25,17 +26,15 @@ PRIVACY_MANIFESTS = [
     pathlib.Path("Na'vi/PrivacyInfo.xcprivacy"),
     pathlib.Path("Na'vi Keyboard/PrivacyInfo.xcprivacy"),
 ]
-SCENE_DELEGATE = pathlib.Path("Na'vi/SceneDelegate.swift")
 APP_ICON_SET = pathlib.Path("Na'vi/Assets.xcassets/AppIcon.appiconset")
-INTERFACE_FILES = [
-    pathlib.Path("Na'vi/Dictionary.storyboard"),
-    pathlib.Path("Na'vi/Base.lproj/Main.storyboard"),
-    pathlib.Path("Na'vi/Base.lproj/LaunchScreen.storyboard"),
-]
 
 SOURCES_PHASES = {
     "Eywa": "A6AE8AEF1D1AD43E00345E2E",
     "Na'vi Keyboard": "A614201F1D1AD5DC001C0FBD",
+}
+RESOURCES_PHASES = {
+    "Eywa": "A6AE8AF11D1AD43E00345E2E",
+    "Na'vi Keyboard": "A61420211D1AD5DC001C0FBD",
 }
 
 VALID_SWIFT_VERSIONS = {"4.0", "4.2", "5.0", "6.0"}
@@ -229,25 +228,6 @@ def check_property_lists(report: Report) -> None:
     app = loaded.get(APP_INFO, {})
     keyboard = loaded.get(KEYBOARD_INFO, {})
 
-    manifest = app.get("UIApplicationSceneManifest")
-    if not manifest:
-        report.fail(
-            "UIApplicationSceneManifest is missing — an app built against the "
-            "iOS 27 SDK without the scene life cycle will not launch"
-        )
-    else:
-        configurations = manifest.get("UISceneConfigurations", {}).get(
-            "UIWindowSceneSessionRoleApplication", []
-        )
-        if not configurations:
-            report.fail("the scene manifest declares no window scene configuration")
-        elif not configurations[0].get("UISceneDelegateClassName", "").endswith("SceneDelegate"):
-            report.fail("the scene manifest does not name a scene delegate class")
-        elif not SCENE_DELEGATE.exists():
-            report.fail(f"the scene manifest names a delegate but {SCENE_DELEGATE} is missing")
-        else:
-            report.ok("scene life cycle is declared and implemented")
-
     if "armv7" in app.get("UIRequiredDeviceCapabilities", []):
         report.fail("UIRequiredDeviceCapabilities asks for armv7; iOS has been 64-bit only since iOS 11")
     else:
@@ -370,23 +350,105 @@ def check_app_store_icon(report: Report) -> None:
         report.ok(f"{icon.name} is 1024×1024 with no alpha channel")
 
 
-def check_interface_files(report: Report) -> None:
-    report.section("Storyboards")
+def resource_names(project: ProjectFile, phase_id: str) -> list[str]:
+    block = re.search(
+        r"\n\t\t" + phase_id + r" /\* \w+ \*/ = \{.*?\n\t\t\};", project.text, re.DOTALL
+    )
+    return re.findall(r"/\* ([^*]+?) in Resources \*/", block.group(0)) if block else []
 
-    legacy = []
-    for path in INTERFACE_FILES:
-        if path.exists() and "viewControllerLayoutGuide" in path.read_text(encoding="utf-8"):
-            legacy.append(path.name)
 
-    if legacy:
-        report.warn(
-            "still pinned to the top and bottom layout guides deprecated in iOS 11: "
-            + ", ".join(legacy)
-            + " — enable “Use Safe Area Layout Guides” in Interface Builder"
+def check_app_life_cycle(report: Report, project: ProjectFile) -> None:
+    report.section("App life cycle and launch screen")
+
+    try:
+        app = plistlib.loads(APP_INFO.read_bytes())
+    except Exception:  # noqa: BLE001 - reported by check_property_lists
+        return
+
+    sources = {
+        path: pathlib.Path(path).read_text(encoding="utf-8")
+        for path in project.compiled_sources(SOURCES_PHASES["Eywa"]) or []
+        if path.endswith(".swift") and pathlib.Path(path).exists()
+    }
+
+    # An app built against the iOS 27 SDK must use the scene-based life cycle,
+    # either through SwiftUI's App protocol or a UIKit scene delegate.
+    manifest = app.get("UIApplicationSceneManifest")
+    configurations = (manifest or {}).get("UISceneConfigurations", {}).get(
+        "UIWindowSceneSessionRoleApplication", []
+    )
+    swiftui_apps = [
+        match.group(1)
+        for text in sources.values()
+        for match in re.finditer(
+            r"@main\s+(?:\w+\s+)*struct\s+(\w+)\s*:\s*(?:\w+\s*,\s*)*App\b", text
         )
-    else:
-        report.ok("all storyboards use safe area layout guides")
+    ]
 
+    if manifest is None:
+        report.fail(
+            "UIApplicationSceneManifest is missing — an app built against the "
+            "iOS 27 SDK without the scene life cycle will not launch"
+        )
+    elif configurations:
+        for configuration in configurations:
+            class_name = configuration.get("UISceneDelegateClassName", "").split(".")[-1]
+            if not class_name:
+                report.fail("a scene configuration names no delegate class")
+            elif not any(
+                re.search(r"\bclass\s+" + re.escape(class_name) + r"\b", text)
+                for text in sources.values()
+            ):
+                report.fail(f"the scene manifest names {class_name}, which the app does not compile")
+            else:
+                report.ok(f"scene life cycle is provided by {class_name}")
+    elif swiftui_apps:
+        report.ok(f"scene life cycle is provided by the SwiftUI app {swiftui_apps[0]}")
+    else:
+        report.fail("no scene delegate is configured and there is no SwiftUI App entry point")
+
+    # Without a launch screen the app runs letterboxed on every modern iPhone.
+    if "UILaunchScreen" in app or "UILaunchScreens" in app:
+        report.ok("the launch screen is declared in Info.plist")
+    elif "UILaunchStoryboardName" in app:
+        report.ok("the launch screen is a storyboard")
+    else:
+        report.fail("no launch screen is declared; the app would run letterboxed")
+
+    # Any storyboard that Info.plist names has to be bundled, or launch fails.
+    bundled = set(resource_names(project, RESOURCES_PHASES["Eywa"]))
+    named = [app.get("UIMainStoryboardFile"), app.get("UILaunchStoryboardName")]
+    named += [configuration.get("UISceneStoryboardFile") for configuration in configurations]
+    for name in filter(None, named):
+        if f"{name}.storyboard" not in bundled:
+            report.fail(f"Info.plist names {name}.storyboard, which the app does not bundle")
+
+
+def check_interface_builder_files(report: Report, project: ProjectFile) -> None:
+    report.section("Interface Builder files")
+
+    for target, phase_id in RESOURCES_PHASES.items():
+        files = sorted(
+            name for name in resource_names(project, phase_id)
+            if name.endswith((".storyboard", ".xib"))
+        )
+        if not files:
+            report.ok(f"{target} bundles no storyboards or nibs")
+            continue
+
+        report.warn(f"{target} still bundles {', '.join(files)}")
+        legacy = sorted({
+            path.name
+            for path in pathlib.Path(".").rglob("*")
+            if path.name in files
+            and "Pods/" not in str(path)
+            and "viewControllerLayoutGuide" in path.read_text(encoding="utf-8", errors="ignore")
+        })
+        if legacy:
+            report.warn(
+                "pinned to the top and bottom layout guides deprecated in iOS 11: "
+                + ", ".join(legacy)
+            )
 
 def check_keyboard_touch_routing(report: Report) -> None:
     report.section("Keyboard touch routing")
@@ -418,11 +480,12 @@ def main() -> int:
 
     check_project_file(report, project)
     check_property_lists(report)
+    check_app_life_cycle(report, project)
     check_app_store_icon(report)
     compiled = check_target_membership(report, project)
     check_deprecated_api(report, compiled)
     check_keyboard_touch_routing(report)
-    check_interface_files(report)
+    check_interface_builder_files(report, project)
 
     report.section("Result")
     if report.failures:

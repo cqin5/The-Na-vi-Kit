@@ -12,7 +12,9 @@ its **Na'vi Keyboard** extension up to the current Apple platform standard.
 | Build SDK | iOS 18 era settings | iOS 26 / 27 SDK (Xcode 26 or later) |
 | Deployment target | iOS 14.0 in the last App Store release | iOS 18.0 |
 | Swift language mode | `5.9`, which is not a value Xcode accepts | `6.0` (app), `5.0` (keyboard) |
-| App life cycle | `UIApplicationDelegate` only | `UIScene` life cycle |
+| App interface | Storyboards and UIKit view controllers | SwiftUI |
+| App life cycle | `UIApplicationDelegate` only | SwiftUI `App`, which is scene-based |
+| Launch screen | Storyboard | `UILaunchScreen` in `Info.plist` |
 | Design language | Hand-built blur and gradient | System Liquid Glass |
 | Dependency managers | CocoaPods + Swift Package Manager | None |
 
@@ -20,8 +22,8 @@ its **Na'vi Keyboard** extension up to the current Apple platform standard.
 about 93% of active iPhones, against 79% for iOS 26 alone. iOS 26 no longer supports
 the iPhone XS and XR, and iOS 17 runs on exactly the same hardware as iOS 18, so a
 lower floor would reach very few additional people. iOS 27, 26 and 18 are also the
-three most recent major releases. The only version-dependent code in the app, the
-Liquid Glass effect, falls back cleanly on iOS 18 through 25.
+three most recent major releases. The app uses two iOS 26 features — Liquid Glass
+and SwiftUI's list section index — and both fall back cleanly on iOS 18 through 25.
 
 People on iOS 14 to 17 keep the version they already have and can re-download the
 last compatible version from their purchase history. The vocabulary and recordings
@@ -33,16 +35,12 @@ are bundled, so that version keeps working; it simply stops receiving updates.
 
 These items block submission or correct behaviour on current systems.
 
-### 2.1 UIScene life cycle
+### 2.1 Scene-based app life cycle
 
 An app built against the iOS 27 SDK without the scene life cycle does not launch.
-The app now declares and implements it:
-
-- `Na'vi/SceneDelegate.swift` — new `UIWindowSceneDelegate`.
-- `Na'vi/AppDelegate.swift` — `@main`, with `configurationForConnecting` and
-  `didDiscardSceneSessions`.
-- `Na'vi/Info.plist` — `UIApplicationSceneManifest` naming the delegate and
-  `Dictionary.storyboard` as the scene's initial interface.
+The app's entry point is now a SwiftUI `App` (`Na'vi/EywaApp.swift`), which is
+scene-based by design, so no application or scene delegate is needed. The scene
+manifest in `Info.plist` declares only whether multiple windows are supported.
 
 ### 2.2 Privacy manifests
 
@@ -58,6 +56,8 @@ under the required-reason category `NSPrivacyAccessedAPICategoryUserDefaults`
 | `UIRequiredDeviceCapabilities` | `armv7` → `arm64` | iOS has been 64-bit only since iOS 11; the old value described a device class that no longer exists. |
 | `CFBundleSignature` | Removed | A Carbon-era key with no meaning on iOS. |
 | `UIRequiresFullScreen` | Removed | No longer honoured on iPadOS 26 and later; the app is now resizable on iPad. |
+| `UIMainStoryboardFile` | Removed | The interface is SwiftUI. |
+| `UILaunchStoryboardName` | Replaced by `UILaunchScreen` | The launch screen is now declared in `Info.plist`. It uses the system background, so it matches Dark Mode; the old storyboard was always white. |
 | `CFBundleVersion` | `4` → `$(CURRENT_PROJECT_VERSION)` | Build numbers now come from the project rather than a hard-coded literal. |
 | `ITSAppUsesNonExemptEncryption` | Added (`false`) | Removes the export-compliance prompt on every upload. |
 | `UIViewControllerBasedStatusBarAppearance` | Added (`true`) | Replaces the obsolete global `UIStatusBarStyle` key, which the system already ignored. |
@@ -78,80 +78,103 @@ opaque, so the file was re-encoded as RGB with identical colour values; it is al
 
 ---
 
-## 3. Design: Liquid Glass
+## 3. SwiftUI interface
 
-Building against the iOS 26 SDK or later makes the system apply Liquid Glass to
-standard controls on its own. The December 2025 styling worked against that: a
-blue-to-purple gradient sat behind every screen, a `UIVisualEffectView` sat behind
-every row, and the navigation and search bars were overridden with custom
-transparent appearances.
+### 3.1 Screens
 
-The approach is now inverted — the system supplies the material, and the app
-styles only what it draws itself.
+| Screen | Before | After |
+| --- | --- | --- |
+| Entry point | `AppDelegate`, `SceneDelegate` | `EywaApp.swift` |
+| Dictionary | `Dictionary.storyboard`, `NDDictionaryMainViewController`, two prototype cells | `DictionaryView.swift`, `DictionaryEntryRow.swift` |
+| Keyboard setup | `Main.storyboard`, `MainViewController` | `KeyboardSetupView.swift` |
+| Launch screen | `LaunchScreen.storyboard` | `UILaunchScreen` in `Info.plist` |
+| Entry detail | `NDDefinitionViewController` | Removed — row selection had been disabled, so the screen was unreachable, and each row already shows the full entry |
 
-**Removed**
+The app target no longer contains a storyboard or nib, and compiles seven Swift
+files where it compiled thirteen.
 
-- The gradient background layer and the code that tracked its frame and colours.
-- Per-row blur views and their reuse bookkeeping.
-- Custom `UINavigationBarAppearance` overrides.
-- Hard-coded text colours built from black and white with alpha, in favour of
-  semantic colours (`.label`, `.secondaryLabel`). These track Dark Mode, Increase
-  Contrast and Reduce Transparency without any per-trait code, which is why the
-  three `traitCollectionDidChange` overrides could be removed rather than migrated.
-- `layer.shouldRasterize` on blurred views, which defeats the material it was
-  meant to accelerate.
-- A hand-built blur and tint layer behind the keyboard's keys. The system draws the
-  keyboard's backdrop itself — as Liquid Glass on iOS 26 — and that layer also
-  broke typing (§6.1).
+### 3.2 Behaviour
 
-**Retained, deliberately**
-
-Two surfaces still use glass, because both float above scrolling content:
-
-- The search field at the bottom of the dictionary, as an interactive capsule.
-- The section headers in the dictionary list.
-
-`Na'vi/GlassUIHelper.swift` builds these with `UIGlassEffect` on iOS 26 and later
-and falls back to the closest system material on iOS 18 to 25, so one view
-hierarchy serves the whole deployment range.
+- **Search.** `.searchable` provides the search field. On iPhone with iOS 26 the
+  system places it at the bottom of the screen in Liquid Glass — where the app
+  already kept it — and keeps it above the keyboard. On iOS 18 to 25 it sits in
+  the navigation bar, as is standard on those releases. The keyboard-tracking code
+  the UIKit version needed is gone. An empty search shows the system's
+  "No Results" view.
+- **Letter index.** On iOS 26, the list uses SwiftUI's native section index. SwiftUI
+  has no section index before iOS 26, so on iOS 18 to 25 a compact index of its own
+  keeps A–Z navigation, which the UIKit version offered on every release.
+- **Loading.** The 890 KB vocabulary is decoded on a background task instead of on
+  the main thread while the first screen initialises. Entries are now value types,
+  which is what lets them cross from that task to the interface under Swift 6's
+  data-race checking.
+- **Text and colour.** Every screen uses text styles and semantic colours, so
+  Dynamic Type, Bold Text, Dark Mode and Increase Contrast apply throughout. The
+  setup screen now scrolls, so its instructions can grow with larger text.
+- **Setup screen appearance.** It follows the system appearance instead of a fixed
+  dark background.
+- **Icons.** The keyboard-setup and play-pronunciation buttons use SF Symbols,
+  which scale with text and carry accessibility labels.
+- **Contact.** "Contact Developer" opens a message in the reader's default mail app,
+  whichever that is. The in-app Mail composer is gone; it worked only when Apple
+  Mail had an account set up.
+- **Previews.** Both screens have `#Preview`s, and previews are enabled for the app
+  target.
 
 ---
 
-## 4. Deprecated and legacy API removed
+## 4. Design: Liquid Glass
 
-| API | Replacement | Location |
+Building against the iOS 26 SDK or later makes the system apply Liquid Glass to
+standard controls on its own. The December 2025 styling worked against that: a
+blue-to-purple gradient sat behind every screen, a blur view sat behind every row,
+the navigation and search bars were overridden with custom transparent
+appearances, and a hand-built blur sat behind the keyboard's keys.
+
+All of it is gone. In the app, the navigation bar, toolbar button, search field and
+setup sheet take on Liquid Glass from SwiftUI, and no custom glass code remains. The
+keyboard sits on the system's own backdrop, which is Liquid Glass on iOS 26; the
+hand-built layer it replaces also broke typing (§7.1).
+
+---
+
+## 5. Deprecated and legacy API removed
+
+| API | Replacement | Where |
 | --- | --- | --- |
-| `@UIApplicationMain` | `@main` | `AppDelegate.swift` |
-| `UIAlertView` | `UIAlertController` | `MainViewController.swift` |
-| `traitCollectionDidChange(_:)` | Semantic colours (no override needed) | 3 call sites |
-| `UIScreen.main` | Window scene, or `traitCollection.displayScale` | `KeyboardLayout.swift`, `KeyboardKey.swift`, `KeyboardViewController.swift` |
-| `UIDevice.current.userInterfaceIdiom` | The trait collection's idiom | `KeyboardLayout.swift`, `KeyboardViewController.swift` |
-| `UIViewController.interfaceOrientation` | `UIWindowScene.interfaceOrientation`, with a size-class fallback | `KeyboardViewController.swift` |
-| `willRotate(to:duration:)` / `didRotate(from:)` | `viewWillTransition(to:with:)` | `KeyboardViewController.swift` |
-| Keyboard notifications with a fixed offset | `view.keyboardLayoutGuide` | `NDDictionaryMainViewController.swift` |
-| Polling with `UIScreen.displayLink(withTarget:selector:)` | Trait-change registration and `textDidChange(_:)` | `KeyboardInputTraits.swift` |
-| String `Selector("…")` | `#selector`, with the target marked `@objc` | `KeyboardViewController.swift` |
-| `Hashable` via a `hashValue` requirement | `hash(into:)` | `KeyboardModel.swift`, `KeyboardLayout.swift` |
-| `protocol …: class` | `protocol …: AnyObject` | `KeyboardKey.swift`, `KeyboardConnector.swift` |
-| `NSLayoutConstraint(item:attribute:…)` | Layout anchors | `KeyboardViewController.swift` |
+| `@UIApplicationMain` | SwiftUI `@main` `App` | App |
+| Storyboards pinned to the top and bottom layout guides (deprecated in iOS 11) | SwiftUI | App |
+| `UIAlertView` | SwiftUI `.alert` | App |
+| `traitCollectionDidChange(_:)` | Semantic colours, which need no override | App |
+| Keyboard notifications with a fixed offset | `.searchable`, positioned by the system | App |
+| `UIScreen.main` | Window scene, or `traitCollection.displayScale` | Keyboard |
+| `UIDevice.current.userInterfaceIdiom` | The trait collection's idiom | Keyboard |
+| `UIViewController.interfaceOrientation` | `UIWindowScene.interfaceOrientation`, with a size-class fallback | Keyboard |
+| `willRotate(to:duration:)` / `didRotate(from:)` | `viewWillTransition(to:with:)` | Keyboard |
+| Polling with `UIScreen.displayLink(withTarget:selector:)` | Trait-change registration and `textDidChange(_:)` | Keyboard |
+| String `Selector("…")` | `#selector`, with the target marked `@objc` | Keyboard |
+| `Hashable` via a `hashValue` requirement | `hash(into:)` | Keyboard |
+| `protocol …: class` | `protocol …: AnyObject` | Keyboard |
+| `NSLayoutConstraint(item:attribute:…)` | Layout anchors | Keyboard |
 | `String.substring(from:)`, `arc4random`, `UIActivityIndicatorView.Style.white`, `MPVolumeView.showsRouteButton` | — | Removed with unused helper code |
 
 ---
 
-## 5. App code quality
+## 6. App code quality
 
-### 5.1 Dictionary loading
+### 6.1 Dictionary data
 
 `NDDictionary` parsed `vocabulary.json` through `NSDictionary`, `AnyObject` and a
 chain of forced unwraps and `as!` casts, then de-duplicated sections by round-
 tripping arrays through `NSSet`. Malformed or missing data crashed the app on
 launch.
 
-It now decodes into `NDDictionaryEntry` with `Codable` and groups entries with
-`Dictionary(grouping:)`. Section and entry ordering are unchanged. A missing or
-malformed file yields an empty dictionary rather than a crash.
+It now decodes value-type `NDDictionaryEntry`s with `Codable` and groups them into
+`DictionarySection`s with `Dictionary(grouping:)`. Section and entry ordering are
+unchanged. A missing or malformed file yields an empty dictionary rather than a
+crash.
 
-### 5.2 Pronunciation playback
+### 6.2 Pronunciation playback
 
 Playback was owned by the table view cell that started it, so scrolling cut a
 recording short as soon as that cell was reused. Each tap also reconfigured and
@@ -162,48 +185,23 @@ playback category is configured once — recordings stay audible when the ring
 switch is silenced — and the session is released when the clip ends so any audio
 the listener had playing can resume.
 
-### 5.3 Search
+### 6.3 Search
 
-The list view held a mutable copy of the dictionary that one delegate path reset
-without reloading the table, leaving the data source and the table disagreeing
-about row counts. Filtering now derives from an immutable source list, and
-matching uses `localizedCaseInsensitiveContains` rather than `uppercased()`
-comparison, which is correct for the diacritics in the Na'vi alphabet.
+`NDDictionary.filtered(_:matching:)` keeps entries whose Na'vi or English text
+contains the query, ignoring case and surrounding whitespace but not diacritics:
+ä and ì are separate letters in Na'vi, not accented forms of a and i. The UIKit
+version compared `uppercased()` strings, and one of its paths reset the data source
+without reloading the table.
 
-### 5.4 Search field and the keyboard
-
-The search field was lifted above the keyboard by `keyboardHeight - 40` points, a
-guess at the height of the home indicator. On Face ID iPhones that left the field
-overlapping the keyboard by 6 points; on the iPhone SE, which has no home
-indicator, by 40 points, hiding most of the field. It also ignored floating,
-split and hardware keyboards and resizable iPad windows.
-
-The field is now pinned to `view.keyboardLayoutGuide`, which sits on the safe area
-when no keyboard is showing and on top of whichever keyboard is, animating with it.
-The keyboard notification handlers and the helper that animated them are gone.
-
-### 5.5 Dynamic Type
-
-The dictionary list used fixed font sizes. Its title, pronunciation and definition
-now scale with the reader's text size setting through `UIFontMetrics`, starting
-from the storyboard's sizes, so the list looks exactly as designed at the default
-setting and rows grow to fit larger text.
-
-### 5.6 Contact
-
-The contact button relied on `MFMailComposeViewController`, which works only when
-Apple Mail has an account set up. When it does not, the button now opens a
-`mailto:` link, which reaches whichever app the reader has chosen as their default
-mail app. The alert appears only when no mail app can take the message.
-
-### 5.7 Build settings
+### 6.4 Build settings
 
 - `SWIFT_VERSION` was `5.9`, which is not one of the values Xcode accepts
   (`4.0`, `4.2`, `5.0`, `6.0`). The app target is now `6.0`; the keyboard is
-  `5.0` (see §9.2).
+  `5.0` (see §10.2).
 - `SWIFT_SWIFT3_OBJC_INFERENCE = On` removed. The current Xcode build system no
   longer defines this setting, so it had no effect; the one method called by
-  name from Objective-C is now marked `@objc` explicitly (§6.2).
+  name from Objective-C is now marked `@objc` explicitly (§7.2).
+- `ENABLE_PREVIEWS = YES` for the app target.
 - `CLANG_CXX_LANGUAGE_STANDARD`: `gnu++0x` → `gnu++20`.
 - `GCC_C_LANGUAGE_STANDARD`: `gnu99` → `gnu17`.
 - `CODE_SIGN_IDENTITY[sdk=iphoneos*]`: `iPhone Developer` → `Apple Development`.
@@ -212,19 +210,22 @@ mail app. The alert appears only when no mail app can take the message.
 
 ---
 
-## 6. Keyboard extension
+## 7. Keyboard extension
 
-### 6.1 Taps not registering
+The keyboard remains UIKit. It uses no storyboards, and a keyboard's per-key touch
+handling is better served by UIKit's controls than by SwiftUI.
+
+### 7.1 Taps not registering
 
 The keyboard receives every touch in one view, `ForwardingView`, which hands it to
 the nearest subview. The December 2025 styling inserted a full-size blur view and
 tint layer into that same view, beneath the keys. Being full-size, they were the
 nearest subview to every touch, so taps went to them and no key responded.
 
-The layer is removed (§3), and `ForwardingView` now considers only controls, so a
+The layer is removed (§4), and `ForwardingView` now considers only controls, so a
 decorative view can no longer capture input.
 
-### 6.2 Crash when sliding off a key
+### 7.2 Crash when sliding off a key
 
 Character keys hide their popup through a control action registered with the string
 `Selector("hidePopup")`. The method was not visible to Objective-C, so the action
@@ -232,7 +233,7 @@ would raise an unrecognised-selector exception the moment a finger slid off a ke
 or a touch was cancelled. The method is now `@objc` and registered with
 `#selector`, which the compiler checks.
 
-### 6.3 Appearance
+### 7.3 Appearance
 
 - **Dark Mode.** The keyboard decided between light and dark keys only from the
   field's requested `keyboardAppearance`, which most fields leave at `.default`.
@@ -245,21 +246,21 @@ or a touch was cancelled. The method is now `@objc` and registered with
   notification for Reduce Transparency, and `textDidChange(_:)` for fields that
   request a dark keyboard.
 
-### 6.4 Key popups
+### 7.4 Key popups
 
 The December styling added a blur view and a second shadow to each key popup. The
 popup is drawn as one continuous shape with its key, and its shadow already uses an
 explicit path; the added shadow had none, which forces an offscreen render every
 time a popup appears — that is, on every keypress. Both additions are removed.
 
-### 6.5 Key colours
+### 7.5 Key colours
 
 The December styling also changed the keys to translucent colours tuned against
-the removed blur layer. Because taps were not registering (§6.1), that design never
+the removed blur layer. Because taps were not registering (§7.1), that design never
 reached anyone in working form. The keys use the palette of the current App Store
-release again; styling them for the iOS 26 keyboard is listed in §9.3.
+release again; styling them for the iOS 26 keyboard is listed in §10.3.
 
-### 6.6 Swift
+### 7.6 Swift
 
 - `Key` implemented `Hashable` through a stored `hashValue` fed by a global mutable
   counter. It now uses identity — every key was already distinct — through
@@ -274,7 +275,7 @@ release again; styling them for the iOS 26 keyboard is listed in §9.3.
 
 With these changes the keyboard holds no mutable global state.
 
-### 6.7 Globe key
+### 7.7 Globe key
 
 The keyboard decided whether to draw a globe key by comparing the screen's pixel
 height against `2436`, the iPhone X. That matched no later device and, on the
@@ -283,7 +284,7 @@ a globe key, as a custom keyboard requires.
 
 ---
 
-## 7. Dependencies removed
+## 8. Dependencies removed
 
 **CocoaPods.** The `Podfile` declared no pods, yet every build ran two
 `[CP] Check Pods Manifest.lock` script phases against a CocoaPods 1.11.3 sandbox
@@ -299,35 +300,38 @@ The project no longer depends on any third-party code, and
 
 ---
 
-## 8. Verification
+## 9. Verification
 
 `./build-verify.sh` runs `Scripts/preflight.py` and then `xcodebuild`. The
 pre-flight checks need only Python and cover:
 
 - **Project file** — balanced delimiters, every object reference resolving, no
   CocoaPods or KeyboardKit remnants, valid `SWIFT_VERSION` values.
-- **Property lists** — all four parse; the scene manifest is present and names a
-  delegate that exists; 64-bit device capabilities; export compliance declared;
-  matching version strings across app and extension; complete privacy manifests.
+- **Property lists** — all four parse; 64-bit device capabilities; export
+  compliance declared; matching version strings across app and extension; complete
+  privacy manifests.
+- **App life cycle and launch screen** — a SwiftUI `App` entry point or a scene
+  delegate the app actually compiles; a launch screen declared; no storyboard named
+  in `Info.plist` that the app does not bundle.
 - **App Store icon** — 1024×1024 with no alpha channel.
 - **Target membership** — every file a target compiles exists on disk, and any
   Swift file belonging to no target is listed.
-- **Deprecated and legacy API** — the patterns in §4, plus debug prints, enforced
+- **Deprecated and legacy API** — the patterns in §5, plus debug prints, enforced
   against compiled sources only.
 - **Keyboard touch routing** — `ForwardingView` still limits itself to controls
-  (§6.1).
-- **Storyboards** — a warning for layouts still pinned to the pre-iOS 11 layout
-  guides.
+  (§7.1).
+- **Interface Builder files** — which storyboards and nibs each target bundles.
 
-All checks pass. Run against the previous revision, the new rules report every
-issue described in §2.5, §5.4 and §6. Compiling and running on device requires
-Xcode 26 or later and has not been performed as part of this change.
+All checks pass. Run against earlier revisions, or with the relevant mistake
+reintroduced, the rules report every issue described in §2.5, §7 and the life-cycle
+and launch-screen section. Compiling and running on device requires Xcode 26 or
+later and has not been performed as part of this change.
 
 ---
 
-## 9. Follow-up work
+## 10. Follow-up work
 
-### 9.1 Files to delete
+### 10.1 Files to delete
 
 These files are no longer part of any target. They were left on disk so the
 removal can be reviewed before it is made permanent:
@@ -338,32 +342,28 @@ removal can be reviewed before it is made permanent:
 | `Keyboard/CatboardBanner.swift` | Swift 2 source (`NSUserDefaults`, `UIControlEvents`) that has not compiled for years; it was already outside the build. |
 | `Keyboard/CQMPHelper.swift` | An `MPVolumeView` extension with no callers, built on API deprecated in iOS 13. |
 | `Keyboard/CQStdHelper.swift` | A `delay(bySeconds:)` helper with no callers. |
-| `Keyboard/CQUIHelper.swift` | The keyboard-animation helper replaced by the keyboard layout guide (§5.4). |
+| `Keyboard/CQUIHelper.swift` | A keyboard-animation helper for the former UIKit search field. |
 | `Keyboard/Utilities.swift` | An unused `memoize` function and an unused global profiling closure. |
-| `UIDevice.swift` | The `hasBottom` device check described in §6.7, now unused. |
-| `Na'vi Keyboard/KeyboardView.swift`, `KeyboardViewController.swift`, `NSHelper.swift`, `Keyboard.xib`, `Keyboard.storyboard` | An abandoned second keyboard implementation, never referenced by the project. |
+| `UIDevice.swift` | The `hasBottom` device check described in §7.7, now unused. |
+| `Na'vi Keyboard/KeyboardView.swift`, `KeyboardViewController.swift`, `NSHelper.swift`, `Keyboard.xib`, `Keyboard.storyboard` | An abandoned second keyboard implementation, never referenced by the project. These are the last storyboard and nib files in the repository outside the keyboard's settings panel. |
 | `Keyboard/Info.plist` | Never referenced; the extension uses `Na'vi Keyboard/Info.plist`. |
-| `Podfile`, `Podfile.lock`, `Pods/` | Left behind by the CocoaPods removal in §7. |
+| `Podfile`, `Podfile.lock`, `Pods/` | Left behind by the CocoaPods removal in §8. |
 
 `Scripts/preflight.py` lists the Swift files among these on every run, so that
 warning disappears once they are removed.
 
-### 9.2 Keyboard extension and Swift 6
+### 10.2 Keyboard extension and Swift 6
 
 The extension is roughly 4,700 lines inherited from the 2014 *tasty-imitation-
 keyboard* project. It is pinned to the Swift 5 language mode with
 `SWIFT_STRICT_CONCURRENCY = minimal`, which compiles under the Swift 6 compiler.
-Its mutable global state is now gone (§6.3, §6.6); the main remaining step is to
+Its mutable global state is now gone (§7.3, §7.6); the main remaining step is to
 isolate `KeyboardLayout`, an `NSObject` subclass that drives UIKit views, to the
 main actor. After that, raising strict concurrency to `complete` and then moving
 to the Swift 6 language mode is a self-contained change.
 
-### 9.3 Needs Xcode, a device or design input
+### 10.3 Needs a device or design input
 
-- **Safe area layout guides.** All three storyboards are still pinned to the top
-  and bottom layout guides deprecated in iOS 11. In Interface Builder, select each
-  storyboard and enable *Use Safe Area Layout Guides* in the File inspector; Xcode
-  converts the constraints.
 - **Keyboard styling for iOS 26.** The keyboard now sits on the system's Liquid
   Glass backdrop with the key palette of the current release. Whether the keys
   should become translucent to match the iOS 26 system keyboard is a design
@@ -374,32 +374,30 @@ to the Swift 6 language mode is a self-contained change.
   `handleInputModeList(from:with:)`, which needs the original touch event;
   `ForwardingView` currently forwards actions without one. Passing the event
   through, then testing on a device, would enable it.
-- **Content beneath the search field.** The list currently ends at the top of the
-  glass search field. Extending it to the bottom edge, with a matching content
-  inset, lets rows scroll beneath the glass as Liquid Glass intends.
-- **Dynamic Type elsewhere.** The setup instructions screen is a fixed layout
-  without a scroll view, and the section index headers have a fixed height, so
-  scaling their text needs layout changes in Interface Builder first.
 - **App icon.** iOS 26 renders icons with Liquid Glass and offers dark, clear and
   tinted appearances. A layered icon made in Icon Composer would use them.
+- **Setup instructions.** The five steps follow Settings → General → Keyboard. A
+  keyboard's switch also appears on the app's own page in Settings, which the app
+  can open directly with `UIApplication.openSettingsURLString`; that is a shorter
+  path worth considering, along with refreshed screenshots.
 
-### 9.4 Smaller items
+### 10.4 Smaller items
 
-- **`GoogleService-Info.plist`** is bundled into both targets, but no Firebase
-  SDK is linked and nothing reads it. It ships project identifiers to no purpose
-  and should be removed from both Resources build phases.
-- **Dictionary loading is synchronous.** Roughly 890 KB of JSON, 2,678 entries,
-  is decoded on the main thread while the first view controller initialises.
-  Moving it off the main thread would shorten launch.
-- **Section headers reuse `dequeueReusableCell`.** The correct API is
-  `dequeueReusableHeaderFooterView(withIdentifier:)`, which requires registering
-  a header view.
-- **The detail screen is unreachable.** `NDDefinitionViewController` is wired into
-  `Dictionary.storyboard` but row selection does nothing; the push was commented
-  out. It is either worth restoring or worth removing.
+- **Bundle contents.** The app bundle ships `Eywa.sketch` (a 2.5 MB design file),
+  `vocabulary-2016.json` and `vocabulary-20220106.csv`, none of which the app reads,
+  and `GoogleService-Info.plist`, although no Firebase SDK is linked. Removing all
+  four from the app's Resources build phase makes the download about 3.2 MB smaller;
+  the Firebase file is also bundled into the keyboard.
+- **Unused assets.** The asset catalog still holds images that only the storyboards
+  used: `Keyboard Icon`, `InfoIcon`, `Play Audio`, `Bookmarked` and
+  `Keyboard Screen Shot`.
+- **Unused Core Data model.** `Na_vi.xcdatamodeld` is compiled into the app but
+  never loaded.
 - **The keyboard's settings panel is unreachable.** Its key is commented out of
-  the layout, so its options are fixed at their defaults. Its key-click option
-  would also need the Full Access permission, which the keyboard does not
-  request. The panel is either worth restoring or worth removing.
+  the layout, so its options are fixed at their defaults, and its key-click option
+  would also need the Full Access permission, which the keyboard does not request.
+  The panel is the one remaining nib (`DefaultSettings.xib`); it is either worth
+  restoring or worth removing.
 - **Tests.** The project has no test target. A Swift Testing target covering
-  dictionary decoding, grouping and search would guard the logic in §5.1 and §5.3.
+  dictionary decoding, grouping and `NDDictionary.filtered(_:matching:)` would guard
+  the logic in §6.1 and §6.3.

@@ -7,24 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */; };
+		A6E200062F0000000000BB06 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200052F0000000000BB05 /* DictionaryView.swift */; };
+		A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200032F0000000000BB03 /* KeyboardSetupView.swift */; };
+		A6E200022F0000000000BB02 /* EywaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200012F0000000000BB01 /* EywaApp.swift */; };
 		A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */; };
 		A6E100062F0000000000AA06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */; };
 		A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100032F0000000000AA03 /* PronunciationPlayer.swift */; };
-		A6E100022F0000000000AA02 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100012F0000000000AA01 /* SceneDelegate.swift */; };
 		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
 		A617909D2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
-		A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */; };
-		A6A8DD8E2EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */; };
-		A6A8DD8F2EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */; };
-		A6A8DD902EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */; };
-		A6A8DD912EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */; };
-		A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */; };
-		A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */; };
-		A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */; };
 		A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */; };
 		A6AE8B011D1AD43E00345E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B001D1AD43E00345E2E /* Assets.xcassets */; };
-		A6AE8B041D1AD43E00345E2E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */; };
 		A6BB0D3E282A34490071BD1E /* vocabulary-20220106.csv in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C2282A343D0071BD1E /* vocabulary-20220106.csv */; };
 		A6BB0D3F282A34490071BD1E /* vocabulary.json in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C3282A343D0071BD1E /* vocabulary.json */; };
 		A6BB0D40282A34490071BD1E /* 11828.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C5282A343D0071BD1E /* 11828.mp3 */; };
@@ -2723,13 +2717,8 @@
 		A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92131D1B32050030D414 /* KeyboardViewController.swift */; };
 		A6CB92291D1B32050030D414 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92141D1B32050030D414 /* Media.xcassets */; };
 		A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92161D1B32050030D414 /* Shapes.swift */; };
-		A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
 		A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
-		A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6CB923C1D1B64960030D414 /* Dictionary.storyboard */; };
-		A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */; };
-		A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */; };
 		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
-		A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */; };
 		A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924F1D1C92D60030D414 /* NDDictionary.swift */; };
 /* End PBXBuildFile section */
 
@@ -2758,25 +2747,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEntryRow.swift; sourceTree = "<group>"; };
+		A6E200052F0000000000BB05 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
+		A6E200032F0000000000BB03 /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
+		A6E200012F0000000000BB01 /* EywaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EywaApp.swift; sourceTree = "<group>"; };
 		A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = "Na'vi Keyboard/PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
 		A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		A6E100032F0000000000AA03 /* PronunciationPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PronunciationPlayer.swift; sourceTree = "<group>"; };
-		A6E100012F0000000000AA01 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na-vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A61790982149099200C7ECFE /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		A617909B2149214C00C7ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionarySectionTableViewCell.swift; sourceTree = "<group>"; };
 		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
 		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
-		A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GlassUIHelper.swift; path = "Na'vi/GlassUIHelper.swift"; sourceTree = "<group>"; };
-		A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewStylingManager.swift; path = "Na'vi/ViewStylingManager.swift"; sourceTree = "<group>"; };
 		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		A6AE8AFB1D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Na_vi.xcdatamodel; sourceTree = "<group>"; };
 		A6AE8B001D1AD43E00345E2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Na'vi/Assets.xcassets"; sourceTree = "<group>"; };
-		A6AE8B031D1AD43E00345E2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A6AE8B051D1AD43E00345E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6BB02C2282A343D0071BD1E /* vocabulary-20220106.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "vocabulary-20220106.csv"; sourceTree = "<group>"; };
 		A6BB02C3282A343D0071BD1E /* vocabulary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = vocabulary.json; sourceTree = "<group>"; };
@@ -5483,11 +5468,7 @@
 		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQNSHelper.swift; path = Keyboard/CQNSHelper.swift; sourceTree = "<group>"; };
 		A6CB92321D1B358E0030D414 /* CQStdHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQStdHelper.swift; path = Keyboard/CQStdHelper.swift; sourceTree = "<group>"; };
 		A6CB92331D1B358E0030D414 /* CQUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQUIHelper.swift; path = Keyboard/CQUIHelper.swift; sourceTree = "<group>"; };
-		A6CB923C1D1B64960030D414 /* Dictionary.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Dictionary.storyboard; sourceTree = "<group>"; };
-		A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryMainViewController.swift; sourceTree = "<group>"; };
-		A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryMainTableViewCell.swift; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
-		A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDefinitionViewController.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -5509,15 +5490,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A65A932D1D1CAA3F0058FB19 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				A6CB92401D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift */,
-				A65A932B1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift */,
-			);
-			name = Cell;
-			sourceTree = "<group>";
-		};
 		A699EE1C2828EFB00067D977 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -5534,8 +5506,6 @@
 			isa = PBXGroup;
 			children = (
 				A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */,
-				A6A8DD8C2EFA80BF00DFFFA8 /* GlassUIHelper.swift */,
-				A6A8DD8D2EFA80BF00DFFFA8 /* ViewStylingManager.swift */,
 				A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */,
 				A699EE1A2828C6D50067D977 /* Na-vi.entitlements */,
 				A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */,
@@ -5559,11 +5529,9 @@
 		A6AE8AF51D1AD43E00345E2E /* Na'vi Main App */ = {
 			isa = PBXGroup;
 			children = (
+				A6E200032F0000000000BB03 /* KeyboardSetupView.swift */,
+				A6E200012F0000000000BB01 /* EywaApp.swift */,
 				A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */,
-				A6E100012F0000000000AA01 /* SceneDelegate.swift */,
-				A6AE8AF61D1AD43E00345E2E /* AppDelegate.swift */,
-				A6AE8AF81D1AD43E00345E2E /* MainViewController.swift */,
-				A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */,
 				A6AE8B051D1AD43E00345E2E /* Info.plist */,
 			);
 			name = "Na'vi Main App";
@@ -8317,11 +8285,9 @@
 		A6CB92421D1B66E60030D414 /* Na'vi Dictionary */ = {
 			isa = PBXGroup;
 			children = (
+				A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */,
+				A6E200052F0000000000BB05 /* DictionaryView.swift */,
 				A6E100032F0000000000AA03 /* PronunciationPlayer.swift */,
-				A6CB923C1D1B64960030D414 /* Dictionary.storyboard */,
-				A6CB923E1D1B66C50030D414 /* NDDictionaryMainViewController.swift */,
-				A6CB924A1D1C5DD30030D414 /* NDDefinitionViewController.swift */,
-				A65A932D1D1CAA3F0058FB19 /* Cell */,
 				A6CB92511D1C92DB0030D414 /* Models */,
 			);
 			name = "Na'vi Dictionary";
@@ -8338,7 +8304,6 @@
 				A6CB92321D1B358E0030D414 /* CQStdHelper.swift */,
 				A6CB92331D1B358E0030D414 /* CQUIHelper.swift */,
 				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
-				A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */,
 				A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */,
 			);
 			name = "Shared Resources";
@@ -8597,7 +8562,6 @@
 				A6BB1357282A34490071BD1E /* 920.mp3 in Resources */,
 				A6BB12C9282A34490071BD1E /* 1864.mp3 in Resources */,
 				A6BB1307282A34490071BD1E /* 8896.mp3 in Resources */,
-				A6AE8B041D1AD43E00345E2E /* LaunchScreen.storyboard in Resources */,
 				A6BB117E282A34490071BD1E /* 8132.mp3 in Resources */,
 				A6BB0D73282A34490071BD1E /* 3980.mp3 in Resources */,
 				A6BB15BF282A344A0071BD1E /* 2512.mp3 in Resources */,
@@ -9592,7 +9556,6 @@
 				A6BB143F282A34490071BD1E /* 9768.mp3 in Resources */,
 				A6BB13C2282A34490071BD1E /* 9584.mp3 in Resources */,
 				A6BB0E92282A34490071BD1E /* 11184.mp3 in Resources */,
-				A6CB923D1D1B64960030D414 /* Dictionary.storyboard in Resources */,
 				A6BB1051282A34490071BD1E /* 5388.mp3 in Resources */,
 				A6BB0DA8282A34490071BD1E /* 1628.mp3 in Resources */,
 				A6BB0DC6282A34490071BD1E /* 8744.mp3 in Resources */,
@@ -9961,7 +9924,6 @@
 				A6BB1714282A344A0071BD1E /* 1592.mp3 in Resources */,
 				A6BB135D282A34490071BD1E /* 10236.mp3 in Resources */,
 				A6BB11B0282A34490071BD1E /* 6136.mp3 in Resources */,
-				A6AE8AFC1D1AD43E00345E2E /* Main.storyboard in Resources */,
 				A6BB12E2282A34490071BD1E /* 6448.mp3 in Resources */,
 				A6BB12FC282A34490071BD1E /* 7780.mp3 in Resources */,
 				A6BB0FF5282A34490071BD1E /* 5216.mp3 in Resources */,
@@ -11148,8 +11110,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6CB921E1D1B32050030D414 /* ExtraView.swift in Sources */,
-				A6A8DD902EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */,
-				A6A8DD912EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */,
 				A6CB92231D1B32050030D414 /* KeyboardInputTraits.swift in Sources */,
 				A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */,
 				A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */,
@@ -11171,19 +11131,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */,
+				A6E200062F0000000000BB06 /* DictionaryView.swift in Sources */,
+				A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */,
+				A6E200022F0000000000BB02 /* EywaApp.swift in Sources */,
 				A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */,
-				A6E100022F0000000000AA02 /* SceneDelegate.swift in Sources */,
-				A65A932C1D1CAA3B0058FB19 /* NDDictionarySectionTableViewCell.swift in Sources */,
-				A6CB924B1D1C5DD30030D414 /* NDDefinitionViewController.swift in Sources */,
-				A6AE8AF91D1AD43E00345E2E /* MainViewController.swift in Sources */,
-				A6CB923F1D1B66C50030D414 /* NDDictionaryMainViewController.swift in Sources */,
-				A6CB92361D1B358E0030D414 /* CQNSHelper.swift in Sources */,
-				A6A8DD8E2EFA80BF00DFFFA8 /* GlassUIHelper.swift in Sources */,
-				A6A8DD8F2EFA80BF00DFFFA8 /* ViewStylingManager.swift in Sources */,
-				A6AE8AF71D1AD43E00345E2E /* AppDelegate.swift in Sources */,
 				A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */,
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
-				A6CB92411D1B66DF0030D414 /* NDDictionaryMainTableViewCell.swift in Sources */,
 				A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11199,25 +11153,6 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		A6AE8AFA1D1AD43E00345E2E /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A6AE8AFB1D1AD43E00345E2E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		A6AE8B021D1AD43E00345E2E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A6AE8B031D1AD43E00345E2E /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			path = "Na'vi";
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A614202B1D1AD5DC001C0FBD /* Debug */ = {
@@ -11395,6 +11330,7 @@
 		A6AE8B1F1D1AD43E00345E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_PREVIEWS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -11421,6 +11357,7 @@
 		A6AE8B201D1AD43E00345E2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_PREVIEWS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";

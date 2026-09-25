@@ -9,9 +9,13 @@
 import Foundation
 
 /// A single vocabulary entry from the bundled Na'vi dictionary.
-final class NDDictionaryEntry: Decodable {
+///
+/// A value type, so entries can be decoded off the main thread and handed to the
+/// interface without sharing mutable state.
+struct NDDictionaryEntry: Decodable, Hashable, Identifiable, Sendable {
 
-    var isBookmarked = false
+    /// A per-launch identity, so entries that share a headword stay distinct.
+    let id = UUID()
 
     let navi: String
     let english: String

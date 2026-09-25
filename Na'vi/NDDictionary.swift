@@ -8,22 +8,47 @@
 
 import Foundation
 
-/// Loads the bundled Na'vi vocabulary and groups it for display.
-final class NDDictionary {
+/// The entries that share a first letter.
+struct DictionarySection: Identifiable, Hashable, Sendable {
+
+    /// The shared first letter, lowercased as it appears in the headwords.
+    let letter: String
+    let entries: [NDDictionaryEntry]
+
+    var id: String { letter }
+
+    /// The label for the section header and the section index.
+    var indexLabel: String { letter.uppercased() }
+}
+
+/// Loads the bundled Na'vi vocabulary, groups it for display, and searches it.
+enum NDDictionary {
 
     /// Every entry, grouped by the first letter of the Na'vi headword. Sections and
     /// the entries inside them are both sorted.
-    private(set) var classifiedEntries: [[NDDictionaryEntry]] = []
-
-    init(resourceName: String = "vocabulary", bundle: Bundle = .main) {
-        classifiedEntries = Self.group(Self.loadEntries(named: resourceName, in: bundle))
+    ///
+    /// Reads and decodes about 900 KB of JSON, so call it off the main thread.
+    static func loadSections(resourceName: String = "vocabulary", bundle: Bundle = .main) -> [DictionarySection] {
+        group(loadEntries(named: resourceName, in: bundle))
     }
 
-    /// The section index titles for a grouped dictionary.
-    static func sectionIndices(ofDictionary entries: [[NDDictionaryEntry]]) -> [String] {
-        entries.map { section in
-            guard let initial = section.first?.navi.lowercased().first else { return " " }
-            return String(initial)
+    /// The sections, keeping only entries whose Na'vi or English text contains
+    /// `query`. Sections left empty are dropped.
+    ///
+    /// Matching ignores case but not diacritics: ä and ì are separate letters in
+    /// Na'vi, not accented forms of a and i.
+    static func filtered(_ sections: [DictionarySection], matching query: String) -> [DictionarySection] {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else {
+            return sections
+        }
+
+        return sections.compactMap { section in
+            let matches = section.entries.filter {
+                $0.navi.localizedCaseInsensitiveContains(query)
+                    || $0.english.localizedCaseInsensitiveContains(query)
+            }
+            return matches.isEmpty ? nil : DictionarySection(letter: section.letter, entries: matches)
         }
     }
 
@@ -50,13 +75,17 @@ final class NDDictionary {
 
     // MARK: - Grouping
 
-    private static func group(_ entries: [NDDictionaryEntry]) -> [[NDDictionaryEntry]] {
+    private static func group(_ entries: [NDDictionaryEntry]) -> [DictionarySection] {
         let grouped = Dictionary(grouping: entries) { entry in
             entry.navi.uppercased().first ?? " "
         }
 
         return grouped
             .sorted { $0.key < $1.key }
-            .map { $0.value.sorted { $0.navi.uppercased() < $1.navi.uppercased() } }
+            .map { group in
+                let sorted = group.value.sorted { $0.navi.uppercased() < $1.navi.uppercased() }
+                let letter = sorted.first?.navi.lowercased().first.map(String.init) ?? " "
+                return DictionarySection(letter: letter, entries: sorted)
+            }
     }
 }
