@@ -8,7 +8,8 @@
 import SwiftUI
 
 /// The Na'vi–English dictionary: every entry grouped by first letter, with search
-/// and a letter index.
+/// and a letter index. Searching for an inflected word, such as oel, also lists the
+/// entry of the word it comes from, with the grammar of the form.
 ///
 /// Navigation bar, search field and list take on Liquid Glass from the system on
 /// iOS 26 and later; on iPhone the search field sits at the bottom of the screen.
@@ -18,14 +19,16 @@ struct DictionaryView: View {
     @State private var hasLoaded = false
     @State private var query = ""
     @State private var isShowingKeyboardSetup = false
+    @State private var grammar: GrammarSearch?
 
     var body: some View {
         let visibleSections = NDDictionary.filtered(sections, matching: query)
+        let wordForms = grammar?.wordForms(matching: query) ?? []
 
         NavigationStack {
-            DictionaryList(sections: visibleSections)
+            DictionaryList(sections: visibleSections, wordForms: wordForms)
                 .overlay {
-                    if hasLoaded && visibleSections.isEmpty && !query.isEmpty {
+                    if hasLoaded && visibleSections.isEmpty && wordForms.isEmpty && !query.isEmpty {
                         ContentUnavailableView.search(text: query)
                     }
                 }
@@ -49,25 +52,33 @@ struct DictionaryView: View {
             }
 
             // Decoding the vocabulary takes long enough to be felt on the main
-            // thread, so it runs on a background task.
-            sections = await Task.detached(priority: .userInitiated) {
+            // thread, so it runs on a background task, and so does loading the
+            // grammar engine, which needs the vocabulary to find base entries.
+            let loaded = await Task.detached(priority: .userInitiated) {
                 NDDictionary.loadSections()
             }.value
+            sections = loaded
             hasLoaded = true
+            grammar = await Task.detached(priority: .userInitiated) {
+                GrammarSearch.load(sections: loaded)
+            }.value
         }
     }
 }
 
 // MARK: - List
 
-/// The sections as a plain list with a letter index on the trailing edge.
+/// The sections as a plain list with a letter index on the trailing edge, after
+/// any inflected forms the search text was read as.
 private struct DictionaryList: View {
 
     let sections: [DictionarySection]
+    let wordForms: [WordFormMatch]
 
     var body: some View {
         if #available(iOS 26.0, *) {
             List {
+                WordFormSection(matches: wordForms)
                 ForEach(sections) { section in
                     Section {
                         ForEach(section.entries) { entry in
@@ -86,6 +97,7 @@ private struct DictionaryList: View {
             // compact index of their own.
             ScrollViewReader { proxy in
                 List {
+                    WordFormSection(matches: wordForms)
                     ForEach(sections) { section in
                         Section {
                             ForEach(section.entries) { entry in
@@ -103,6 +115,24 @@ private struct DictionaryList: View {
                         proxy.scrollTo(sections[index].id, anchor: .top)
                     }
                 }
+            }
+        }
+    }
+}
+
+/// The inflected forms the search text was read as, above the ordinary results.
+private struct WordFormSection: View {
+
+    let matches: [WordFormMatch]
+
+    var body: some View {
+        if !matches.isEmpty {
+            Section {
+                ForEach(matches) { match in
+                    WordFormRow(match: match)
+                }
+            } header: {
+                Text("Word Forms")
             }
         }
     }
