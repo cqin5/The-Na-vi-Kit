@@ -36,9 +36,14 @@ enum NDDictionary {
     /// `query`. Sections left empty are dropped.
     ///
     /// Matching ignores case but not diacritics: ä and ì are separate letters in
-    /// Na'vi, not accented forms of a and i.
+    /// Na'vi, not accented forms of a and i. Curly quotes match the straight
+    /// apostrophe the vocabulary uses, because Smart Punctuation turns a typed
+    /// apostrophe into one.
     static func filtered(_ sections: [DictionarySection], matching query: String) -> [DictionarySection] {
-        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let query = query
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\u{2019}", with: "'")
+            .replacingOccurrences(of: "\u{2018}", with: "'")
         guard !query.isEmpty else {
             return sections
         }
@@ -81,11 +86,31 @@ enum NDDictionary {
         }
 
         return grouped
-            .sorted { $0.key < $1.key }
+            .sorted { collationKey(String($0.key)).lexicographicallyPrecedes(collationKey(String($1.key))) }
             .map { group in
-                let sorted = group.value.sorted { $0.navi.uppercased() < $1.navi.uppercased() }
+                let sorted = group.value
+                    .map { (entry: $0, key: collationKey($0.navi)) }
+                    .sorted { $0.key.lexicographicallyPrecedes($1.key) }
+                    .map { $0.entry }
                 let letter = sorted.first?.navi.lowercased().first.map(String.init) ?? " "
                 return DictionarySection(letter: letter, entries: sorted)
             }
+    }
+
+    // MARK: - Collation
+
+    /// The Na'vi alphabet, in order: ä follows a and ì follows i, where Unicode
+    /// order would put both after z. A space comes first, so a phrase follows the
+    /// word it starts with. Digraphs such as kx and ts sort by their letters.
+    private static let alphabet: [Character: Int] = Dictionary(
+        uniqueKeysWithValues: " 'aäbcdefghiìjklmnopqrstuvwxyz".enumerated().map { ($1, $0) }
+    )
+
+    /// A key that sorts `text` in Na'vi alphabetical order, ignoring case.
+    /// Characters outside the alphabet sort after it, by code point.
+    static func collationKey(_ text: String) -> [Int] {
+        text.lowercased().map { character in
+            alphabet[character] ?? alphabet.count + Int(character.unicodeScalars.first?.value ?? 0)
+        }
     }
 }

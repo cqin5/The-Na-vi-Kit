@@ -36,62 +36,47 @@ struct NDDictionaryEntry: Decodable, Hashable, Identifiable, Sendable {
 
     /// The abbreviated part of speech from the source data, spelled out.
     ///
-    /// Unrecognised abbreviations are passed through unchanged so new source data
-    /// still reads sensibly before this list catches up with it.
+    /// A combined code such as `n., adv.` is spelled out one abbreviation at a
+    /// time, as "Noun, adverb". A code with an abbreviation this list does not
+    /// know is passed through unchanged, so new source data still reads sensibly
+    /// before the list catches up with it.
     var partOfSpeech: String {
-        switch partOfSpeechShort.trimmingCharacters(in: .whitespaces) {
-        case "adj.":
-            return "Adjective"
-        case "adv.":
-            return "Adverb"
-        case "conj.":
-            return "Conjunction"
-        case "inter":
-            return "Interrogative"
-        case "inter., intj.":
-            return "Interrogative, interjection"
-        case "intj.":
-            return "Interjection"
-        case "n.":
-            return "Noun"
-        case "n., adv.":
-            return "Noun, adverb"
-        case "n., intj.":
-            return "Noun, interjection"
-        case "num.":
-            return "Number"
-        case "part.":
-            return "Particle"
-        case "part., intj.":
-            return "Particle, interjection"
-        case "ph.":
-            return "Phrase"
-        case "pn.":
-            return "Pronoun"
-        case "pn., adv.":
-            return "Pronoun, adverb"
-        case "pn., sbd.":
-            return "Pronoun, subordinator"
-        case "prop.n.":
-            return "Proper noun"
-        case "sbd.":
-            return "Subordinator"
-        case "svin.", "vin.":
-            return "Intransitive verb"
-        case "v.":
-            return "Verb"
-        case "vim.":
-            return "Intransitive modal verb"
-        case "vtr.":
-            return "Transitive verb"
-        case "vtr., vin.":
-            return "Transitive verb, intransitive verb"
-        case "vtrm.":
-            return "Transitive modal verb"
-        case "vtrm., vtr.":
-            return "Transitive modal verb, transitive verb"
-        default:
+        let names = partOfSpeechShort
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+            .map { Self.partOfSpeechNames[$0] }
+
+        guard !names.isEmpty, !names.contains(nil) else {
             return partOfSpeechShort
         }
+
+        return names.compactMap { $0 }.enumerated().map { index, name in
+            index == 0 ? name : name.prefix(1).lowercased() + name.dropFirst()
+        }.joined(separator: ", ")
     }
+
+    private static let partOfSpeechNames: [String: String] = [
+        "adj.": "Adjective",
+        "adp.": "Adposition",
+        "adv.": "Adverb",
+        "conj.": "Conjunction",
+        "dem.": "Demonstrative",
+        "inter": "Interrogative",
+        "inter.": "Interrogative",
+        "intj.": "Interjection",
+        "n.": "Noun",
+        "num.": "Numeral",
+        "part.": "Particle",
+        "ph.": "Phrase",
+        "pn.": "Pronoun",
+        "prop.n.": "Proper noun",
+        "sbd.": "Subordinator",
+        "svin.": "Stative intransitive verb",
+        "v.": "Verb",
+        "vim.": "Intransitive modal verb",
+        "vin.": "Intransitive verb",
+        "vtr.": "Transitive verb",
+        "vtrm.": "Transitive modal verb",
+    ]
 }

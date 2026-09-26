@@ -170,9 +170,27 @@ tripping arrays through `NSSet`. Malformed or missing data crashed the app on
 launch.
 
 It now decodes value-type `NDDictionaryEntry`s with `Codable` and groups them into
-`DictionarySection`s with `Dictionary(grouping:)`. Section and entry ordering are
-unchanged. A missing or malformed file yields an empty dictionary rather than a
-crash.
+`DictionarySection`s with `Dictionary(grouping:)`. A missing or malformed file
+yields an empty dictionary rather than a crash.
+
+**Alphabetical order.** Sections and entries were sorted by Unicode code point,
+which puts ä and ì after z: the Ä and Ì sections came last, and within a section
+a word containing ä or ì sorted as if that letter followed z. `NDDictionary.collationKey(_:)` now
+sorts by the Na'vi alphabet, with ä after a and ì after i. A space sorts before
+every letter, so a phrase still follows the word it starts with, and digraphs such
+as kx and ts sort by their letters.
+
+**Part of speech.** The source data abbreviates each entry's part of speech, and a
+fixed list of codes spelled them out. 122 entries used codes missing from that
+list, such as `inter.` (57), `adp.` (48) and `adv., n.`, and showed the raw
+abbreviation. Each abbreviation in a code is now spelled out on its own, so any
+combination reads as, for example, "Adverb, noun". Two labels changed: `num.` is
+"Numeral" rather than "Number", and `svin.` is "Stative intransitive verb" rather
+than "Intransitive verb".
+
+Both fixes, and the quote fix in §6.3, were first made on the July 2026 recovery
+branch, `fix/ios26-uiux-bugs`, for the UIKit app; they were carried over when that
+branch was merged.
 
 ### 6.2 Pronunciation playback
 
@@ -192,6 +210,11 @@ contains the query, ignoring case and surrounding whitespace but not diacritics:
 ä and ì are separate letters in Na'vi, not accented forms of a and i. The UIKit
 version compared `uppercased()` strings, and one of its paths reset the data source
 without reloading the table.
+
+Smart Punctuation, which is on by default, turns a typed apostrophe into a curly
+quote, while the vocabulary spells every glottal stop with a straight apostrophe.
+Searching for any word containing one therefore found nothing. Curly quotes in the
+query now match straight apostrophes.
 
 ### 6.4 Build settings
 
