@@ -7,7 +7,8 @@
 
 /// A phrase and what it means. The Na'vi is as appendix F of the LearnNavi
 /// dictionary gives it, most of it from Dr. Paul Frommer's blog; the English is our
-/// own. The pre-flight checks confirm that every phrase appears in appendix F.
+/// own. The pre-flight checks confirm that every phrase appears in appendix F. An
+/// ellipsis stands where the learner puts a word in, as X does in appendix F.
 struct Phrase: Identifiable, Hashable, Sendable {
 
     let navi: String
@@ -21,6 +22,8 @@ struct Phrase: Identifiable, Hashable, Sendable {
 struct PhraseTopic: Identifiable, Hashable, Sendable {
 
     let title: String
+    /// The SF Symbol shown beside the topic in the phrasebook's list.
+    let symbol: String
     let phrases: [Phrase]
 
     var id: String { title }
@@ -29,7 +32,7 @@ struct PhraseTopic: Identifiable, Hashable, Sendable {
 enum Phrasebook {
 
     static let topics: [PhraseTopic] = [
-        PhraseTopic(title: "Greetings and Goodbyes", phrases: [
+        PhraseTopic(title: "Greetings and Goodbyes", symbol: "hand.wave", phrases: [
             Phrase(navi: "Kaltxì", english: "Hello", note: "Casual."),
             Phrase(navi: "Oel ngati kameie", english: "I see you", note: "A familiar greeting."),
             Phrase(navi: "Ngaru lu fpom srak?", english: "How are you?", note: "Literally, is there well-being for you?"),
@@ -42,7 +45,7 @@ enum Phrasebook {
             Phrase(navi: "Makto zong", english: "Take care on your way"),
             Phrase(navi: "Txon lefpom", english: "Good night", note: "Literally, peaceful night."),
         ]),
-        PhraseTopic(title: "Courtesy", phrases: [
+        PhraseTopic(title: "Courtesy", symbol: "heart", phrases: [
             Phrase(navi: "Irayo", english: "Thank you"),
             Phrase(navi: "Oe irayo si ngaru", english: "I thank you"),
             Phrase(navi: "Kea tìkin", english: "No need to thank me"),
@@ -55,7 +58,7 @@ enum Phrasebook {
             Phrase(navi: "Rutxe tivìng mikyun, ma frapo", english: "Your attention, please, everyone"),
             Phrase(navi: "Tstunwi", english: "That's kind of you"),
         ]),
-        PhraseTopic(title: "Getting to Know Someone", phrases: [
+        PhraseTopic(title: "Getting to Know Someone", symbol: "person.text.rectangle", phrases: [
             Phrase(navi: "Fyape fko syaw ngar?", english: "What's your name?", note: "Literally, how are you called?"),
             Phrase(navi: "Oeru syaw fko Txewì", english: "My name is Txewì"),
             Phrase(navi: "Ngenga lu tupe?", english: "Who are you?", note: "With the respectful form of you."),
@@ -68,19 +71,26 @@ enum Phrasebook {
             Phrase(navi: "Nga pesuhu käteng nìtrrtrr?", english: "Who do you usually spend your time with?"),
             Phrase(navi: "Oe tskxekeng si säsulìnur alu tsko swizaw", english: "I practise my hobby, archery"),
         ]),
-        PhraseTopic(title: "Conversation", phrases: [
+        PhraseTopic(title: "Learning Na'vi", symbol: "graduationcap", phrases: [
+            Phrase(navi: "… nìNa'vi slu pelì'u?", english: "How do you say … in Na'vi?",
+                   note: "Put the word you want in place of the dots. Literally, … becomes what word in Na'vi?"),
+            Phrase(navi: "Tsalì'uri alu …, ral lu 'upe?", english: "What does the word … mean?",
+                   note: "Literally, as for that word, …, what is its meaning?"),
             Phrase(navi: "Ke tslolam", english: "I didn't understand"),
             Phrase(navi: "Rutxe liveyn", english: "Could you say that again, please?"),
             Phrase(navi: "Tsun nga law sivi nì'it srak?", english: "Could you make that a little clearer?"),
-            Phrase(navi: "Pefya nga fpìl?", english: "What do you think?", note: "Literally, how do you think?"),
-            Phrase(navi: "Tì'efumì oeyä", english: "In my opinion"),
-            Phrase(navi: "Tìyawr ngaru", english: "You're right"),
-            Phrase(navi: "Tìkxey ngaru", english: "You're wrong"),
-            Phrase(navi: "Ke tare", english: "It doesn't matter"),
             Phrase(navi: "Srake fnan ngal lì'fyati leNa'vi?", english: "Are you good at Na'vi?"),
             Phrase(navi: "Ftia oel lì'fyati leNa'vi nì'o' nìwotx", english: "Learning Na'vi is great fun for me"),
         ]),
-        PhraseTopic(title: "Feelings and Encouragement", phrases: [
+        PhraseTopic(title: "Conversation", symbol: "bubble.left.and.bubble.right", phrases: [
+            Phrase(navi: "Pefya nga fpìl?", english: "What do you think?", note: "Literally, how do you think?"),
+            Phrase(navi: "Tì'efumì oeyä", english: "In my opinion"),
+            Phrase(navi: "Tìomummì oeyä", english: "As far as I know", note: "Literally, in my knowledge."),
+            Phrase(navi: "Tìyawr ngaru", english: "You're right"),
+            Phrase(navi: "Tìkxey ngaru", english: "You're wrong"),
+            Phrase(navi: "Ke tare", english: "It doesn't matter"),
+        ]),
+        PhraseTopic(title: "Feelings and Encouragement", symbol: "face.smiling", phrases: [
             Phrase(navi: "Nga yawne lu oer", english: "I love you", note: "Literally, you are beloved to me."),
             Phrase(navi: "Ngari txe'lan mawey livu", english: "Don't worry", note: "Literally, may your heart be calm."),
             Phrase(navi: "Ke zene win säpivi", english: "Take your time; no need to hurry"),
@@ -94,7 +104,7 @@ enum Phrasebook {
             Phrase(navi: "Etrìpa syayvi", english: "Good luck"),
             Phrase(navi: "Yewla!", english: "What a shame!"),
         ]),
-        PhraseTopic(title: "Sayings", phrases: [
+        PhraseTopic(title: "Sayings", symbol: "text.quote", phrases: [
             Phrase(navi: "Fwa kan ke tam; zene swizawit livonu.", english: "Aiming is not enough; the arrow has to fly",
                    note: "Good intentions are not enough; what counts is action."),
             Phrase(navi: "Kxetse sì mikyun kop plltxe", english: "The tail and the ears speak too",

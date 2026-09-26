@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		A6E3000B2F0000000000CC0B /* Phrasebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E3000A2F0000000000CC0A /* Phrasebook.swift */; };
 		A6E3000D2F0000000000CC0D /* PhrasebookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E3000C2F0000000000CC0C /* PhrasebookView.swift */; };
+		A6E500022F0000000000EE02 /* Basics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E500012F0000000000EE01 /* Basics.swift */; };
+		A6E500062F0000000000EE06 /* NumbersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E500052F0000000000EE05 /* NumbersView.swift */; };
+		A6E500082F0000000000EE08 /* PronunciationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E500072F0000000000EE07 /* PronunciationView.swift */; };
+		A6E5000A2F0000000000EE0A /* PronounsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E500092F0000000000EE09 /* PronounsView.swift */; };
+		A6E500042F0000000000EE04 /* WordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E500032F0000000000EE03 /* WordListView.swift */; };
 		A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300042F0000000000CC04 /* GrammarSearch.swift */; };
 		A6E300072F0000000000CC07 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300062F0000000000CC06 /* TranslateView.swift */; };
 		A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300082F0000000000CC08 /* WordFormRow.swift */; };
@@ -2749,6 +2754,11 @@
 		A6E300082F0000000000CC08 /* WordFormRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordFormRow.swift; sourceTree = "<group>"; };
 		A6E3000A2F0000000000CC0A /* Phrasebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrasebook.swift; sourceTree = "<group>"; };
 		A6E3000C2F0000000000CC0C /* PhrasebookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasebookView.swift; sourceTree = "<group>"; };
+		A6E500012F0000000000EE01 /* Basics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Basics.swift; sourceTree = "<group>"; };
+		A6E500052F0000000000EE05 /* NumbersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersView.swift; sourceTree = "<group>"; };
+		A6E500072F0000000000EE07 /* PronunciationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PronunciationView.swift; sourceTree = "<group>"; };
+		A6E500092F0000000000EE09 /* PronounsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PronounsView.swift; sourceTree = "<group>"; };
+		A6E500032F0000000000EE03 /* WordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListView.swift; sourceTree = "<group>"; };
 		A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na-vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
 		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
@@ -8277,6 +8287,11 @@
 				A6E300082F0000000000CC08 /* WordFormRow.swift */,
 				A6E3000A2F0000000000CC0A /* Phrasebook.swift */,
 				A6E3000C2F0000000000CC0C /* PhrasebookView.swift */,
+				A6E500012F0000000000EE01 /* Basics.swift */,
+				A6E500052F0000000000EE05 /* NumbersView.swift */,
+				A6E500072F0000000000EE07 /* PronunciationView.swift */,
+				A6E500092F0000000000EE09 /* PronounsView.swift */,
+				A6E500032F0000000000EE03 /* WordListView.swift */,
 				A6E100032F0000000000AA03 /* PronunciationPlayer.swift */,
 				A6CB92511D1C92DB0030D414 /* Models */,
 			);
@@ -11115,6 +11130,11 @@
 				A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */,
 				A6E3000B2F0000000000CC0B /* Phrasebook.swift in Sources */,
 				A6E3000D2F0000000000CC0D /* PhrasebookView.swift in Sources */,
+				A6E500022F0000000000EE02 /* Basics.swift in Sources */,
+				A6E500062F0000000000EE06 /* NumbersView.swift in Sources */,
+				A6E500082F0000000000EE08 /* PronunciationView.swift in Sources */,
+				A6E5000A2F0000000000EE0A /* PronounsView.swift in Sources */,
+				A6E500042F0000000000EE04 /* WordListView.swift in Sources */,
 				A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */,
 				A6E300072F0000000000CC07 /* TranslateView.swift in Sources */,
 				A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */,

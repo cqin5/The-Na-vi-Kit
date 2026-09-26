@@ -335,24 +335,62 @@ class GrammarPackageCheckTests(unittest.TestCase):
 
 class PhrasebookCheckTests(unittest.TestCase):
 
-    APPENDIX = 'static let phrases: [String] = [\n        "kaltxì",\n        "oel ngati kameie",\n    ]\n'
+    APPENDIX = (
+        'static let phrases: [String] = [\n'
+        '        "kaltxì",\n'
+        '        "oel ngati kameie",\n'
+        '        "tsalì\'uri alu, ral lu \'upe",\n'
+        '        "nìNa\'vi slu pelì\'u",\n'
+        '    ]\n'
+    )
 
-    def run_check(self, phrasebook: str) -> tuple[int, str]:
+    def run_check(self, phrasebook: str, basics: str = "enum Basics {}") -> tuple[int, str]:
         with tempfile.TemporaryDirectory() as directory:
             book = pathlib.Path(directory) / "Phrasebook.swift"
+            basics_file = pathlib.Path(directory) / "Basics.swift"
             appendix = pathlib.Path(directory) / "AppendixFTests.swift"
             book.write_text(phrasebook, encoding="utf-8")
+            basics_file.write_text(basics, encoding="utf-8")
             appendix.write_text(self.APPENDIX, encoding="utf-8")
             report = preflight.Report()
             output = io.StringIO()
-            originals = preflight.PHRASEBOOK, preflight.APPENDIX_F_TESTS
-            preflight.PHRASEBOOK, preflight.APPENDIX_F_TESTS = book, appendix
+            originals = preflight.PHRASEBOOK, preflight.BASICS, preflight.APPENDIX_F_TESTS
+            preflight.PHRASEBOOK, preflight.BASICS, preflight.APPENDIX_F_TESTS = book, basics_file, appendix
             try:
                 with contextlib.redirect_stdout(output):
                     preflight.check_phrasebook(report)
             finally:
-                preflight.PHRASEBOOK, preflight.APPENDIX_F_TESTS = originals
+                preflight.PHRASEBOOK, preflight.BASICS, preflight.APPENDIX_F_TESTS = originals
         return report.failures, output.getvalue()
+
+    def test_an_ellipsis_stands_for_the_word_appendix_f_writes_as_x(self) -> None:
+        failures, output = self.run_check(
+            'Phrase(navi: "Tsalì\'uri alu …, ral lu \'upe?", english: "What does the word … mean?")\n'
+            'Phrase(navi: "… nìNa\'vi slu pelì\'u?", english: "How do you say … in Na\'vi?")'
+        )
+        self.assertEqual(failures, 0, output)
+        self.assertIn("all 2 phrases", output)
+
+    def test_an_ellipsis_does_not_excuse_other_words(self) -> None:
+        failures, output = self.run_check('Phrase(navi: "… nìNa\'vi pelì\'u?", english: "How do you say …?")')
+        self.assertEqual(failures, 1)
+        self.assertIn("is not an appendix F phrase", output)
+
+    def test_phrases_on_the_basics_pages_are_checked_too(self) -> None:
+        failures, output = self.run_check(
+            'Phrase(navi: "Kaltxì", english: "Hello")',
+            basics='Phrase(navi: "Oeri solalew zìsìt amevol", english: "I\'m 16")',
+        )
+        self.assertEqual(failures, 1)
+        self.assertIn("Basics.swift: 'Oeri solalew zìsìt amevol' is not an appendix F phrase", output)
+
+    def test_a_phrase_in_both_files_appears_more_than_once(self) -> None:
+        failures, output = self.run_check(
+            'Phrase(navi: "Kaltxì", english: "Hello")',
+            basics='Phrase(navi: "Kaltxì", english: "Hi")',
+        )
+        self.assertEqual(failures, 1)
+        self.assertIn("more than once", output)
 
     def test_phrases_from_appendix_f_pass_whatever_their_capitals_and_final_punctuation(self) -> None:
         failures, output = self.run_check('Phrase(navi: "Kaltxì!", english: "Hello")\nPhrase(navi: "Oel ngati kameie", english: "I see you")')
@@ -386,6 +424,143 @@ class PhrasebookCheckTests(unittest.TestCase):
         with contextlib.redirect_stdout(output):
             preflight.check_phrasebook(report)
         self.assertEqual(report.failures, 0, output.getvalue())
+
+
+class BasicsCheckTests(unittest.TestCase):
+
+    LEXICON = (
+        "# NaviGrammar lexicon.\n"
+        "id\tnavi\tpos\tinfixes\tgrammar\ten\n"
+        "12\t'aw\tnum.\t\t\tone\n"
+        "1348\tnga\tpn.\t\t\tyou\n"
+        "4072\tsre+\tadp.\t\t\tbefore (time)\n"
+        "4320\tkinä\tnum.\t\t\tseven\n"
+    )
+    VOCABULARY = [
+        entry(**{"Na'vi": "'aw", "English": "one", "Audio local URL": "12.mp3"}),
+        entry(**{"Na'vi": "nga", "English": "you", "Audio local URL": "1348.mp3"}),
+        entry(**{"Na'vi": "kinä", "English": "seven", "Audio local URL": "4320.mp3"}),
+        entry(**{"Na'vi": "pxenga", "English": "you three", "Audio local URL": ""}),
+    ]
+    # A two-letter alphabet, so that each case need list only what it is about.
+    ALPHABET = {"'": "tìftang", "ng": "ngeng"}
+    LETTERS = (
+        'NaviLetter(letter: "\'", name: "tìftang", ipa: "ʔ", sound: "uh-oh",\n'
+        '           example: BasicWord(navi: "\'aw", english: "one")),\n'
+        'NaviLetter(letter: "ng", name: "ngeng", ipa: "ŋ", sound: "sing",\n'
+        '           example: BasicWord(navi: "nga", english: "you")),\n'
+    )
+
+    def run_check(self, basics: str, vocabulary: object | None = None) -> tuple[int, int, str]:
+        with tempfile.TemporaryDirectory() as directory:
+            basics_file = pathlib.Path(directory) / "Basics.swift"
+            lexicon = pathlib.Path(directory) / "lexicon.tsv"
+            vocabulary_file = pathlib.Path(directory) / "vocabulary.json"
+            basics_file.write_text(basics, encoding="utf-8")
+            lexicon.write_text(self.LEXICON, encoding="utf-8")
+            vocabulary_file.write_text(
+                json.dumps({"dict": self.VOCABULARY} if vocabulary is None else vocabulary, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            report = preflight.Report()
+            output = io.StringIO()
+            originals = preflight.BASICS, preflight.GRAMMAR_LEXICON, preflight.VOCABULARY_FILE, preflight.APPENDIX_G
+            preflight.BASICS, preflight.GRAMMAR_LEXICON, preflight.VOCABULARY_FILE = basics_file, lexicon, vocabulary_file
+            preflight.APPENDIX_G = self.ALPHABET
+            try:
+                with contextlib.redirect_stdout(output):
+                    preflight.check_basics(report)
+            finally:
+                preflight.BASICS, preflight.GRAMMAR_LEXICON, preflight.VOCABULARY_FILE, preflight.APPENDIX_G = originals
+        return report.failures, report.warnings, output.getvalue()
+
+    def test_words_from_the_lexicon_or_the_vocabulary_pass(self) -> None:
+        failures, warnings, output = self.run_check(
+            self.LETTERS + 'BasicWord(navi: "kinä", english: "seven")\nBasicWord(navi: "pxenga", english: "you three")'
+        )
+        self.assertEqual((failures, warnings), (0, 0), output)
+        self.assertIn("all 4 words", output)
+        self.assertIn("2 letters", output)
+
+    def test_misspelled_word(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS + 'BasicWord(navi: "kina", english: "seven")')
+        self.assertEqual(failures, 1)
+        self.assertIn("'kina' is in neither the lexicon nor the vocabulary", output)
+
+    def test_word_attested_only_in_an_appendix(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS + 'BasicWord(navi: "menga", english: "you two")')
+        self.assertEqual(failures, 0, output)
+
+    def test_capitals_curly_apostrophes_decomposed_letters_and_lenition_marks_match(self) -> None:
+        failures, _, output = self.run_check(
+            self.LETTERS
+            + 'BasicWord(navi: "Nga", english: "you")\n'
+            + 'BasicWord(navi: "’aw", english: "one")\n'
+            + 'BasicWord(navi: "kinä", english: "seven")\n'
+            + 'BasicWord(navi: "sre", english: "before")'
+        )
+        self.assertEqual(failures, 0, output)
+
+    def test_letter_left_out(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS.split("NaviLetter(letter: \"ng\"")[0])
+        self.assertEqual(failures, 1)
+        self.assertIn("the alphabet leaves out 'ng'", output)
+
+    def test_letter_appendix_g_does_not_have(self) -> None:
+        failures, _, output = self.run_check(
+            self.LETTERS + 'NaviLetter(letter: "b", ipa: "b", sound: "b", example: BasicWord(navi: "nga", english: "you"))'
+        )
+        self.assertIn("'b' is not a letter of appendix G", output)
+        self.assertGreaterEqual(failures, 1)
+
+    def test_letter_listed_twice(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS + self.LETTERS.split("),\n")[0] + ")")
+        self.assertIn("\"'\" is listed more than once", output)
+        self.assertEqual(failures, 1)
+
+    def test_wrong_name(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS.replace('name: "ngeng"', 'name: "nga"'))
+        self.assertEqual(failures, 1)
+        self.assertIn("appendix G names it 'ngeng'", output)
+
+    def test_names_differing_only_in_capitals_match(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS.replace('name: "ngeng"', 'name: "NgeNg"'))
+        self.assertEqual(failures, 0, output)
+
+    def test_example_without_its_letter(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS.replace('navi: "nga"', 'navi: "kinä"'))
+        self.assertEqual(failures, 1)
+        self.assertIn("'kinä', does not have that letter", output)
+
+    def test_example_without_a_recording(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS.replace('navi: "nga"', 'navi: "pxenga"'))
+        self.assertEqual(failures, 1)
+        self.assertIn("'pxenga', has no recording", output)
+
+    def test_empty_basics(self) -> None:
+        failures, _, output = self.run_check("enum Basics {}")
+        self.assertIn("no words found", output)
+        self.assertIn("the alphabet leaves out", output)
+        self.assertGreaterEqual(failures, 3)
+
+    def test_vocabulary_without_its_list(self) -> None:
+        failures, _, output = self.run_check(self.LETTERS, vocabulary={"entries": []})
+        self.assertEqual(failures, 1)
+        self.assertIn("cannot read", output)
+
+    def test_an_exception_the_dictionary_has_caught_up_with_is_reported(self) -> None:
+        vocabulary = {"dict": self.VOCABULARY + [entry(**{"Na'vi": "menga", "English": "you two"})]}
+        failures, warnings, output = self.run_check(self.LETTERS, vocabulary=vocabulary)
+        self.assertEqual((failures, warnings), (0, 1), output)
+        self.assertIn("ATTESTED_ELSEWHERE no longer needs it", output)
+
+    def test_real_basics_pass(self) -> None:
+        report = preflight.Report()
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            preflight.check_basics(report)
+        self.assertEqual((report.failures, report.warnings), (0, 0), output.getvalue())
+        self.assertIn("33 letters", output.getvalue())
 
 
 if __name__ == "__main__":
