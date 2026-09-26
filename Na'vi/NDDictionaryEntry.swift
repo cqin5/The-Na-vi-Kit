@@ -25,6 +25,10 @@ struct NDDictionaryEntry: Decodable, Hashable, Identifiable, Sendable {
     let audioFileLocation: String
     let localAudioFileName: String
 
+    /// Whether the app bundles a recording of this entry. Entries added from sources
+    /// without recordings leave the file name empty.
+    var hasRecording: Bool { !localAudioFileName.isEmpty }
+
     private enum CodingKeys: String, CodingKey {
         case navi = "Na'vi"
         case english = "English"
@@ -70,8 +74,10 @@ struct NDDictionaryEntry: Decodable, Hashable, Identifiable, Sendable {
         "part.": "Particle",
         "ph.": "Phrase",
         "pn.": "Pronoun",
+        "pref.": "Prefix",
         "prop.n.": "Proper noun",
         "sbd.": "Subordinator",
+        "suff.": "Suffix",
         "svin.": "Stative intransitive verb",
         "v.": "Verb",
         "vim.": "Intransitive modal verb",

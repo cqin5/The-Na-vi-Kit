@@ -8,7 +8,8 @@
 import SwiftUI
 
 /// One dictionary entry: the Na'vi headword, its pronunciation and part of speech,
-/// the English meaning, and a button that plays the recorded pronunciation.
+/// the English meaning, and a button that plays the recorded pronunciation. Entries
+/// without a written pronunciation or a recording leave those out.
 ///
 /// Text styles scale with the reader's text size setting, and semantic colours
 /// follow Dark Mode and Increase Contrast.
@@ -22,7 +23,7 @@ struct DictionaryEntryRow: View {
                 Text(entry.navi)
                     .font(.headline)
 
-                Text(verbatim: "\(entry.ipa)  \(entry.partOfSpeech)")
+                Text(verbatim: [entry.ipa, entry.partOfSpeech].filter { !$0.isEmpty }.joined(separator: "  "))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
@@ -32,15 +33,17 @@ struct DictionaryEntryRow: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
 
-            // Borderless, so tapping elsewhere in the row doesn't trigger playback.
-            Button {
-                PronunciationPlayer.shared.play(fileNamed: entry.localAudioFileName)
-            } label: {
-                Image(systemName: "speaker.wave.2.fill")
-                    .imageScale(.large)
+            if entry.hasRecording {
+                // Borderless, so tapping elsewhere in the row doesn't trigger playback.
+                Button {
+                    PronunciationPlayer.shared.play(fileNamed: entry.localAudioFileName)
+                } label: {
+                    Image(systemName: "speaker.wave.2.fill")
+                        .imageScale(.large)
+                }
+                .buttonStyle(.borderless)
+                .accessibilityLabel(Text("Play pronunciation of \(entry.navi)"))
             }
-            .buttonStyle(.borderless)
-            .accessibilityLabel(Text("Play pronunciation of \(entry.navi)"))
         }
         .padding(.vertical, 4)
     }
