@@ -197,7 +197,7 @@ without reloading the table.
 
 - `SWIFT_VERSION` was `5.9`, which is not one of the values Xcode accepts
   (`4.0`, `4.2`, `5.0`, `6.0`). The app target is now `6.0`; the keyboard is
-  `5.0` (see §10.2).
+  `5.0` (see §10.1).
 - `SWIFT_SWIFT3_OBJC_INFERENCE = On` removed. The current Xcode build system no
   longer defines this setting, so it had no effect; the one method called by
   name from Objective-C is now marked `@objc` explicitly (§7.2).
@@ -221,7 +221,7 @@ The app bundled four files that nothing reads:
 
 The design file and the two exports stay in the repository as source material, but
 no target copies them any more. Firebase is not planned, so its configuration file
-is deleted; its API key is covered in §10.4.
+is deleted; its API key is covered in §10.3.
 
 Two more things were used only by code that no longer exists:
 
@@ -286,7 +286,7 @@ time a popup appears — that is, on every keypress. Both additions are removed.
 The December styling also changed the keys to translucent colours tuned against
 the removed blur layer. Because taps were not registering (§7.1), that design never
 reached anyone in working form. The keys use the palette of the current App Store
-release again; styling them for the iOS 26 keyboard is listed in §10.3.
+release again; styling them for the iOS 26 keyboard is listed in §10.2.
 
 ### 7.6 Swift
 
@@ -312,12 +312,13 @@ a globe key, as a custom keyboard requires.
 
 ---
 
-## 8. Dependencies removed
+## 8. Dependencies and unused files removed
 
 **CocoaPods.** The `Podfile` declared no pods, yet every build ran two
 `[CP] Check Pods Manifest.lock` script phases against a CocoaPods 1.11.3 sandbox
-and linked two empty frameworks. The integration, the generated xcconfigs and the
-`Pods.xcodeproj` workspace reference are gone.
+and linked two empty frameworks. The integration and the `Pods.xcodeproj`
+workspace reference are gone, and so are the `Podfile`, `Podfile.lock` and the
+`Pods/` directory of generated support files.
 
 **KeyboardKit and KeyboardKitPro.** Both were pinned at 6.0.0 and linked into the
 app target, and neither was imported anywhere in the codebase. Versions of that
@@ -325,6 +326,25 @@ age do not build on a current toolchain.
 
 The project no longer depends on any third-party code, and
 `Na-vi.xcworkspace` now contains only `Na-vi.xcodeproj`.
+
+**Unused files.** The following files belonged to no target. They are deleted,
+together with the entries that still listed them in Xcode's project navigator:
+
+| File | Why it was removed |
+| --- | --- |
+| `Keyboard/Na'vi Keyboard.swift` | The `Catboard` sample class. Never instantiated — the extension's principal class is `KeyboardViewController` — and it injected cat emoji into typed text and wrote screenshots to a hard-coded path on the original sample author's Mac. |
+| `Keyboard/CatboardBanner.swift` | Swift 2 source (`NSUserDefaults`, `UIControlEvents`) that had not compiled for years. |
+| `Keyboard/CQMPHelper.swift` | An `MPVolumeView` extension with no callers, built on API deprecated in iOS 13. |
+| `Keyboard/CQStdHelper.swift` | A `delay(bySeconds:)` helper with no callers. |
+| `Keyboard/CQUIHelper.swift` | A keyboard-animation helper for the former UIKit search field. |
+| `Keyboard/Utilities.swift` | An unused `memoize` function and an unused global profiling closure. |
+| `UIDevice.swift` | The `hasBottom` device check described in §7.7, no longer used. |
+| `Na'vi Keyboard/KeyboardView.swift`, `KeyboardViewController.swift`, `NSHelper.swift`, `Keyboard.xib`, `Keyboard.storyboard` | An abandoned second keyboard implementation, never referenced by the project. |
+| `Keyboard/Info.plist` | Not used by the build; the extension uses `Na'vi Keyboard/Info.plist`. |
+
+Every Swift file in the repository is now compiled into a target, and the only
+Interface Builder file left is the keyboard's settings panel, `DefaultSettings.xib`
+(§10.3).
 
 ---
 
@@ -363,28 +383,7 @@ device has not been performed as part of this change.
 
 ## 10. Follow-up work
 
-### 10.1 Files to delete
-
-These files are no longer part of any target. They were left on disk so the
-removal can be reviewed before it is made permanent:
-
-| File | Why it is dead |
-| --- | --- |
-| `Keyboard/Na'vi Keyboard.swift` | The `Catboard` sample class. Never instantiated — the extension's principal class is `KeyboardViewController` — and it injects cat emoji into typed text and writes screenshots to a hard-coded path on a stranger's Mac. |
-| `Keyboard/CatboardBanner.swift` | Swift 2 source (`NSUserDefaults`, `UIControlEvents`) that has not compiled for years; it was already outside the build. |
-| `Keyboard/CQMPHelper.swift` | An `MPVolumeView` extension with no callers, built on API deprecated in iOS 13. |
-| `Keyboard/CQStdHelper.swift` | A `delay(bySeconds:)` helper with no callers. |
-| `Keyboard/CQUIHelper.swift` | A keyboard-animation helper for the former UIKit search field. |
-| `Keyboard/Utilities.swift` | An unused `memoize` function and an unused global profiling closure. |
-| `UIDevice.swift` | The `hasBottom` device check described in §7.7, now unused. |
-| `Na'vi Keyboard/KeyboardView.swift`, `KeyboardViewController.swift`, `NSHelper.swift`, `Keyboard.xib`, `Keyboard.storyboard` | An abandoned second keyboard implementation, never referenced by the project. These are the last storyboard and nib files in the repository outside the keyboard's settings panel. |
-| `Keyboard/Info.plist` | Never referenced; the extension uses `Na'vi Keyboard/Info.plist`. |
-| `Podfile`, `Podfile.lock`, `Pods/` | Left behind by the CocoaPods removal in §8. |
-
-`Scripts/preflight.py` lists the Swift files among these on every run, so that
-warning disappears once they are removed.
-
-### 10.2 Keyboard extension and Swift 6
+### 10.1 Keyboard extension and Swift 6
 
 The extension is roughly 4,700 lines inherited from the 2014 *tasty-imitation-
 keyboard* project. It is pinned to the Swift 5 language mode with
@@ -394,7 +393,7 @@ isolate `KeyboardLayout`, an `NSObject` subclass that drives UIKit views, to the
 main actor. After that, raising strict concurrency to `complete` and then moving
 to the Swift 6 language mode is a self-contained change.
 
-### 10.3 Needs a device or design input
+### 10.2 Needs a device or design input
 
 - **Keyboard styling for iOS 26.** The keyboard now sits on the system's Liquid
   Glass backdrop with the key palette of the current release. Whether the keys
@@ -413,7 +412,7 @@ to the Swift 6 language mode is a self-contained change.
   can open directly with `UIApplication.openSettingsURLString`; that is a shorter
   path worth considering, along with refreshed screenshots.
 
-### 10.4 Smaller items
+### 10.3 Smaller items
 
 - **Firebase API key.** `GoogleService-Info.plist` (§6.5) was committed to this
   public repository in 2018, so its API key stays in the git history. Firebase is
