@@ -452,6 +452,10 @@ pre-flight checks need only Python and cover:
   flashcard markup, a part of speech the app can spell out and, when it names a
   recording, one the app bundles. `Scripts/test_preflight.py` feeds the check one
   broken vocabulary per mistake.
+- **Grammar package** — the app links NaviGrammar, the engine behind the
+  translator; its sources import neither UIKit nor SwiftUI; and its bundled lexicon
+  is complete, with its source checksum and credits. The translator, its sources and
+  its own tests are described in [docs/TRANSLATOR.md](docs/TRANSLATOR.md).
 
 All checks pass. Run against earlier revisions, or with the relevant mistake
 reintroduced, the rules report every issue described in §2.5, §7.1, §7.2, §7.8 to

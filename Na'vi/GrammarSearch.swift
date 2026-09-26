@@ -52,7 +52,7 @@ struct GrammarSearch: Sendable {
         entriesByHeadword = Dictionary(grouping: sections.flatMap(\.entries)) { Self.key($0.navi) }
     }
 
-    /// Loads the grammar lexicon bundled with NaviGrammar. It takes a few
+    /// Loads the grammar lexicon bundled with NaviGrammar. It takes tens of
     /// milliseconds, so call it off the main thread along with the vocabulary.
     static func load(sections: [DictionarySection]) -> GrammarSearch? {
         do {
