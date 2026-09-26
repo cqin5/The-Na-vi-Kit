@@ -1,0 +1,20 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v2.png
+
+Use case: precise-object-edit
+Asset: very subtle finishing pass on an approved Na'vi language app icon.
+
+The attached image is the ACCEPTED MASTER DESIGN. Preserve the N and apostrophe letterform geometry, stroke weight, rounded serif shapes, exact layout, optical centering, spacing, scale and uniform dark blue background. It should remain recognizably the SAME monogram. Keep at least 95 percent of the current appearance. This is a tiny material/detail edit, NOT a redesign.
+
+User request: keep this monogram and add just a tiny hint of the Avatar / Na'vi world. Express this through very restrained bioluminescence ONLY, with no additional symbol or illustration.
+
+Make ONLY these small changes:
+- Add a fine, softly luminous turquoise-cyan edge accent to a SHORT SELECTIVE PART of the N's inner flowing curve. Not a continuous outline, not neon tubing, and no large halo. The existing pale-aqua letter remains mostly flat, clear and solid.
+- Place exactly FIVE tiny, softly luminous ice-white/cyan freckles in a gently curving, asymmetrical cluster INSIDE the broad diagonal stroke near its lower-right portion, just before it joins the right stem. Each dot is about 3 to 5 pixels in diameter on a 1024px icon; these should only be noticeable on close inspection. They do not form an eye, face, rune, star constellation or any new logo. Slightly vary sizes. Very little light spill. Keep contrast subtle against the existing pale aqua.
+- Leave the apostrophe completely unchanged.
+
+OVERALL: the first impression is still the refined N' typographic monogram. The second glance reveals a tiny organic bioluminescent detail. Elegant, mature, restrained, legible. Avoid all dramatic effects.
+
+DO NOT add a face, eyes, ears, character, plant, seed, tree, feathers, tribal ornaments, floating particles, stars in background, film lettering, scenery, pattern across the whole letter, texture, 3D bevel, shiny plastic or lens flare. Do not change the glyph design. Do not make the N into a creature or object. Do not add background gradients or any border.
+
+Output one opaque square icon artwork, 1024x1024, same full-bleed background to all four corners; no rounded app-tile mask or mockup.

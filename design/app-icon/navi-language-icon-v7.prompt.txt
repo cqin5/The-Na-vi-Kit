@@ -1,0 +1,11 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v6.png
+
+Use case: precise-object-edit.
+Edit the attached approved Na'vi N’ app icon. ONLY reduce the remaining drop shadow further.
+
+The last shadow reduction was too modest. Make the existing cast shadows behind the N and golden apostrophe visibly much fainter now: remove roughly two thirds of the remaining shadow contrast. Aim for just a whisper of blue contact shading, with the letter almost flush against the background. In particular, lift the dark patches below both bottom serifs, to the right of the right stem, inside both negative spaces, and behind the golden apostrophe so they are very close to the surrounding navy background. Keep any residual shadow very short, soft and transparent. No dark black pockets, no large dark outline.
+
+Preserve the exact monogram contours, size, placement, spacing, golden apostrophe shape, cyan-to-blue gradient, three blue stripes, three luminous dots, existing glossy highlights, and gently rounded edges. Keep the soft background blue illumination. Do not reduce letter saturation or wash out the artwork. Do not change any foreground shape, color, texture or ornament. This should still have the accepted gloss, but almost no cast-shadow weight.
+
+Output one opaque 1024x1024 square icon with the same full-bleed background. No rounded mask, border, mockup or comparison.

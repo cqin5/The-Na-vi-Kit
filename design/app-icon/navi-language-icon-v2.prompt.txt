@@ -1,0 +1,16 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v1.png
+
+Use case: logo-brand refinement / precise-object-edit
+Asset: refined 1024x1024 iOS app icon for a Na'vi language and culture dictionary.
+
+INPUT IMAGE is the accepted design direction. PRESERVE its identity: one softly curved serif capital N with a separate typographic right apostrophe, pale ice-cyan on an opaque deep blue background. Refine the SAME MARK, do not redesign it.
+
+Make these carefully controlled improvements:
+1. Enlarge the main N by approximately 12 percent for better home-screen readability. Keep its graceful, rounded bracketed serifs and organically flowing diagonal, but slim the heavy diagonal by about 8 percent relative to the stems, and open the narrow internal curves. Balance the top and bottom terminals so the form feels purpose-drawn, calm, and precise.
+2. Make the apostrophe about 23 percent smaller than the reference, with a shorter, more purposeful taper. Preserve its curved typographic shape. Its top should sit just above the N cap height, its bottom no lower than the top quarter of the N. Bring it closer to the N with a clean intentional gap, approximately half the width of the right vertical stem. The N remains unmistakably the hero.
+3. Optically center the whole N-apostrophe composition. The mark should fill roughly 64 percent of the canvas width, with N cap-to-baseline height about 54 percent of the canvas. Ample consistent breathing room, safe margins.
+4. Clean the artwork to impeccably smooth, near-flat graphic shapes. No surface grain or texture. Elegant pale aqua-cyan letterform with only the faintest broad color variation, no glow, no shadows, no bevel or dimensional extrusion. Full-bleed UNIFORM deep blue-teal navy background approximately #072D47. Main mark approximately #A5EEF4.
+
+Invariants: one readable capital N and one right apostrophe; same soft organic serif personality as the reference; blue family retained; no imagery, ornaments or additional motifs. No faces, eyes, plants, tribal marks, fantasy glyphs, film references, extra words. Avoid making it conventional Times New Roman, avoid sharp needle serifs or bulbous decorative tails.
+Output exactly ONE final square icon, not a comparison board or mockup. Opaque background reaches all four corners; no rounded square mask, border or outer canvas.

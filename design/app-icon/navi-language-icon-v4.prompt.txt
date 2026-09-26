@@ -1,0 +1,21 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v2.png
+
+Use case: precise-object-edit
+Asset: refined iOS app icon for Na'vi language and culture, with a recognizable yet restrained Na'vi visual influence AT PHONE ICON SIZE.
+
+REFERENCE IMAGE is the approved N’ monogram. Preserve its exact capital N silhouette, soft organic serif curves, stroke proportions, separate apostrophe silhouette, spacing, overall scale, and placement. Keep the same deep blue full-bleed background. We are editing color and a few internal graphic markings ONLY.
+
+The previous attempt used tiny pale dots on a nearly white N, which vanished at 60px. Correct that. The Na'vi character of this design must read from BOLD AREAS OF COLOR and a FEW SIMPLE MARKINGS, not microscopic detail.
+
+Create one polished version:
+- Recolor the N from pale flat white to luminous saturated turquoise/cyan blue, transitioning gently from bright clear turquoise across its top and upper-left to richer azure blue in its lower-right. Keep the whole N bright enough against the navy backdrop. Broad smooth color, impeccably clean near-flat graphic style, no plastic or beveled 3D.
+- Integrate exactly THREE broad, smoothly curved, tapered darker-blue stripe accents WITHIN the N's existing silhouette: two short, flowing bands across the thick upper-left shoulder and one across the lower-right diagonal near its join. Subtle organic Na'vi-inspired markings, designed like elegant graphic inlays, not realistic skin texture. They must be thick enough to remain visible at 60px: approximately 25-40px wide on the 1024px master, at least a few pixels wide when downscaled. Not too many bands; preserve all contours and keep most of the N open and luminous.
+- Add a small arc of THREE ice-blue/white bioluminescent dots, each approximately 18-22px in diameter, within the blue lower-right portion of the N. Enough value contrast to read against the blue; very controlled glow, no fuzzy large halo.
+- Keep the apostrophe's exact shape, but use a warm honey-gold/amber fill as a SINGLE small color accent. This is only punctuation, not an eye. No iris, pupil, eyelids or eye imagery.
+- Keep the background quiet and dark, no particles or scene.
+
+Overall impression: a beautiful sophisticated N’ typographic app brand first, with a clear blue-and-gold Na'vi sensibility that survives at 60px. More identifiable than an almost-white generic N, still restrained and elegant. Excellent small-size readability.
+
+Strict avoid: faces, creatures, heads, ears, eyes, movie poster imagery, Avatar film-title font, foliage, trees, seeds, fake tribal glyphs, dense patterns, photoreal skin, decorative speckles everywhere, neon tubes, lens flare, hard shine, bevel, extra text. Do not redesign or deform the letterforms. Do not add an icon tile, border or surrounding canvas.
+Output exactly one opaque 1024x1024 square, full-bleed background reaching all four corners, no rounded-corner mask, no mockup.

@@ -1,0 +1,13 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v5.png
+
+Use case: precise-object-edit
+Asset: subtle shadow refinement of the attached user-approved Na'vi app icon.
+
+Make ONE small change only: lighten and soften the existing cast shadows behind the N and the golden apostrophe. The user likes the current dimensional design but finds the shadows slightly too skeuomorphic.
+
+Reduce the shadow darkness/contrast by about 40 percent, retaining a very faint blue-toned contact shadow. In particular, lighten the dark areas just under the bottom serifs, beside the inner letter curves, and behind the apostrophe. Reduce the shadow's spread/offset slightly so the mark feels closer to the background. The background should remain gently continuous around the glyph, with no dark black pockets. Keep a little separation and depth; do not remove the shadow entirely.
+
+PRESERVE EVERYTHING ELSE: exact N’ outlines, size, location, spacing, cyan-to-blue colors, three dark-blue stripes, three pale dots, golden apostrophe, glossy highlights, fine rounded edges, and the subtle blue background illumination. Do not redesign, recolor, flatten the letter completely, increase the gloss, add effects, or change any shapes. Keep the highlights as they are; just make the shadows quieter.
+
+Output exactly one 1024x1024 opaque square app icon, full-bleed to all four corners, no rounded tile, border, mockup or comparison.

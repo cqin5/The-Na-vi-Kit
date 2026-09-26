@@ -1,0 +1,19 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v4.png
+
+Use case: precise-object-edit / lighting finish
+Asset: polished iOS app icon, 1024x1024.
+
+The attached image is the USER-APPROVED FINAL DESIGN. They love this design and request ONLY a little sheen and dimensionality. Preserve the exact silhouette, geometry, composition, proportions, position, blue-to-cyan palette, THREE dark-blue stripe shapes and locations, THREE light dots and locations, and the golden apostrophe. This is a careful material-and-light pass over the same artwork. Do not redesign any element.
+
+Add a restrained premium satin-gloss finish:
+- Make the N feel like a very shallow raised piece of smooth satin enamel. Keep its face broad and nearly flat. Use a very small softly rounded edge with a thin cyan highlight on upper-left-facing edges and slightly deeper blue on lower-right-facing edges. The apparent depth should be only about 6-9 pixels on a 1024-pixel image: enough to feel tactile, never thick extrusion.
+- A broad, soft, controlled specular highlight from the upper left gently rolls across the cyan part of the N. It should preserve saturation and all the stripes. No giant white patch, no sharp diagonal reflection band, no glass transparency, no chrome.
+- Keep the dark-blue markings flush with the letter surface, like colored enamel inlays. Preserve their readability. Keep all three luminous dots in their original size and positions, with just a whisper of soft light.
+- Give the golden apostrophe the SAME shallow rounded satin finish and lighting direction. Preserve its shape and warm honey-gold color. Add one modest pale-gold highlight; no metallic flakes or eye-like features.
+- Add a small, soft, low-opacity shadow directly behind and slightly below/right of the monogram and apostrophe, so they sit a little above the background. No long cast shadow, no floating object effect.
+- Keep the full-bleed deep navy background, adding ONLY a very subtle broad blue-teal illumination behind the upper-middle part of the mark and gently darker outer edges. Smooth, quiet, no visible spotlight circle, no raised tile, no background texture or scenery.
+
+Target: polished, quietly dimensional, elegant and contemporary, with the same instantly readable N’ identity at phone home-screen size. A little more tactile and luminous than the input, not a flashy 3D redesign.
+
+Strict constraints: preserve ALL shapes, stroke weights, exact layout, stripe pattern, three dots and spacing. Do not add any new symbols, text, faces, eyes, particles, starbursts, lens flare, film imagery, framing, bevelled app-tile border, or rounded-corner mask. No heavy gloss, no toy plastic, no gem facets, no exaggerated extrusion. Background must fill the entire opaque square all the way into all four corners. Exactly one finished icon, no mockup or comparison sheet.

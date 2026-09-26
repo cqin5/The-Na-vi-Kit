@@ -1,0 +1,18 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v4.png (flat approved base)
+
+Use case: precise-object-edit
+Starting image: the attached FLAT approved N’ icon, with NO DROP SHADOW. Use this shadow-free master as the starting point, not a raised or shadowed version.
+
+User wants tasteful gloss but only the faintest conceivable depth. Begin at ZERO shadow. The finished icon should appear flush with the background. Gloss is a reflection on the colored face, not a reason to make the letter float.
+
+Preserve EXACTLY the attached N’ shapes, size, placement, three darker-blue markings, three light dots, cyan-to-blue color scheme, gold apostrophe and dark navy background.
+
+Apply ONLY:
+1. A soft satin reflection INSIDE the top-left part of the N and the top of the gold apostrophe. A narrow soft pale-cyan/pale-gold highlight on the top-facing edge, with broad subtle tonal variation within the existing colored face. Smooth, beautiful and restrained. No bulbous bevel, no visible extruded side wall. Most of the letter remains the current graphic design.
+2. For the sole depth cue, an almost imperceptible 1-pixel cool-blue contact edge at 3% opacity immediately touching the lowest edges. No offset, no blur extending beyond 1 pixel. It must be effectively invisible at normal app icon size. If that cannot be rendered subtly, OMIT IT and favor no shadow.
+3. An extremely gentle broad illumination within the navy background, NOT shaped like the letter and not creating darkness behind it.
+
+CRITICAL: NO VISIBLE CAST SHADOW ANYWHERE. No dark patch under the lower serifs. No dark outline inside the N openings. No shadow behind the apostrophe. No black gaps around the letter. No directional drop shadow, no large blurred shadow, no floating emblem. Background tones immediately outside all glyph contours should match the adjacent background naturally. Appearance approximately 98% flat with 2% depth from reflected light. The sheen should be visible; the shadow should not.
+
+Do not add any text, motif, pattern, dots, texture, border or mockup. No rounded-square tile. Output one finished opaque square 1024x1024 image, background filling all four corners.

@@ -1,0 +1,13 @@
+Generated with the built-in imagegen tool.
+
+Use case: logo-brand
+Asset: one refined iOS app icon for Na'vi, a language dictionary and keyboard.
+Core identity: Na'vi LANGUAGE AND CULTURE. This is a language tool, not a movie companion. The design must be typographic, sophisticated, clear and approachable.
+
+Design a bold original capital N monogram accompanied by a small apostrophe at its upper right. The N is the clear main symbol, instantly readable. Its silhouette is carefully customized: substantial rounded strokes with gently organic inner curves, the diagonal connection flowing seamlessly between two upright stems. The little apostrophe is a simple tapered curved typographic stroke. These are letterforms, NOT leaves or plants. The apostrophe should be visually integrated into the composition, not resemble a star or decorative object.
+The monogram is softly luminous ice-blue/cyan with very subtle tonal depth, almost flat and tactile, crisp edges. Use a quiet, timeless graphic brand design suitable for a premium language app. No bevel, chrome, plastic, realistic light effects or dramatic glow. The letterform and negative spaces do all the work.
+
+Composition: bold balanced N and apostrophe together occupy 60% of the square width and 58% of its height, centered with ample even margins. The single background is a full-bleed uniform deep blue-teal navy. The palette quietly acknowledges the cultural world; there are no illustrative movie references.
+ABSOLUTELY NO faces, eyes, mascots, animals, ears, movie characters, film imagery, floating seeds, jellyfish, plants, feathers, forest scenes, bioluminescent dots, fantasy runes, tribal ornaments or decorative texture. Do not invent a Na'vi alphabet. No other text. No gradients on background. No shadows or containers around the icon.
+The only text is the custom monogram "N’".
+Output: exactly ONE final opaque SQUARE app icon, 1024 by 1024, artwork fills entire canvas, solid background all the way into every corner, no rounded tile, no frame, no mockup, no contact sheet.

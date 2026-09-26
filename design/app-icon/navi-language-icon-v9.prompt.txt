@@ -1,0 +1,18 @@
+Generated with the built-in imagegen tool.
+Reference: navi-language-icon-v8.png
+Accepted after optical balance review at small size. Image generation approximates the requested position; this is not a pixel-exact translation.
+
+Precise layout correction. Edit the attached approved icon. Keep the entire original design exactly as it is and move the N and apostrophe TOGETHER only a VERY SMALL distance right. No redesign or restyling.
+
+Use these NORMALIZED POSITIONS to place the group, not your own idea of geometric centering:
+- Current leftmost foreground edge: 19.1% of canvas width.
+- Required new leftmost foreground edge: 21.8% of canvas width.
+- Current rightmost apostrophe edge: 82.0% of canvas width.
+- Required new rightmost apostrophe edge: 84.7% of canvas width.
+- The foreground's width stays 62.9% of the canvas.
+This is a translation of ONLY 2.7% of the canvas width (28 pixels if the square is 1024px). Do not move it farther. In particular do not move the leftmost edge to 26% or the rightmost edge to 89%: that would be much too far. Optical balance requires this small offset, not centering the big N by itself.
+
+Preserve all original vertical coordinates: top of the N near 24.0% of canvas height, its bottom near 75.2%, apostrophe top near 22.5%. Preserve exact scale, letterform curves, spacing, pale highlight, near-flat finish, blue stripes, three pale dots, and warm golden apostrophe. No visible cast shadows. Keep the original dark navy background and faint illumination stationary. No new light effects, textures, border, words or objects.
+
+Only relocate the original drawing rigidly, seamlessly restoring the existing background in the vacated narrow strip. Final result must look virtually identical to the reference except for the small 28/1024 rightward nudge.
+Output one full-bleed opaque square icon.

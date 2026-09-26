@@ -1,0 +1,129 @@
+{
+  "source": "design/app-icon/navi-language-icon-v9.png",
+  "source_sha256": "20342618f5b62adc370b8a89770696b1ddcefa334dbe9dc0aa24a6deecf7266d",
+  "catalog": "Na'vi/Assets.xcassets/AppIcon.appiconset",
+  "slots": 19,
+  "files": [
+    {
+      "name": "Icon-App-20x20@1x.png",
+      "pixels": [
+        20,
+        20
+      ],
+      "sha256": "f7016d35362e92a24b83b56bbe6a034af796cd10ecff158655341b8dabfc7e41"
+    },
+    {
+      "name": "Icon-App-20x20@2x.png",
+      "pixels": [
+        40,
+        40
+      ],
+      "sha256": "2a56816c61b54da5ed1ece6cee8082b69d4729344b93ab3816faf51b9903c3d4"
+    },
+    {
+      "name": "Icon-App-20x20@3x.png",
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "83a0f3c624baa1e3874a9ec4bdaf9e69c32eb4a290a8d728ed991e399672ad27"
+    },
+    {
+      "name": "Icon-App-29x29@1x.png",
+      "pixels": [
+        29,
+        29
+      ],
+      "sha256": "cfa0f9a1a979dae164e5e0fdd3f60db42b13319a7e9c1b8aceafdb4e2d5774bc"
+    },
+    {
+      "name": "Icon-App-29x29@2x.png",
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "df8d8fe8fefe10e797d1102a67bcda05f15a2a6bb6cc4afe61fe651dcd7839d4"
+    },
+    {
+      "name": "Icon-App-29x29@3x.png",
+      "pixels": [
+        87,
+        87
+      ],
+      "sha256": "ff289142daaf1a8b54d3b28c42ff2c97ea06acc059953d62fdb86500933fe693"
+    },
+    {
+      "name": "Icon-App-40x40@1x.png",
+      "pixels": [
+        40,
+        40
+      ],
+      "sha256": "2a56816c61b54da5ed1ece6cee8082b69d4729344b93ab3816faf51b9903c3d4"
+    },
+    {
+      "name": "Icon-App-40x40@2x.png",
+      "pixels": [
+        80,
+        80
+      ],
+      "sha256": "ba264b37dad2603d2724de5dc9ad56e311e5e1f0a2d4548e88974f920aa23940"
+    },
+    {
+      "name": "Icon-App-40x40@3x.png",
+      "pixels": [
+        120,
+        120
+      ],
+      "sha256": "08f169e3ef55e7a419290fd23f98a45d8c73550dc4e283a793b878e1a95d5940"
+    },
+    {
+      "name": "Icon-App-60x60@2x.png",
+      "pixels": [
+        120,
+        120
+      ],
+      "sha256": "08f169e3ef55e7a419290fd23f98a45d8c73550dc4e283a793b878e1a95d5940"
+    },
+    {
+      "name": "Icon-App-60x60@3x.png",
+      "pixels": [
+        180,
+        180
+      ],
+      "sha256": "056915847c8d89096c0ede4609aa58d7aa0c40d80eda427573624bcde69c640e"
+    },
+    {
+      "name": "Icon-App-76x76@1x.png",
+      "pixels": [
+        76,
+        76
+      ],
+      "sha256": "dca77e0d6c77a576e841eee2f1d57c804576d749bcd42b764e910fdc52a3acd0"
+    },
+    {
+      "name": "Icon-App-76x76@2x.png",
+      "pixels": [
+        152,
+        152
+      ],
+      "sha256": "f23858f988d10c13ef88f9247fb85763faee739ea266415b036e359d8bec949a"
+    },
+    {
+      "name": "Icon-App-83.5x83.5@2x.png",
+      "pixels": [
+        167,
+        167
+      ],
+      "sha256": "ef04d86ff69285cb864fe81b7245d25a7c558ec3c193ed23044465cf6b6a7bf8"
+    },
+    {
+      "name": "iTunesArtwork@2x.png",
+      "pixels": [
+        1024,
+        1024
+      ],
+      "sha256": "20342618f5b62adc370b8a89770696b1ddcefa334dbe9dc0aa24a6deecf7266d"
+    }
+  ],
+  "validation": "All PNGs are exact slot dimensions, 8-bit RGB, without alpha or transparency. ZIP matches active catalog byte for byte."
+}
