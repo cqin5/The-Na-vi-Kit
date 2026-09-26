@@ -311,6 +311,11 @@ the removed blur layer. Because taps were not registering (§7.1), that design n
 reached anyone in working form. The keys use the palette of the current App Store
 release again; styling them for the iOS 26 keyboard is listed in §10.2.
 
+The Shift and Delete keys drew their symbols in white in both appearances. On the
+grey special keys of the light palette that is a contrast of about 2:1, so at rest
+both keys looked blank. In light mode their symbols are now black, as on the system
+keyboard.
+
 ### 7.6 Swift
 
 - `Key` implemented `Hashable` through a stored `hashValue` fed by a global mutable
@@ -332,6 +337,53 @@ The keyboard decided whether to draw a globe key by comparing the screen's pixel
 height against `2436`, the iPhone X. That matched no later device and, on the
 iPhone X itself, removed the only way to switch keyboards. Every page now carries
 a globe key, as a custom keyboard requires.
+
+### 7.8 Crash in an empty field
+
+In a field that capitalizes every word, such as a name field, the keyboard turns
+Shift on according to the character before the cursor. It read that character by
+stepping back from the end of the text, which traps when a field reports its empty
+text as an empty string rather than as no text. It now reads the text's last
+character, which is simply absent when the text is empty.
+
+### 7.9 Keyboard height
+
+The keyboard reserved 30 points at the top for a banner it never creates, so an
+empty strip sat above the keys. It no longer reserves the space.
+
+Rotation set the new height only in `viewWillTransition(to:with:)`, although a note
+in the controller records that none of the `UIContentContainer` methods, which
+include that one, are called for it. The height is now also set during layout, once
+for each change of orientation, so a landscape keyboard is not left at its portrait
+height.
+
+### 7.10 Key clicks
+
+Key clicks played a system sound through AudioToolbox, which a keyboard can do only
+with Full Access. This keyboard does not request Full Access, so its Keyboard
+Clicks option never made a sound. Clicks now use `UIDevice.playInputClick()`, which
+needs no Full Access and plays only when keyboard clicks are also on in the
+system's Sounds settings. The note in the keyboard's settings saying clicks need
+Full Access is removed.
+
+### 7.11 Key caps
+
+Whether the letter keys show capitals was computed three different ways, so the key
+caps changed case depending on whether a keypress, a mode change or a relayout had
+run last. All three now follow the Allow Lowercase Key Caps setting: capitals while
+it is off, which is the default, and the Shift state while it is on.
+
+### 7.12 Settings panel
+
+The key that opens the keyboard's settings panel was commented out of the layout,
+so Auto-Capitalization, the “.” Shortcut, Keyboard Clicks and Allow Lowercase Key
+Caps were fixed at their defaults. The key is back on every page. The panel is the
+keyboard's one remaining nib, `DefaultSettings.xib`.
+
+§7.8 to §7.12 and the Shift and Delete colours in §7.5 were first fixed on the July
+2026 recovery branch, `fix/ios26-uiux-bugs`, and carried over when that branch was
+merged. None of them has been tried on a device: a custom keyboard cannot be used in
+the simulator until it is enabled in Settings, which these checks did not do.
 
 ---
 
@@ -367,7 +419,7 @@ together with the entries that still listed them in Xcode's project navigator:
 
 Every Swift file in the repository is now compiled into a target, and the only
 Interface Builder file left is the keyboard's settings panel, `DefaultSettings.xib`
-(§10.3).
+(§7.12).
 
 ---
 
@@ -387,8 +439,8 @@ pre-flight checks need only Python and cover:
 - **App Store icon** — 1024×1024 with no alpha channel.
 - **Target membership** — every file a target compiles exists on disk, and any
   Swift file belonging to no target is listed.
-- **Deprecated and legacy API** — the patterns in §5, plus debug prints, enforced
-  against compiled sources only.
+- **Deprecated and legacy API** — the patterns in §5, debug prints, and the
+  keyboard mistakes in §7.8 to §7.10, enforced against compiled sources only.
 - **Keyboard touch routing** — `ForwardingView` still limits itself to controls
   (§7.1).
 - **Interface Builder files** — which storyboards and nibs each target bundles.
@@ -397,8 +449,9 @@ pre-flight checks need only Python and cover:
   configuration (§6.5).
 
 All checks pass. Run against earlier revisions, or with the relevant mistake
-reintroduced, the rules report every issue described in §2.5, §7 and the life-cycle
-and launch-screen section, and every bundled file listed in §6.5. The project
+reintroduced, the rules report every issue described in §2.5, §7.1, §7.2, §7.8 to
+§7.10 and the life-cycle and launch-screen section, and every bundled file listed in
+§6.5. The project
 builds with Xcode 27, and the app runs in the iOS 26.5 simulator; running on a
 device has not been performed as part of this change.
 
@@ -443,11 +496,6 @@ to the Swift 6 language mode is a self-contained change.
   `the-navi-kit` Firebase project, if nothing else uses it — closes this off more
   completely than rotating it. Deleting the project also retires its Realtime
   Database, which only its security rules protect, with or without a key.
-- **The keyboard's settings panel is unreachable.** Its key is commented out of
-  the layout, so its options are fixed at their defaults, and its key-click option
-  would also need the Full Access permission, which the keyboard does not request.
-  The panel is the one remaining nib (`DefaultSettings.xib`); it is either worth
-  restoring or worth removing.
 - **Tests.** The project has no test target. A Swift Testing target covering
   dictionary decoding, grouping and `NDDictionary.filtered(_:matching:)` would guard
   the logic in §6.1 and §6.3.

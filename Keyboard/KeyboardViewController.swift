@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AudioToolbox
 
 let metrics: [String:Double] = [
     "topBanner": 30
@@ -205,13 +204,21 @@ class KeyboardViewController: UIInputViewController {
     }
     
     var lastLayoutBounds: CGRect?
+    var lastLayoutWasPortrait: Bool?
     override func viewDidLayoutSubviews() {
         if view.bounds == CGRect.zero {
             return
         }
-        
+
         self.setupLayout()
-        
+
+        // A rotation does not always reach viewWillTransition(to:with:) here (see
+        // the bug note below), so the height is also set once per orientation.
+        if self.isPortraitLayout != self.lastLayoutWasPortrait {
+            self.lastLayoutWasPortrait = self.isPortraitLayout
+            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: false)
+        }
+
         let orientationSavvyBounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.canonicalKeyboardHeight(withTopBanner: false))
         
         if (lastLayoutBounds != nil && lastLayoutBounds == orientationSavvyBounds) {
@@ -247,7 +254,8 @@ class KeyboardViewController: UIInputViewController {
         super.viewWillAppear(animated)
 
         self.bannerView?.isHidden = true
-        self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
+        // The banner is never created, so no room is reserved for it.
+        self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: false)
         self.refreshAppearance()
     }
 
@@ -263,7 +271,7 @@ class KeyboardViewController: UIInputViewController {
 
         coordinator.animate(alongsideTransition: { [weak self] _ in
             guard let self = self else { return }
-            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
+            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: false)
         }, completion: { [weak self] _ in
             // optimization: ensures quick mode and shift transitions
             self?.layout?.keyPool.forEach { $0.shouldRasterize = false }
@@ -622,7 +630,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func updateKeyCaps(_ uppercase: Bool) {
-        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? !uppercase : uppercase)
+        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
         self.layout?.updateKeyCaps(false, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
     }
     
@@ -638,7 +646,7 @@ class KeyboardViewController: UIInputViewController {
         self.shiftWasMultitapped = false
         
         let uppercase = self.shiftState.uppercase()
-        let characterUppercase = uppercase// (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
+        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
         self.layout?.layoutKeys(mode, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
         
         self.setupKeys()
@@ -747,8 +755,9 @@ class KeyboardViewController: UIInputViewController {
             case .none:
                 return false
             case .words:
-                if let beforeContext = documentProxy.documentContextBeforeInput {
-                    let previousCharacter = beforeContext[beforeContext.index(before: beforeContext.endIndex)]
+                // A field can report empty text before the cursor as "" rather
+                // than nil, so the last character is read with `last`.
+                if let previousCharacter = documentProxy.documentContextBeforeInput?.last {
                     return self.characterIsWhitespace(previousCharacter)
                 }
                 else {
@@ -798,16 +807,15 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
-    // this only works if full access is enabled
+    // The system key click needs no Full Access, unlike a system sound played
+    // through AudioToolbox. It plays because this controller adopts
+    // UIInputViewAudioFeedback (at the end of this file).
     @objc func playKeySound() {
         if !UserDefaults.standard.bool(forKey: kKeyboardClicks) {
             return
         }
-        
-        DispatchQueue.global(qos: .userInteractive).async {
-            AudioServicesPlaySystemSound(1104)
-        }
-                
+
+        UIDevice.current.playInputClick()
     }
     
     //////////////////////////////////////
@@ -836,4 +844,10 @@ class KeyboardViewController: UIInputViewController {
         settingsView.backButton?.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: UIControl.Event.touchUpInside)
         return settingsView
     }
+}
+
+// Lets UIDevice.current.playInputClick() play key clicks, which it does only for
+// an input view that asks for them.
+extension KeyboardViewController: UIInputViewAudioFeedback {
+    var enableInputClicksWhenVisible: Bool { return true }
 }

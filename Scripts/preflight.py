@@ -73,6 +73,9 @@ DEPRECATED_API = {
     r"\bvar hashValue\b": "a hashValue requirement — implement hash(into:)",
     r"\bUIDevice\.current\.userInterfaceIdiom\b": "UIDevice idiom — use the trait collection",
     r"\bkeyboardFrameEndUserInfoKey\b": "manual keyboard frame handling — use view.keyboardLayoutGuide",
+    r"\bAudioServicesPlaySystemSound\b": "a system sound, which needs Full Access the keyboard does not request — use UIDevice.current.playInputClick()",
+    r"withTopBanner:\s*true": "room for the top banner, which is never shown, so an empty strip sits above the keys",
+    r"\[(\w+)\.index\(before: \1\.endIndex\)\]": "the character before endIndex, which traps on an empty string — use .last",
     r"^\s*print\(": "a debug print in shipping code",
 }
 

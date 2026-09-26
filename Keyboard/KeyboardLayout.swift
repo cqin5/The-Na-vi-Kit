@@ -517,14 +517,14 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         Key.KeyType.shift:
             key.color = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
             key.downColor = (darkMode ? self.globalColors.darkModeShiftKeyDown : self.globalColors.lightModeRegularKey)
-            key.textColor = self.globalColors.darkModeTextColor
+            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
             key.downTextColor = self.globalColors.lightModeTextColor
         case
         Key.KeyType.backspace:
             key.color = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
             // TODO: actually a bit different
             key.downColor = self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
-            key.textColor = self.globalColors.darkModeTextColor
+            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
             key.downTextColor = (darkMode ? nil : self.globalColors.lightModeTextColor)
         case
         Key.KeyType.modeChange:
