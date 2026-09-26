@@ -438,35 +438,17 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     // if pool is disabled, always returns a unique key view for the corresponding key model
     func pooledKey(key aKey: Key, model: Keyboard, frame: CGRect) -> KeyboardKey? {
         if !type(of: self).shouldPoolKeys {
-            var p: Int!
-            var r: Int!
-            var k: Int!
-            
             // TODO: O(N^2) in terms of total # of keys since pooledKey is called for each key, but probably doesn't matter
-            var foundKey: Bool = false
-            for (pp, page) in model.pages.enumerated() {
-                for (rr, row) in page.rows.enumerated() {
-                    for (kk, key) in row.enumerated() {
-                        if key == aKey {
-                            p = pp
-                            r = rr
-                            k = kk
-                            foundKey = true
-                        }
-                        if foundKey {
-                            break
-                        }
+            var id = ""
+            search: for (p, page) in model.pages.enumerated() {
+                for (r, row) in page.rows.enumerated() {
+                    for (k, key) in row.enumerated() where key == aKey {
+                        id = "p\(p)r\(r)k\(k)"
+                        break search
                     }
-                    if foundKey {
-                        break
-                    }
-                }
-                if foundKey {
-                    break
                 }
             }
-            
-            let id = "p\(p)r\(r)k\(k)"
+
             if let key = self.nonPooledMap[id] {
                 return key
             }
