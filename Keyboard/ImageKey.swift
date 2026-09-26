@@ -8,57 +8,59 @@
 
 import UIKit
 
+/// A key that can show an SF Symbol, such as Shift's arrow, in place of text.
 class ImageKey: KeyboardKey {
-    
-    var image: UIImageView? {
-        willSet {
-            let anImage = image
-            anImage?.removeFromSuperview()
-        }
+
+    /// The system keyboard draws its Shift and Delete symbols at this size.
+    static let symbolPointSize: CGFloat = 19
+
+    var symbolName: String? {
         didSet {
-            if let imageView = image {
-                self.addSubview(imageView)
-                imageView.contentMode = UIView.ContentMode.scaleAspectFit
-                self.redrawImage()
-                updateColors()
+            if symbolName != oldValue {
+                self.updateSymbol()
             }
         }
     }
-    
-    override func updateColors() {
-        super.updateColors()
-        
-        let switchColors = self.isHighlighted || self.isSelected
-        
-        if switchColors {
-            if let downTextColor = self.downTextColor {
-                self.image?.tintColor = downTextColor
-            }
-            else {
-                self.image?.tintColor = self.textColor
-            }
+
+    let symbolView = UIImageView()
+
+    private var symbolScale: CGFloat = 0
+
+    override init() {
+        super.init()
+
+        self.symbolView.contentMode = UIView.ContentMode.center
+        self.symbolView.isUserInteractionEnabled = false
+        self.addSubview(self.symbolView)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("NSCoding not supported")
+    }
+
+    func updateSymbol() {
+        self.symbolScale = self.typeScale
+
+        if let symbolName = self.symbolName {
+            let configuration = UIImage.SymbolConfiguration(pointSize: ImageKey.symbolPointSize * self.symbolScale, weight: .regular)
+            self.symbolView.image = UIImage(systemName: symbolName, withConfiguration: configuration)
         }
         else {
-            self.image?.tintColor = self.textColor
+            self.symbolView.image = nil
         }
     }
-    
-    override func refreshShapes() {
-        super.refreshShapes()
-        self.redrawImage()
-    }
-    
-    func redrawImage() {
-        if let image = self.image {
-            let imageSize = CGSize(width: 20, height: 20)
-            let imageOrigin = CGPoint(
-                x: (self.bounds.width - imageSize.width) / CGFloat(2),
-                y: (self.bounds.height - imageSize.height) / CGFloat(2))
-            var imageFrame = CGRect.zero
-            imageFrame.origin = imageOrigin
-            imageFrame.size = imageSize
-            
-            image.frame = imageFrame
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        if self.symbolName != nil && self.symbolScale != self.typeScale {
+            self.updateSymbol()
         }
+        self.symbolView.frame = self.bounds
+    }
+
+    override func updateColors() {
+        super.updateColors()
+        self.symbolView.tintColor = self.currentTextColor
     }
 }

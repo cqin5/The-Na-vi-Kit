@@ -12,7 +12,7 @@
 		A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300042F0000000000CC04 /* GrammarSearch.swift */; };
 		A6E300072F0000000000CC07 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300062F0000000000CC06 /* TranslateView.swift */; };
 		A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300082F0000000000CC08 /* WordFormRow.swift */; };
-		A6E300032F0000000000CC03 /* NaviGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = A6E300022F0000000000CC02 /* NaviGrammar */; };
+		A6E300032F0000000000CC03 /* NaviGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 307AAC37208A4F6716BD2093 /* NaviGrammar */; };
 		A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */; };
 		A6E200062F0000000000BB06 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200052F0000000000BB05 /* DictionaryView.swift */; };
 		A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200032F0000000000BB03 /* KeyboardSetupView.swift */; };
@@ -2703,12 +2703,9 @@
 		A6BB17B5282A344A0071BD1E /* 7876.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3B282A34480071BD1E /* 7876.mp3 */; };
 		A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */; };
 		A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92061D1B32050030D414 /* DefaultSettings.swift */; };
-		A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92071D1B32050030D414 /* DefaultSettings.xib */; };
-		A6CB921D1D1B32050030D414 /* DirectionEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92081D1B32050030D414 /* DirectionEnum.swift */; };
 		A6CB921E1D1B32050030D414 /* ExtraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92091D1B32050030D414 /* ExtraView.swift */; };
 		A6CB921F1D1B32050030D414 /* ForwardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920A1D1B32050030D414 /* ForwardingView.swift */; };
 		A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920B1D1B32050030D414 /* ImageKey.swift */; };
-		A6CB92221D1B32050030D414 /* KeyboardConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920D1D1B32050030D414 /* KeyboardConnector.swift */; };
 		A6CB92231D1B32050030D414 /* KeyboardInputTraits.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920E1D1B32050030D414 /* KeyboardInputTraits.swift */; };
 		A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920F1D1B32050030D414 /* KeyboardKey.swift */; };
 		A6CB92251D1B32050030D414 /* KeyboardKeyBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92101D1B32050030D414 /* KeyboardKeyBackground.swift */; };
@@ -2716,7 +2713,7 @@
 		A6CB92271D1B32050030D414 /* KeyboardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92121D1B32050030D414 /* KeyboardModel.swift */; };
 		A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92131D1B32050030D414 /* KeyboardViewController.swift */; };
 		A6CB92291D1B32050030D414 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92141D1B32050030D414 /* Media.xcassets */; };
-		A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92161D1B32050030D414 /* Shapes.swift */; };
+		A6E300022F0000000000CC02 /* KeyboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300012F0000000000CC01 /* KeyboardToolbar.swift */; };
 		A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
 		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
 		A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924F1D1C92D60030D414 /* NDDictionary.swift */; };
@@ -5449,12 +5446,9 @@
 		A6BB0D3D282A34490071BD1E /* Eywa.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = Eywa.sketch; sourceTree = "<group>"; };
 		A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKeyboard.swift; sourceTree = "<group>"; };
 		A6CB92061D1B32050030D414 /* DefaultSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSettings.swift; sourceTree = "<group>"; };
-		A6CB92071D1B32050030D414 /* DefaultSettings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DefaultSettings.xib; sourceTree = "<group>"; };
-		A6CB92081D1B32050030D414 /* DirectionEnum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectionEnum.swift; sourceTree = "<group>"; };
 		A6CB92091D1B32050030D414 /* ExtraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraView.swift; sourceTree = "<group>"; };
 		A6CB920A1D1B32050030D414 /* ForwardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForwardingView.swift; sourceTree = "<group>"; };
 		A6CB920B1D1B32050030D414 /* ImageKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageKey.swift; sourceTree = "<group>"; };
-		A6CB920D1D1B32050030D414 /* KeyboardConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardConnector.swift; sourceTree = "<group>"; };
 		A6CB920E1D1B32050030D414 /* KeyboardInputTraits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInputTraits.swift; sourceTree = "<group>"; };
 		A6CB920F1D1B32050030D414 /* KeyboardKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKey.swift; sourceTree = "<group>"; };
 		A6CB92101D1B32050030D414 /* KeyboardKeyBackground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKeyBackground.swift; sourceTree = "<group>"; };
@@ -5462,7 +5456,7 @@
 		A6CB92121D1B32050030D414 /* KeyboardModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardModel.swift; sourceTree = "<group>"; };
 		A6CB92131D1B32050030D414 /* KeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		A6CB92141D1B32050030D414 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		A6CB92161D1B32050030D414 /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
+		A6E300012F0000000000CC01 /* KeyboardToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardToolbar.swift; sourceTree = "<group>"; };
 		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQNSHelper.swift; path = Keyboard/CQNSHelper.swift; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
@@ -8255,7 +8249,6 @@
 			isa = PBXGroup;
 			children = (
 				A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */,
-				A6CB92081D1B32050030D414 /* DirectionEnum.swift */,
 				A6CB92121D1B32050030D414 /* KeyboardModel.swift */,
 			);
 			name = Models;
@@ -8265,13 +8258,11 @@
 			isa = PBXGroup;
 			children = (
 				A6CB92061D1B32050030D414 /* DefaultSettings.swift */,
-				A6CB92071D1B32050030D414 /* DefaultSettings.xib */,
 				A6CB92091D1B32050030D414 /* ExtraView.swift */,
 				A6CB920B1D1B32050030D414 /* ImageKey.swift */,
-				A6CB920D1D1B32050030D414 /* KeyboardConnector.swift */,
 				A6CB920F1D1B32050030D414 /* KeyboardKey.swift */,
 				A6CB92101D1B32050030D414 /* KeyboardKeyBackground.swift */,
-				A6CB92161D1B32050030D414 /* Shapes.swift */,
+				A6E300012F0000000000CC01 /* KeyboardToolbar.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -8347,7 +8338,7 @@
 			);
 			name = "Na-vi";
 			packageProductDependencies = (
-				A6E300022F0000000000CC02 /* NaviGrammar */,
+				307AAC37208A4F6716BD2093 /* NaviGrammar */,
 			);
 			productName = "Na'vi";
 			productReference = A6AE8AF31D1AD43E00345E2E /* Eywa.app */;
@@ -8384,7 +8375,7 @@
 			);
 			mainGroup = A6AE8AEA1D1AD43E00345E2E;
 			packageReferences = (
-				A6E300012F0000000000CC01 /* XCLocalSwiftPackageReference "Packages/NaviGrammar" */,
+				B6431DB6BCDB07FE49DA9BB0 /* XCLocalSwiftPackageReference "Packages/NaviGrammar" */,
 			);
 			productRefGroup = A6AE8AF41D1AD43E00345E2E /* Products */;
 			projectDirPath = "";
@@ -8402,7 +8393,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */,
-				A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */,
 				A6CB92291D1B32050030D414 /* Media.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11107,12 +11097,10 @@
 				A6CB92231D1B32050030D414 /* KeyboardInputTraits.swift in Sources */,
 				A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */,
 				A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */,
-				A6CB922B1D1B32050030D414 /* Shapes.swift in Sources */,
+				A6E300022F0000000000CC02 /* KeyboardToolbar.swift in Sources */,
 				A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */,
-				A6CB92221D1B32050030D414 /* KeyboardConnector.swift in Sources */,
 				A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6CB92251D1B32050030D414 /* KeyboardKeyBackground.swift in Sources */,
-				A6CB921D1D1B32050030D414 /* DirectionEnum.swift in Sources */,
 				A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */,
 				A6CB92271D1B32050030D414 /* KeyboardModel.swift in Sources */,
 				A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */,
@@ -11412,14 +11400,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		A6E300012F0000000000CC01 /* XCLocalSwiftPackageReference "Packages/NaviGrammar" */ = {
+		B6431DB6BCDB07FE49DA9BB0 /* XCLocalSwiftPackageReference "Packages/NaviGrammar" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/NaviGrammar;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A6E300022F0000000000CC02 /* NaviGrammar */ = {
+		307AAC37208A4F6716BD2093 /* NaviGrammar */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NaviGrammar;
 		};

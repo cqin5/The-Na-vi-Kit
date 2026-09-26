@@ -8,11 +8,6 @@
 
 import UIKit
 
-let metrics: [String:Double] = [
-    "topBanner": 30
-]
-func metric(_ name: String) -> CGFloat { return CGFloat(metrics[name]!) }
-
 // TODO: move this somewhere else and localize
 let kAutoCapitalization = "kAutoCapitalization"
 let kPeriodShortcut = "kPeriodShortcut"
@@ -24,7 +19,10 @@ class KeyboardViewController: UIInputViewController {
     let backspaceDelay: TimeInterval = 0.5
     let backspaceRepeat: TimeInterval = 0.07
     
+    // Built in setupLayout(), once the system has said whether the keyboard needs
+    // its own globe key.
     var keyboard: Keyboard!
+    var keyboardIncludesGlobeKey: Bool = true
     var forwardingView: ForwardingView!
     var layout: KeyboardLayout?
     var heightConstraint: NSLayoutConstraint?
@@ -97,10 +95,9 @@ class KeyboardViewController: UIInputViewController {
             kAutoCapitalization: true,
             kPeriodShortcut: true,
             kKeyboardClicks: false,
-            kSmallLowercase: false
+            // Letters follow Shift, as on the system keyboard.
+            kSmallLowercase: true
         ])
-        
-        self.keyboard = defaultKeyboard()
         
         self.shiftState = .disabled
         self.currentMode = 0
@@ -172,6 +169,9 @@ class KeyboardViewController: UIInputViewController {
     var constraintsAdded: Bool = false
     func setupLayout() {
         if !constraintsAdded {
+            self.keyboardIncludesGlobeKey = self.needsInputModeSwitchKey
+            self.keyboard = defaultKeyboard(includesGlobeKey: self.keyboardIncludesGlobeKey)
+            
             // No background is drawn here: the system supplies the keyboard's
             // backdrop, which is Liquid Glass on iOS 26 and later.
             self.layout = type(of: self).layoutClass.init(model: self.keyboard, superview: self.forwardingView, layoutConstants: type(of: self).layoutConstants, globalColors: type(of: self).globalColors, darkMode: self.darkMode(), solidColorMode: self.solidColorMode())
@@ -189,6 +189,23 @@ class KeyboardViewController: UIInputViewController {
 
             self.constraintsAdded = true
         }
+    }
+    
+    /// Adds or removes the globe keys if the system changes its mind about them.
+    ///
+    /// iPhones without a Home button draw a globe key below the keyboard, and report
+    /// `needsInputModeSwitchKey` as false; a second globe key would be redundant.
+    func updateGlobeKeyIfNeeded() {
+        guard let layout = self.layout, self.needsInputModeSwitchKey != self.keyboardIncludesGlobeKey else {
+            return
+        }
+        
+        self.keyboardIncludesGlobeKey = self.needsInputModeSwitchKey
+        self.keyboard = defaultKeyboard(includesGlobeKey: self.keyboardIncludesGlobeKey)
+        layout.model = self.keyboard
+        
+        // lays the keys out again
+        self.lastLayoutBounds = nil
     }
 
     // only available after frame becomes non-zero
@@ -211,12 +228,13 @@ class KeyboardViewController: UIInputViewController {
         }
 
         self.setupLayout()
+        self.updateGlobeKeyIfNeeded()
 
         // A rotation does not always reach viewWillTransition(to:with:) here (see
         // the bug note below), so the height is also set once per orientation.
         if self.isPortraitLayout != self.lastLayoutWasPortrait {
             self.lastLayoutWasPortrait = self.isPortraitLayout
-            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: false)
+            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
         }
 
         let orientationSavvyBounds = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.canonicalKeyboardHeight(withTopBanner: false))
@@ -234,28 +252,27 @@ class KeyboardViewController: UIInputViewController {
             self.setupKeys()
         }
         
-        self.bannerView?.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: metric("topBanner"))
+        self.bannerView?.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.toolbarHeight)
         
         let newOrigin = CGPoint(x: 0, y: self.view.bounds.height - self.forwardingView.bounds.height)
         self.forwardingView.frame.origin = newOrigin
     }
     
-    override func loadView() {
-        super.loadView()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-//        if let aBanner = self.createBanner() {
-//            aBanner.hidden = true
-//            self.view.insertSubview(aBanner, belowSubview: self.forwardingView)
-//            self.bannerView = aBanner
-//        }
+        // The toolbar sits beneath the keys, so a popup from the top row can
+        // draw over it.
+        if let aBanner = self.createBanner() {
+            self.view.insertSubview(aBanner, belowSubview: self.forwardingView)
+            self.bannerView = aBanner
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.bannerView?.isHidden = true
-        // The banner is never created, so no room is reserved for it.
-        self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: false)
+        self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
         self.refreshAppearance()
     }
 
@@ -271,23 +288,11 @@ class KeyboardViewController: UIInputViewController {
 
         coordinator.animate(alongsideTransition: { [weak self] _ in
             guard let self = self else { return }
-            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: false)
+            self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
         }, completion: { [weak self] _ in
             // optimization: ensures quick mode and shift transitions
             self?.layout?.keyPool.forEach { $0.shouldRasterize = false }
         })
-    }
-
-    /// The width of the space the keyboard has to lay out in, in points.
-    ///
-    /// The host app sizes the input view, so its own bounds are the authority.
-    /// The window scene is only a fallback for the first layout pass, before the
-    /// view has been given a size.
-    private var availableWidth: CGFloat {
-        if self.view.bounds.width > 0 {
-            return self.view.bounds.width
-        }
-        return self.view.window?.windowScene?.screen.bounds.width ?? 0
     }
 
     /// Whether the keyboard is laying out in a portrait-shaped space.
@@ -298,13 +303,19 @@ class KeyboardViewController: UIInputViewController {
         return self.traitCollection.verticalSizeClass != .compact
     }
 
+    /// The height of the toolbar above the keys.
+    var toolbarHeight: CGFloat {
+        return (self.isPortraitLayout ? 36 : 32)
+    }
+
     func canonicalKeyboardHeight(withTopBanner: Bool) -> CGFloat {
         let isPad = self.traitCollection.userInterfaceIdiom == .pad
 
-        //TODO: hardcoded stuff
-        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(availableWidth >= 400 ? 226 : 216))
+        // On iPhone in portrait, four rows of 43-point keys spaced as on the
+        // system keyboard (see LayoutConstants).
+        let canonicalPortraitHeight = (isPad ? CGFloat(264) : CGFloat(214))
         let canonicalLandscapeHeight = (isPad ? CGFloat(352) : CGFloat(162))
-        let topBannerHeight = (withTopBanner ? metric("topBanner") : 0)
+        let topBannerHeight = (withTopBanner && self.bannerView != nil ? self.toolbarHeight : 0)
 
         return (isPortraitLayout ? canonicalPortraitHeight : canonicalLandscapeHeight) + topBannerHeight
     }
@@ -344,8 +355,6 @@ class KeyboardViewController: UIInputViewController {
                             keyView.addTarget(self, action: #selector(KeyboardViewController.shiftDoubleTapped(_:)), for: .touchDownRepeat)
                         case Key.KeyType.modeChange:
                             keyView.addTarget(self, action: #selector(KeyboardViewController.modeChangeTapped(_:)), for: .touchDown)
-                        case Key.KeyType.settings:
-                            keyView.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: .touchUpInside)
                         default:
                             break
                         }
@@ -438,6 +447,7 @@ class KeyboardViewController: UIInputViewController {
     func updateAppearances(_ appearanceIsDark: Bool) {
         self.layout?.solidColorMode = self.solidColorMode()
         self.layout?.darkMode = appearanceIsDark
+        self.layout?.returnKeyType = self.textDocumentProxy.returnKeyType ?? .default
         self.layout?.updateKeyAppearance()
         
         self.bannerView?.darkMode = appearanceIsDark
@@ -582,8 +592,6 @@ class KeyboardViewController: UIInputViewController {
                 case .locked:
                     self.shiftState = .disabled
                 }
-                
-                (sender.shape as? ShiftShape)?.withLock = false
             }
         }
     }
@@ -606,8 +614,6 @@ class KeyboardViewController: UIInputViewController {
                     case .locked:
                         self.shiftState = .disabled
                     }
-                    
-                    (sender.shape as? ShiftShape)?.withLock = false
                 }
             }
         }
@@ -689,7 +695,7 @@ class KeyboardViewController: UIInputViewController {
             self.bannerView?.isHidden = hidden
         }
     }
-    
+
     func setCapsIfNeeded() -> Bool {
         if self.shouldAutoCapitalize() {
             switch self.shiftState {
@@ -833,15 +839,17 @@ class KeyboardViewController: UIInputViewController {
     // a banner that sits in the empty space on top of the keyboard
     func createBanner() -> ExtraView? {
         // note that dark mode is not yet valid here, so we just put false for clarity
-        //return ExtraView(globalColors: self.dynamicType.globalColors, darkMode: false, solidColorMode: self.solidColorMode())
-        return nil
+        let toolbar = KeyboardToolbar(globalColors: type(of: self).globalColors, darkMode: false, solidColorMode: self.solidColorMode())
+        toolbar.settingsButton.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: .touchUpInside)
+        toolbar.dismissButton.addTarget(self, action: #selector(UIInputViewController.dismissKeyboard), for: .touchUpInside)
+        return toolbar
     }
     
     // a settings view that replaces the keyboard when the settings button is pressed
     func createSettings() -> ExtraView? {
         // note that dark mode is not yet valid here, so we just put false for clarity
         let settingsView = DefaultSettings(globalColors: type(of: self).globalColors, darkMode: false, solidColorMode: self.solidColorMode())
-        settingsView.backButton?.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: UIControl.Event.touchUpInside)
+        settingsView.backButton.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: UIControl.Event.touchUpInside)
         return settingsView
     }
 }

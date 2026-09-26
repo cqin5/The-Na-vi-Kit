@@ -8,117 +8,50 @@
 
 import UIKit
 
-// TODO: need to rename, consolidate, and define terms
+// Spacing measured from the iOS 26 system keyboard, in portrait on a 402-point-wide
+// iPhone. Landscape keeps the spacing the keyboard used before.
 class LayoutConstants: NSObject {
-    class var landscapeRatio: CGFloat { get { return 2 }}
+    // A layout at least this many times wider than it is tall is treated as
+    // landscape. Portrait phones reach about 2.1, landscape phones start near 4.
+    class var landscapeRatio: CGFloat { get { return 2.5 }}
     
-    // side edges increase on 6 in portrait
-    class var sideEdgesPortraitArray: [CGFloat] { get { return [3, 4] }}
-    class var sideEdgesPortraitWidthThreshholds: [CGFloat] { get { return [400] }}
+    class var sideEdgesPortrait: CGFloat { get { return 6.5 }}
     class var sideEdgesLandscape: CGFloat { get { return 3 }}
     
-    // top edges decrease on various devices in portrait
-    class var topEdgePortraitArray: [CGFloat] { get { return [12, 10, 8] }}
-    class var topEdgePortraitWidthThreshholds: [CGFloat] { get { return [350, 400] }}
-    class var topEdgeLandscape: CGFloat { get { return 6 }}
+    // above the first row, below the toolbar
+    class var topEdgePortrait: CGFloat { get { return 6 }}
+    class var topEdgeLandscape: CGFloat { get { return 4 }}
+    class var bottomEdge: CGFloat { get { return 3 }}
+    
+    class var rowGapPortrait: CGFloat { get { return 11 }}
+    class var rowGapLandscape: CGFloat { get { return 7 }}
+    class var keyGap: CGFloat { get { return 6 }}
+    
+    // Shift and Delete, and the keys in their place on the other pages, are this
+    // many times as wide as a letter key.
+    class var sideKeyWidthRatio: CGFloat { get { return 1.36 }}
+    // A row between Shift and Delete with fewer keys than this, such as the
+    // punctuation row, spreads its keys across the width this many letters take.
+    class var standardCharacterCount: Int { get { return 7 }}
     
     // keyboard area shrinks in size in landscape on 6 and 6+
     class var keyboardShrunkSizeArray: [CGFloat] { get { return [522, 524] }}
     class var keyboardShrunkSizeWidthThreshholds: [CGFloat] { get { return [700] }}
     class var keyboardShrunkSizeBaseWidthThreshhold: CGFloat { get { return 600 }}
     
-    // row gaps are weird on 6 in portrait
-    class var rowGapPortraitArray: [CGFloat] { get { return [15, 11, 10] }}
-    class var rowGapPortraitThreshholds: [CGFloat] { get { return [350, 400] }}
-    class var rowGapPortraitLastRow: CGFloat { get { return 9 }}
-    class var rowGapPortraitLastRowIndex: Int { get { return 1 }}
-    class var rowGapLandscape: CGFloat { get { return 7 }}
+    class var keyCornerRadius: CGFloat { get { return 8 }}
+    class var popupCornerRadius: CGFloat { get { return 13 }}
     
-    // key gaps have weird and inconsistent rules
-    class var keyGapPortraitNormal: CGFloat { get { return 6 }}
-    class var keyGapPortraitSmall: CGFloat { get { return 5 }}
-    class var keyGapPortraitNormalThreshhold: CGFloat { get { return 350 }}
-    class var keyGapPortraitUncompressThreshhold: CGFloat { get { return 350 }}
-    class var keyGapLandscapeNormal: CGFloat { get { return 6 }}
-    class var keyGapLandscapeSmall: CGFloat { get { return 5 }}
-    // TODO: 5.5 row gap on 5L
-    // TODO: wider row gap on 6L
-    class var keyCompressedThreshhold: Int { get { return 11 }}
-    
-    // rows with two special keys on the side and characters in the middle (usually 3rd row)
-    // TODO: these are not pixel-perfect, but should be correct within a few pixels
-    // TODO: are there any "hidden constants" that would allow us to get rid of the multiplier? see: popup dimensions
-    class var flexibleEndRowTotalWidthToKeyWidthMPortrait: CGFloat { get { return 1 }}
-    class var flexibleEndRowTotalWidthToKeyWidthCPortrait: CGFloat { get { return -14 }}
-    class var flexibleEndRowTotalWidthToKeyWidthMLandscape: CGFloat { get { return 0.9231 }}
-    class var flexibleEndRowTotalWidthToKeyWidthCLandscape: CGFloat { get { return -9.4615 }}
-    class var flexibleEndRowMinimumStandardCharacterWidth: CGFloat { get { return 7 }}
-    
-    class var lastRowKeyGapPortrait: CGFloat { get { return 6 }}
-    class var lastRowKeyGapLandscapeArray: [CGFloat] { get { return [8, 7, 5] }}
-    class var lastRowKeyGapLandscapeWidthThreshholds: [CGFloat] { get { return [500, 700] }}
-    
-    // TODO: approxmiate, but close enough
-    class var lastRowPortraitFirstTwoButtonAreaWidthToKeyboardAreaWidth: CGFloat { get { return 0.24 }}
-    class var lastRowLandscapeFirstTwoButtonAreaWidthToKeyboardAreaWidth: CGFloat { get { return 0.19 }}
-    class var lastRowPortraitLastButtonAreaWidthToKeyboardAreaWidth: CGFloat { get { return 0.24 }}
-    class var lastRowLandscapeLastButtonAreaWidthToKeyboardAreaWidth: CGFloat { get { return 0.19 }}
-    class var micButtonPortraitWidthRatioToOtherSpecialButtons: CGFloat { get { return 0.765 }}
-    
-    // TODO: not exactly precise
-    class var popupGap: CGFloat { get { return 8 }}
-    class var popupWidthIncrement: CGFloat { get { return 26 }}
-    class var popupTotalHeightArray: [CGFloat] { get { return [102, 108] }}
-    class var popupTotalHeightDeviceWidthThreshholds: [CGFloat] { get { return [350] }}
-    
-    class func sideEdgesPortrait(_ width: CGFloat) -> CGFloat {
-        return self.findThreshhold(self.sideEdgesPortraitArray, threshholds: self.sideEdgesPortraitWidthThreshholds, measurement: width)
-    }
-    class func topEdgePortrait(_ width: CGFloat) -> CGFloat {
-        return self.findThreshhold(self.topEdgePortraitArray, threshholds: self.topEdgePortraitWidthThreshholds, measurement: width)
-    }
-    class func rowGapPortrait(_ width: CGFloat) -> CGFloat {
-        return self.findThreshhold(self.rowGapPortraitArray, threshholds: self.rowGapPortraitThreshholds, measurement: width)
-    }
-    
-    class func rowGapPortraitLastRow(_ width: CGFloat) -> CGFloat {
-        let index = self.findThreshholdIndex(self.rowGapPortraitThreshholds, measurement: width)
-        if index == self.rowGapPortraitLastRowIndex {
-            return self.rowGapPortraitLastRow
-        }
-        else {
-            return self.rowGapPortraitArray[index]
-        }
-    }
-    
-    class func keyGapPortrait(_ width: CGFloat, rowCharacterCount: Int) -> CGFloat {
-        let compressed = (rowCharacterCount >= self.keyCompressedThreshhold)
-        if compressed {
-            if width >= self.keyGapPortraitUncompressThreshhold {
-                return self.keyGapPortraitNormal
-            }
-            else {
-                return self.keyGapPortraitSmall
-            }
-        }
-        else {
-            return self.keyGapPortraitNormal
-        }
-    }
-    class func keyGapLandscape(_ width: CGFloat, rowCharacterCount: Int, isPad: Bool) -> CGFloat {
-        let compressed = (rowCharacterCount >= self.keyCompressedThreshhold)
-        let shrunk = self.keyboardIsShrunk(width, isPad: isPad)
-        if compressed || shrunk {
-            return self.keyGapLandscapeSmall
-        }
-        else {
-            return self.keyGapLandscapeNormal
-        }
-    }
-    
-    class func lastRowKeyGapLandscape(_ width: CGFloat) -> CGFloat {
-        return self.findThreshhold(self.lastRowKeyGapLandscapeArray, threshholds: self.lastRowKeyGapLandscapeWidthThreshholds, measurement: width)
-    }
+    // A popup is this much wider than its key. For a key of the reference height,
+    // its body is this tall and ends this far above the key.
+    class var popupWidthIncrement: CGFloat { get { return 25.33 }}
+    class var popupBodyHeight: CGFloat { get { return 54 }}
+    class var popupGap: CGFloat { get { return 12 }}
+    // Near the top of the keyboard, where a popup has less room, it keeps at least
+    // these, and stays this far inside the keyboard's edges.
+    class var popupMinimumBodyHeight: CGFloat { get { return 34 }}
+    class var popupMinimumGap: CGFloat { get { return 4 }}
+    class var popupMargin: CGFloat { get { return 2 }}
     
     // `isPad` comes from the keyboard's trait collection, supplied by the layout.
     class func keyboardIsShrunk(_ width: CGFloat, isPad: Bool) -> Bool {
@@ -137,10 +70,6 @@ class LayoutConstants: NSObject {
         }
     }
     
-    class func popupTotalHeight(_ deviceWidth: CGFloat) -> CGFloat {
-        return self.findThreshhold(self.popupTotalHeightArray, threshholds: self.popupTotalHeightDeviceWidthThreshholds, measurement: deviceWidth)
-    }
-    
     class func findThreshhold(_ elements: [CGFloat], threshholds: [CGFloat], measurement: CGFloat) -> CGFloat {
         assert(elements.count == threshholds.count + 1, "elements and threshholds do not match")
         return elements[self.findThreshholdIndex(threshholds, measurement: measurement)]
@@ -156,62 +85,40 @@ class LayoutConstants: NSObject {
     }
 }
 
+// The iOS 26 system keyboard gives every key the same fill, and shows Shift's
+// state through its symbol alone. The fills are opaque, as the system's are, so
+// Reduce Transparency needs no colours of its own.
 class GlobalColors: NSObject {
-    class var lightModeRegularKey: UIColor { get { return UIColor.white }}
-    class var darkModeRegularKey: UIColor { get { return UIColor.white.withAlphaComponent(CGFloat(0.3)) }}
-    class var darkModeSolidColorRegularKey: UIColor { get { return UIColor(red: CGFloat(83)/CGFloat(255), green: CGFloat(83)/CGFloat(255), blue: CGFloat(83)/CGFloat(255), alpha: 1) }}
-    class var lightModeSpecialKey: UIColor { get { return GlobalColors.lightModeSolidColorSpecialKey }}
-    class var lightModeSolidColorSpecialKey: UIColor { get { return UIColor(red: CGFloat(177)/CGFloat(255), green: CGFloat(177)/CGFloat(255), blue: CGFloat(177)/CGFloat(255), alpha: 1) }}
-    class var darkModeSpecialKey: UIColor { get { return UIColor.gray.withAlphaComponent(CGFloat(0.3)) }}
-    class var darkModeSolidColorSpecialKey: UIColor { get { return UIColor(red: CGFloat(45)/CGFloat(255), green: CGFloat(45)/CGFloat(255), blue: CGFloat(45)/CGFloat(255), alpha: 1) }}
-    class var darkModeShiftKeyDown: UIColor { get { return UIColor(red: CGFloat(214)/CGFloat(255), green: CGFloat(220)/CGFloat(255), blue: CGFloat(208)/CGFloat(255), alpha: 1) }}
-    class var lightModePopup: UIColor { get { return GlobalColors.lightModeRegularKey }}
-    class var darkModePopup: UIColor { get { return UIColor.gray }}
-    class var darkModeSolidColorPopup: UIColor { get { return GlobalColors.darkModeSolidColorRegularKey }}
-
-    class var lightModeUnderColor: UIColor { get { return UIColor(hue: (220/360.0), saturation: 0.04, brightness: 0.56, alpha: 1) }}
-    class var darkModeUnderColor: UIColor { get { return UIColor(red: CGFloat(38.6)/CGFloat(255), green: CGFloat(18)/CGFloat(255), blue: CGFloat(39.3)/CGFloat(255), alpha: 0.4) }}
+    class var lightModeKey: UIColor { get { return UIColor.white }}
+    class var darkModeKey: UIColor { get { return UIColor(white: 61/255, alpha: 1) }}
+    // a key without a popup, such as Delete, while it is held down
+    class var lightModePressedKey: UIColor { get { return UIColor(red: 199/255, green: 202/255, blue: 209/255, alpha: 1) }}
+    class var darkModePressedKey: UIColor { get { return UIColor(white: 92/255, alpha: 1) }}
+    class var lightModePopup: UIColor { get { return UIColor.white }}
+    class var darkModePopup: UIColor { get { return UIColor(white: 80/255, alpha: 1) }}
     class var lightModeTextColor: UIColor { get { return UIColor.black }}
     class var darkModeTextColor: UIColor { get { return UIColor.white }}
-    class var lightModeBorderColor: UIColor { get { return UIColor(hue: (214/360.0), saturation: 0.04, brightness: 0.65, alpha: 1.0) }}
-    class var darkModeBorderColor: UIColor { get { return UIColor.clear }}
+    // Return, in fields where it performs an action such as a search
+    class var accentKey: UIColor { get { return UIColor(red: 0, green: 122/255, blue: 1, alpha: 1) }}
+    class var pressedAccentKey: UIColor { get { return UIColor(red: 0, green: 98/255, blue: 204/255, alpha: 1) }}
+    class var accentTextColor: UIColor { get { return UIColor.white }}
     
-    class func regularKey(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if darkMode {
-            return solidColorMode ? self.darkModeSolidColorRegularKey : self.darkModeRegularKey
-        }
-        else {
-            return self.lightModeRegularKey
-        }
+    class func key(_ darkMode: Bool) -> UIColor {
+        return darkMode ? self.darkModeKey : self.lightModeKey
     }
     
-    class func popup(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if darkMode {
-            if solidColorMode {
-                return self.darkModeSolidColorPopup
-            }
-            else {
-                return self.darkModePopup
-            }
-        }
-        else {
-            return self.lightModePopup
-        }
+    class func pressedKey(_ darkMode: Bool) -> UIColor {
+        return darkMode ? self.darkModePressedKey : self.lightModePressedKey
     }
     
-    class func specialKey(_ darkMode: Bool, solidColorMode: Bool) -> UIColor {
-        if darkMode {
-            return solidColorMode ? self.darkModeSolidColorSpecialKey : self.darkModeSpecialKey
-        }
-        else {
-            return solidColorMode ? self.lightModeSolidColorSpecialKey : self.lightModeSpecialKey
-        }
+    class func popup(_ darkMode: Bool) -> UIColor {
+        return darkMode ? self.darkModePopup : self.lightModePopup
+    }
+    
+    class func text(_ darkMode: Bool) -> UIColor {
+        return darkMode ? self.darkModeTextColor : self.lightModeTextColor
     }
 }
-
-//"darkShadowColor": UIColor(hue: (220/360.0), saturation: 0.04, brightness: 0.56, alpha: 1),
-//"blueColor": UIColor(hue: (211/360.0), saturation: 1.0, brightness: 1.0, alpha: 1),
-//"blueShadowColor": UIColor(hue: (216/360.0), saturation: 0.05, brightness: 0.43, alpha: 1),
 
 /// The dictionary key for grouping pooled key views by size. A local type avoids
 /// conforming CGSize, an imported type, to Hashable, an imported protocol.
@@ -241,11 +148,13 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     var keyPool: [KeyboardKey] = []
     var nonPooledMap: [String:KeyboardKey] = [:]
     var sizeToKeyMap: [KeySize:[KeyboardKey]] = [:]
-    var shapePool: [String:Shape] = [:]
     
     var darkMode: Bool
     var solidColorMode: Bool
     var initialized: Bool
+    
+    /// The field's Return key type. Return turns blue where it performs an action.
+    var returnKeyType: UIReturnKeyType = .default
     
     required init(model: Keyboard, superview: UIView, layoutConstants: LayoutConstants.Type, globalColors: GlobalColors.Type, darkMode: Bool, solidColorMode: Bool) {
         self.layoutConstants = layoutConstants
@@ -383,11 +292,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         
         if fullReset {
             for (_, key) in self.modelToView {
-                key.shape = nil
-                
-                if let imageKey = key as? ImageKey { // TODO:
-                    imageKey.image = nil
-                }
+                (key as? ImageKey)?.symbolName = nil
             }
         }
         
@@ -400,16 +305,20 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     
     func updateKeyCap(_ key: KeyboardKey, model: Key, fullReset: Bool, uppercase: Bool, characterUppercase: Bool, shiftState: ShiftState) {
         if fullReset {
-            // font size
+            // type
             switch model.type {
+            case Key.KeyType.character:
+                key.capStyle = .letter
             case
             Key.KeyType.modeChange,
             Key.KeyType.space,
             Key.KeyType.return:
-                key.label.adjustsFontSizeToFitWidth = true
-                key.label.font = key.label.font.withSize(16)
+                // "#+=" is drawn smaller than "123" and "ABC", as on the system keyboard.
+                let cap = model.keyCapForCase(true)
+                let isSymbols = !cap.isEmpty && cap.allSatisfy { !$0.isLetter && !$0.isNumber }
+                key.capStyle = .label(isSymbols ? 14 : 18)
             default:
-                key.label.font = key.label.font.withSize(22)
+                key.capStyle = .character
             }
             
             // label inset
@@ -421,55 +330,29 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
                 key.labelInset = 0
             }
             
-            // shapes
+            // symbols
             switch model.type {
-            case Key.KeyType.shift:
-                if key.shape == nil {
-                    let shiftShape = self.getShape(ShiftShape.self)
-                    key.shape = shiftShape
-                }
             case Key.KeyType.backspace:
-                if key.shape == nil {
-                    let backspaceShape = self.getShape(BackspaceShape.self)
-                    key.shape = backspaceShape
-                }
+                (key as? ImageKey)?.symbolName = "delete.left"
             case Key.KeyType.keyboardChange:
-                if key.shape == nil {
-                    let globeShape = self.getShape(GlobeShape.self)
-                    key.shape = globeShape
-                }
+                (key as? ImageKey)?.symbolName = "globe"
             default:
                 break
             }
             
-            // images
-            if model.type == Key.KeyType.settings {
-                if let imageKey = key as? ImageKey {
-                    if imageKey.image == nil {
-                        let gearImage = UIImage(named: "gear")
-                        let settingsImageView = UIImageView(image: gearImage)
-                        imageKey.image = settingsImageView
-                    }
-                }
-            }
+            key.cornerRadius = self.layoutConstants.keyCornerRadius
+            key.popupCornerRadius = self.layoutConstants.popupCornerRadius
         }
         
         if model.type == Key.KeyType.shift {
-            if key.shape == nil {
-                let shiftShape = self.getShape(ShiftShape.self)
-                key.shape = shiftShape
-            }
-            
             switch shiftState {
             case .disabled:
-                key.isHighlighted = false
+                (key as? ImageKey)?.symbolName = "shift"
             case .enabled:
-                key.isHighlighted = true
+                (key as? ImageKey)?.symbolName = "shift.fill"
             case .locked:
-                key.isHighlighted = true
+                (key as? ImageKey)?.symbolName = "capslock.fill"
             }
-            
-            (key.shape as? ShiftShape)?.withLock = (shiftState == .locked)
         }
         
         self.updateKeyCapText(key, model: model, uppercase: uppercase, characterUppercase: characterUppercase)
@@ -493,61 +376,54 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
             self.setAppearanceForOtherKey(key, model: model, darkMode: darkMode, solidColorMode: solidColorMode)
         }
         
+        key.color = self.globalColors.key(darkMode)
+        key.textColor = self.globalColors.text(darkMode)
+        key.downTextColor = nil
+        key.popupColor = self.globalColors.popup(darkMode)
+        
         switch model.type {
         case
         Key.KeyType.character,
         Key.KeyType.specialCharacter,
         Key.KeyType.period:
-            key.color = self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
-            if self.superview.traitCollection.userInterfaceIdiom == .pad {
-                key.downColor = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
-            }
-            else {
-                key.downColor = nil
-            }
-            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
-            key.downTextColor = nil
-        case
-        Key.KeyType.space:
-            key.color = self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
-            key.downColor = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
-            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
-            key.downTextColor = nil
+            // On iPhone a popup shows the press; on iPad, where there are no
+            // popups, the key darkens instead.
+            key.downColor = (self.isPad ? self.globalColors.pressedKey(darkMode) : nil)
         case
         Key.KeyType.shift:
-            key.color = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
-            key.downColor = (darkMode ? self.globalColors.darkModeShiftKeyDown : self.globalColors.lightModeRegularKey)
-            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
-            key.downTextColor = self.globalColors.lightModeTextColor
-        case
-        Key.KeyType.backspace:
-            key.color = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
-            // TODO: actually a bit different
-            key.downColor = self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
-            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
-            key.downTextColor = (darkMode ? nil : self.globalColors.lightModeTextColor)
-        case
-        Key.KeyType.modeChange:
-            key.color = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
+            // The symbol shows Shift's state, so the key itself never changes.
             key.downColor = nil
-            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
-            key.downTextColor = nil
         case
-        Key.KeyType.return,
-        Key.KeyType.keyboardChange,
-        Key.KeyType.settings:
-            key.color = self.globalColors.specialKey(darkMode, solidColorMode: solidColorMode)
-            // TODO: actually a bit different
-            key.downColor = self.globalColors.regularKey(darkMode, solidColorMode: solidColorMode)
-            key.textColor = (darkMode ? self.globalColors.darkModeTextColor : self.globalColors.lightModeTextColor)
-            key.downTextColor = nil
-        default:
+        Key.KeyType.return:
+            if self.returnKeyIsAccented {
+                key.color = self.globalColors.accentKey
+                key.textColor = self.globalColors.accentTextColor
+                key.downColor = self.globalColors.pressedAccentKey
+            }
+            else {
+                key.downColor = self.globalColors.pressedKey(darkMode)
+            }
+        case
+        Key.KeyType.space,
+        Key.KeyType.backspace,
+        Key.KeyType.modeChange,
+        Key.KeyType.keyboardChange:
+            key.downColor = self.globalColors.pressedKey(darkMode)
+        case
+        Key.KeyType.other:
             break
         }
-        
-        key.popupColor = self.globalColors.popup(darkMode, solidColorMode: solidColorMode)
-        key.underColor = (self.darkMode ? self.globalColors.darkModeUnderColor : self.globalColors.lightModeUnderColor)
-        key.borderColor = (self.darkMode ? self.globalColors.darkModeBorderColor : self.globalColors.lightModeBorderColor)
+    }
+    
+    /// Whether Return is drawn blue, as the system keyboard draws it in fields
+    /// where it performs an action rather than starting a new line.
+    var returnKeyIsAccented: Bool {
+        switch self.returnKeyType {
+        case .go, .google, .join, .route, .search, .send, .yahoo, .done, .emergencyCall, .continue:
+            return true
+        default:
+            return false
+        }
     }
     
     func setAppearanceForOtherKey(_ key: KeyboardKey, model: Key, darkMode: Bool, solidColorMode: Bool) { /* override this to handle special keys */ }
@@ -624,7 +500,7 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     }
     
     func createNewKey() -> KeyboardKey {
-        return ImageKey(vibrancy: nil)
+        return ImageKey()
     }
     
     // if pool is disabled, always generates a new key
@@ -690,26 +566,6 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         }
     }
     
-    // TODO: no support for more than one of the same shape
-    // if pool disabled, always returns new shape
-    func getShape(_ shapeClass: Shape.Type) -> Shape {
-        let className = NSStringFromClass(shapeClass)
-        
-        if type(of: self).shouldPoolKeys {
-            if let shape = self.shapePool[className] {
-                return shape
-            }
-            else {
-                let shape = shapeClass.init(frame: CGRect.zero)
-                self.shapePool[className] = shape
-                return shape
-            }
-        }
-        else {
-            return shapeClass.init(frame: CGRect.zero)
-        }
-    }
-    
     //////////////////////
     // LAYOUT FUNCTIONS //
     //////////////////////
@@ -734,98 +590,74 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         return round(measurement * scale) / scale
     }
     
+    /// A frame whose edges fall on the display's pixel grid, so neighbouring keys
+    /// keep an even gap between them.
+    func pixelAlignedFrame(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) -> CGRect {
+        let minX = self.rounded(x)
+        let maxX = self.rounded(x + width)
+        let minY = self.rounded(y)
+        let maxY = self.rounded(y + height)
+        return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    }
+    
     func generateKeyFrames(_ model: Keyboard, bounds: CGRect, page pageToLayout: Int) -> [Key:CGRect]? {
-        if bounds.height == 0 || bounds.width == 0 {
+        if bounds.height == 0 || bounds.width == 0 || pageToLayout >= model.pages.count {
             return nil
         }
         
+        let page = model.pages[pageToLayout]
+        let constants = self.layoutConstants
+        let isLandscape = (bounds.width / bounds.height >= constants.landscapeRatio)
+        
+        let sideEdges = (isLandscape ? constants.sideEdgesLandscape : constants.sideEdgesPortrait)
+        let topEdge = (isLandscape ? constants.topEdgeLandscape : constants.topEdgePortrait)
+        let rowGap = (isLandscape ? constants.rowGapLandscape : constants.rowGapPortrait)
+        let keyGap = constants.keyGap
+        
+        // On wide phones in landscape the keys keep to a narrower area in the middle.
+        let areaWidth = constants.keyboardShrunkSize(bounds.width - 2 * sideEdges, isPad: self.isPad)
+        let area = CGRect(x: (bounds.width - areaWidth) / 2, y: topEdge, width: areaWidth, height: bounds.height - topEdge - constants.bottomEdge)
+        
+        let numRows = page.rows.count
+        if numRows == 0 {
+            return [:]
+        }
+        // on the pixel grid, so every row is the same height
+        let keyHeight = self.rounded((area.height - CGFloat(numRows - 1) * rowGap) / CGFloat(numRows))
+
+        // Letter keys are as wide as the longest row allows.
+        let mostKeysInRow = page.rows.map { $0.count }.max() ?? 1
+        let letterKeyWidth = (area.width - CGFloat(mostKeysInRow - 1) * keyGap) / CGFloat(mostKeysInRow)
+
+        // Too small to hold the keys, as can happen for a moment while the host
+        // resizes the keyboard: keep the previous layout rather than draw keys
+        // with negative sizes.
+        if keyHeight <= 0 || letterKeyWidth <= 0 {
+            return nil
+        }
+
         var keyMap = [Key:CGRect]()
         
-        let isLandscape: Bool = {
-            let boundsRatio = bounds.width / bounds.height
-            return (boundsRatio >= self.layoutConstants.landscapeRatio)
-        }()
-        
-        var sideEdges = (isLandscape ? self.layoutConstants.sideEdgesLandscape : self.layoutConstants.sideEdgesPortrait(bounds.width))
-        let bottomEdge = sideEdges
-        
-        let normalKeyboardSize = bounds.width - CGFloat(2) * sideEdges
-        let shrunkKeyboardSize = self.layoutConstants.keyboardShrunkSize(normalKeyboardSize, isPad: self.isPad)
-        
-        sideEdges += ((normalKeyboardSize - shrunkKeyboardSize) / CGFloat(2))
-        
-        let topEdge: CGFloat = (isLandscape ? self.layoutConstants.topEdgeLandscape : self.layoutConstants.topEdgePortrait(bounds.width))
-        
-        let rowGap: CGFloat = (isLandscape ? self.layoutConstants.rowGapLandscape : self.layoutConstants.rowGapPortrait(bounds.width))
-        let lastRowGap: CGFloat = (isLandscape ? rowGap : self.layoutConstants.rowGapPortraitLastRow(bounds.width))
-        
-        //let flexibleEndRowM = (isLandscape ? self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthMLandscape : self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthMPortrait)
-        //let flexibleEndRowC = (isLandscape ? self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthCLandscape : self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthCPortrait)
-        
-        let lastRowLeftSideRatio = (isLandscape ? self.layoutConstants.lastRowLandscapeFirstTwoButtonAreaWidthToKeyboardAreaWidth : self.layoutConstants.lastRowPortraitFirstTwoButtonAreaWidthToKeyboardAreaWidth)
-        let lastRowRightSideRatio = (isLandscape ? self.layoutConstants.lastRowLandscapeLastButtonAreaWidthToKeyboardAreaWidth : self.layoutConstants.lastRowPortraitLastButtonAreaWidthToKeyboardAreaWidth)
-        let lastRowKeyGap = (isLandscape ? self.layoutConstants.lastRowKeyGapLandscape(bounds.width) : self.layoutConstants.lastRowKeyGapPortrait)
-        
-        for (p, page) in model.pages.enumerated() {
-            if p != pageToLayout {
-                continue
+        for (r, row) in page.rows.enumerated() {
+            let frame = CGRect(x: area.minX, y: area.minY + CGFloat(r) * (keyHeight + rowGap), width: area.width, height: keyHeight)
+            let frames: [CGRect]
+            
+            // basic character row: only typable characters
+            if self.characterRowHeuristic(row) {
+                frames = self.layoutCharacterRow(row, keyWidth: letterKeyWidth, gapWidth: keyGap, frame: frame)
+            }
+            // character row with side buttons: shift, backspace, etc.
+            else if self.doubleSidedRowHeuristic(row) {
+                frames = self.layoutCharacterWithSidesRow(row, frame: frame, keyWidth: letterKeyWidth, keyGap: keyGap)
+            }
+            // bottom row with things like space, return, etc.
+            else {
+                frames = self.layoutSpecialKeysRow(row, keyWidth: letterKeyWidth, keyGap: keyGap, frame: frame)
             }
             
-            let numRows = page.rows.count
-            
-            let mostKeysInRow: Int = {
-                var currentMax: Int = 0
-                for (_, row) in page.rows.enumerated() {
-                    currentMax = max(currentMax, row.count)
-                }
-                return currentMax
-            }()
-            
-            let rowGapTotal = CGFloat(numRows - 1 - 1) * rowGap + lastRowGap
-            
-            let keyGap: CGFloat = (isLandscape ? self.layoutConstants.keyGapLandscape(bounds.width, rowCharacterCount: mostKeysInRow, isPad: self.isPad) : self.layoutConstants.keyGapPortrait(bounds.width, rowCharacterCount: mostKeysInRow))
-            
-            let keyHeight: CGFloat = {
-                let totalGaps = bottomEdge + topEdge + rowGapTotal
-                let returnHeight = (bounds.height - totalGaps) / CGFloat(numRows)
-                return self.rounded(returnHeight)
-                }()
-            
-            let letterKeyWidth: CGFloat = {
-                let totalGaps = (sideEdges * CGFloat(2)) + (keyGap * CGFloat(mostKeysInRow - 1))
-                let returnWidth = (bounds.width - totalGaps) / CGFloat(mostKeysInRow)
-                return self.rounded(returnWidth)
-                }()
-            
-            let processRow = { (row: [Key], frames: [CGRect], map: inout [Key:CGRect]) -> Void in
-                assert(row.count == frames.count, "row and frames don't match")
-                for (k, key) in row.enumerated() {
-                    map[key] = frames[k]
-                }
-            }
-            
-            for (r, row) in page.rows.enumerated() {
-                let rowGapCurrentTotal = (r == page.rows.count - 1 ? rowGapTotal : CGFloat(r) * rowGap)
-                let frame = CGRect(x: rounded(sideEdges), y: rounded(topEdge + (CGFloat(r) * keyHeight) + rowGapCurrentTotal), width: rounded(bounds.width - CGFloat(2) * sideEdges), height: rounded(keyHeight))
-                
-                var frames: [CGRect]!
-                
-                // basic character row: only typable characters
-                if self.characterRowHeuristic(row) {
-                    frames = self.layoutCharacterRow(row, keyWidth: letterKeyWidth, gapWidth: keyGap, frame: frame)
-                }
-                    
-                    // character row with side buttons: shift, backspace, etc.
-                else if self.doubleSidedRowHeuristic(row) {
-                    frames = self.layoutCharacterWithSidesRow(row, frame: frame, isLandscape: isLandscape, keyWidth: letterKeyWidth, keyGap: keyGap)
-                }
-                    
-                    // bottom row with things like space, return, etc.
-                else {
-                    frames = self.layoutSpecialKeysRow(row, keyWidth: letterKeyWidth, gapWidth: lastRowKeyGap, leftSideRatio: lastRowLeftSideRatio, rightSideRatio: lastRowRightSideRatio, micButtonRatio: self.layoutConstants.micButtonPortraitWidthRatioToOtherSpecialButtons, isLandscape: isLandscape, frame: frame)
-                }
-                
-                processRow(row, frames, &keyMap)
+            assert(row.count == frames.count, "row and frames don't match")
+            for (k, key) in row.enumerated() {
+                keyMap[key] = frames[k]
             }
         }
         
@@ -840,163 +672,89 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
         return (row.count >= 3 && !row[0].isCharacter && row[1].isCharacter)
     }
     
+    // Keys of one width, centred in the row.
     func layoutCharacterRow(_ row: [Key], keyWidth: CGFloat, gapWidth: CGFloat, frame: CGRect) -> [CGRect] {
-        var frames = [CGRect]()
+        let count = CGFloat(row.count)
+        var gap = gapWidth
+        var sideSpace = (frame.width - count * keyWidth - (count - 1) * gapWidth) / 2
         
-        let keySpace = CGFloat(row.count) * keyWidth + CGFloat(row.count - 1) * gapWidth
-        var actualGapWidth = gapWidth
-        var sideSpace = (frame.width - keySpace) / CGFloat(2)
-        
-        // TODO: port this to the other layout functions
         // avoiding rounding errors
         if sideSpace < 0 {
             sideSpace = 0
-            actualGapWidth = (frame.width - (CGFloat(row.count) * keyWidth)) / CGFloat(row.count - 1)
+            gap = (row.count > 1 ? (frame.width - count * keyWidth) / (count - 1) : 0)
         }
         
-        var currentOrigin = frame.origin.x + sideSpace
-        
-        for (_, _) in row.enumerated() {
-            let roundedOrigin = rounded(currentOrigin)
-            
-            // avoiding rounding errors
-            if roundedOrigin + keyWidth > frame.origin.x + frame.width {
-                frames.append(CGRect(x: rounded(frame.origin.x + frame.width - keyWidth), y: frame.origin.y, width: keyWidth, height: frame.height))
-            }
-            else {
-                frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: keyWidth, height: frame.height))
-            }
-            
-            currentOrigin += (keyWidth + actualGapWidth)
+        return row.indices.map { k in
+            self.pixelAlignedFrame(x: frame.minX + sideSpace + CGFloat(k) * (keyWidth + gap), y: frame.minY, width: keyWidth, height: frame.height)
         }
+    }
+    
+    // Shift and Delete, or the keys in their place, at the ends, and the keys
+    // between them centred.
+    func layoutCharacterWithSidesRow(_ row: [Key], frame: CGRect, keyWidth: CGFloat, keyGap: CGFloat) -> [CGRect] {
+        let characterCount = row.count - 2
+        let standardCount = self.layoutConstants.standardCharacterCount
+        let standardWidth = CGFloat(standardCount) * keyWidth + CGFloat(standardCount - 1) * keyGap
+        
+        let charactersWidth: CGFloat
+        let characterWidth: CGFloat
+        if characterCount < standardCount {
+            charactersWidth = standardWidth
+            characterWidth = (standardWidth - CGFloat(characterCount - 1) * keyGap) / CGFloat(characterCount)
+        }
+        else {
+            characterWidth = keyWidth
+            charactersWidth = CGFloat(characterCount) * keyWidth + CGFloat(characterCount - 1) * keyGap
+        }
+        
+        let charactersX = frame.minX + (frame.width - charactersWidth) / 2
+        let sideWidth = max(0, min(keyWidth * self.layoutConstants.sideKeyWidthRatio, charactersX - frame.minX - keyGap))
+        
+        var frames = [CGRect]()
+        frames.append(self.pixelAlignedFrame(x: frame.minX, y: frame.minY, width: sideWidth, height: frame.height))
+        for k in 0..<characterCount {
+            frames.append(self.pixelAlignedFrame(x: charactersX + CGFloat(k) * (characterWidth + keyGap), y: frame.minY, width: characterWidth, height: frame.height))
+        }
+        frames.append(self.pixelAlignedFrame(x: frame.maxX - sideWidth, y: frame.minY, width: sideWidth, height: frame.height))
         
         return frames
     }
     
-    // TODO: pass in actual widths instead
-    func layoutCharacterWithSidesRow(_ row: [Key], frame: CGRect, isLandscape: Bool, keyWidth: CGFloat, keyGap: CGFloat) -> [CGRect] {
-        var frames = [CGRect]()
-
-        let standardFullKeyCount = Int(self.layoutConstants.keyCompressedThreshhold) - 1
-        let standardGap = (isLandscape
-            ? self.layoutConstants.keyGapLandscape(frame.width, rowCharacterCount: standardFullKeyCount, isPad: self.isPad)
-            : self.layoutConstants.keyGapPortrait(frame.width, rowCharacterCount: standardFullKeyCount))
-        let sideEdges = (isLandscape ? self.layoutConstants.sideEdgesLandscape : self.layoutConstants.sideEdgesPortrait(frame.width))
-        var standardKeyWidth = (frame.width - sideEdges - (standardGap * CGFloat(standardFullKeyCount - 1)) - sideEdges)
-        standardKeyWidth /= CGFloat(standardFullKeyCount)
-        let standardKeyCount = self.layoutConstants.flexibleEndRowMinimumStandardCharacterWidth
-        
-        let standardWidth = CGFloat(standardKeyWidth * standardKeyCount + standardGap * (standardKeyCount - 1))
-        let currentWidth = CGFloat(row.count - 2) * keyWidth + CGFloat(row.count - 3) * keyGap
-        
-        let isStandardWidth = (currentWidth < standardWidth)
-        let actualWidth = (isStandardWidth ? standardWidth : currentWidth)
-        let actualGap = (isStandardWidth ? standardGap : keyGap)
-        let actualKeyWidth = (actualWidth - CGFloat(row.count - 3) * actualGap) / CGFloat(row.count - 2)
-        
-        let sideSpace = (frame.width - actualWidth) / CGFloat(2)
-        
-        let m = (isLandscape ? self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthMLandscape : self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthMPortrait)
-        let c = (isLandscape ? self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthCLandscape : self.layoutConstants.flexibleEndRowTotalWidthToKeyWidthCPortrait)
-        
-        var specialCharacterWidth = sideSpace * m + c
-        specialCharacterWidth = max(specialCharacterWidth, keyWidth)
-        specialCharacterWidth = rounded(specialCharacterWidth)
-        let specialCharacterGap = sideSpace - specialCharacterWidth
-        
-        var currentOrigin = frame.origin.x
-        for (k, _) in row.enumerated() {
-            if k == 0 {
-                frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: specialCharacterWidth, height: frame.height))
-                currentOrigin += (specialCharacterWidth + specialCharacterGap)
-            }
-            else if k == row.count - 1 {
-                currentOrigin += specialCharacterGap
-                frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: specialCharacterWidth, height: frame.height))
-                currentOrigin += specialCharacterWidth
-            }
-            else {
-                frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: actualKeyWidth, height: frame.height))
-                if k == row.count - 2 {
-                    currentOrigin += (actualKeyWidth)
-                }
-                else {
-                    currentOrigin += (actualKeyWidth + keyGap)
-                }
-            }
+    // The bottom row. As on the system keyboard, the space bar starts where the
+    // third key of a nine-key row would and Return where the eighth would, so the
+    // keys on either side of the space bar share about two and a half letters'
+    // width.
+    func layoutSpecialKeysRow(_ row: [Key], keyWidth: CGFloat, keyGap: CGFloat, frame: CGRect) -> [CGRect] {
+        guard let spaceIndex = row.firstIndex(where: { $0.type == Key.KeyType.space }) else {
+            let width = (frame.width - CGFloat(row.count - 1) * keyGap) / CGFloat(row.count)
+            return self.layoutCharacterRow(row, keyWidth: width, gapWidth: keyGap, frame: frame)
         }
-
-        return frames
-    }
-    
-    func layoutSpecialKeysRow(_ row: [Key], keyWidth: CGFloat, gapWidth: CGFloat, leftSideRatio: CGFloat, rightSideRatio: CGFloat, micButtonRatio: CGFloat, isLandscape: Bool, frame: CGRect) -> [CGRect] {
+        
+        let unit = keyWidth + keyGap
+        let keysBefore = spaceIndex
+        let keysAfter = row.count - spaceIndex - 1
+        let spaceStart = (keysBefore > 0 ? frame.minX + 2.5 * unit : frame.minX)
+        let afterStart = frame.minX + 7.5 * unit
+        let spaceEnd = (keysAfter > 0 ? afterStart - keyGap : frame.maxX)
+        
         var frames = [CGRect]()
         
-        var keysBeforeSpace = 0
-        var keysAfterSpace = 0
-        var reachedSpace = false
-        for (_, key) in row.enumerated() {
-            if key.type == Key.KeyType.space {
-                reachedSpace = true
-            }
-            else {
-                if !reachedSpace {
-                    keysBeforeSpace += 1
-                }
-                else {
-                    keysAfterSpace += 1
-                }
+        if keysBefore > 0 {
+            let width = (spaceStart - keyGap - frame.minX - CGFloat(keysBefore - 1) * keyGap) / CGFloat(keysBefore)
+            for k in 0..<keysBefore {
+                frames.append(self.pixelAlignedFrame(x: frame.minX + CGFloat(k) * (width + keyGap), y: frame.minY, width: width, height: frame.height))
             }
         }
         
-        assert(keysBeforeSpace <= 3, "invalid number of keys before space (only max 3 currently supported)")
-        assert(keysAfterSpace == 1, "invalid number of keys after space (only default 1 currently supported)")
+        frames.append(self.pixelAlignedFrame(x: spaceStart, y: frame.minY, width: spaceEnd - spaceStart, height: frame.height))
         
-        let hasButtonInMicButtonPosition = (keysBeforeSpace == 3)
-        
-        var leftSideAreaWidth = frame.width * leftSideRatio
-        let rightSideAreaWidth = frame.width * rightSideRatio
-        var leftButtonWidth = (leftSideAreaWidth - (gapWidth * CGFloat(2 - 1))) / CGFloat(2)
-        leftButtonWidth = keysBeforeSpace == 1 ? rounded(leftButtonWidth * 2 + 4) : rounded(leftButtonWidth)
-
-        var rightButtonWidth = (rightSideAreaWidth - (gapWidth * CGFloat(keysAfterSpace - 1))) / CGFloat(keysAfterSpace)
-        rightButtonWidth = rounded(rightButtonWidth)
-        
-        let micButtonWidth = (isLandscape ? leftButtonWidth : leftButtonWidth * micButtonRatio)
-        
-        // special case for mic button
-        if hasButtonInMicButtonPosition {
-            leftSideAreaWidth = leftSideAreaWidth + gapWidth + micButtonWidth
-        }
-        
-        
-        var spaceWidth = frame.width - leftSideAreaWidth - rightSideAreaWidth - gapWidth * CGFloat(2)
-        spaceWidth = rounded(spaceWidth)
-        
-        var currentOrigin = frame.origin.x
-        var beforeSpace: Bool = true
-        for (k, key) in row.enumerated() {
-            if key.type == Key.KeyType.space {
-                frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: spaceWidth, height: frame.height))
-                currentOrigin += (spaceWidth + gapWidth)
-                beforeSpace = false
-            }
-            else if beforeSpace {
-                if hasButtonInMicButtonPosition && k == 2 { //mic button position
-                    frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: micButtonWidth, height: frame.height))
-                    currentOrigin += (micButtonWidth + gapWidth)
-                }
-                else {
-                    frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: leftButtonWidth, height: frame.height))
-                    currentOrigin += (leftButtonWidth + gapWidth)
-                }
-            }
-            else {
-                frames.append(CGRect(x: rounded(currentOrigin), y: frame.origin.y, width: rightButtonWidth, height: frame.height))
-                currentOrigin += (rightButtonWidth + gapWidth)
+        if keysAfter > 0 {
+            let width = (frame.maxX - afterStart - CGFloat(keysAfter - 1) * keyGap) / CGFloat(keysAfter)
+            for k in 0..<keysAfter {
+                frames.append(self.pixelAlignedFrame(x: afterStart + CGFloat(k) * (width + keyGap), y: frame.minY, width: width, height: frame.height))
             }
         }
-
+        
         return frames
     }
     
@@ -1004,51 +762,54 @@ class KeyboardLayout: NSObject, KeyboardKeyProtocol {
     // END LAYOUT //
     ////////////////
     
-    func frameForPopup(_ key: KeyboardKey, direction: Direction) -> CGRect {
-        // The keyboard's own width is what the popup has to fit inside; the window
-        // scene's screen is only a fallback before the first layout pass.
-        let referenceWidth = self.superview.bounds.width > 0
-            ? self.superview.bounds.width
-            : (self.superview.window?.windowScene?.screen.bounds.width ?? 0)
-        let totalHeight = self.layoutConstants.popupTotalHeight(referenceWidth)
+    func frameForPopup(_ key: KeyboardKey) -> CGRect {
+        let scale = key.bounds.height / KeyboardKey.referenceHeight
+        let width = key.bounds.width + self.layoutConstants.popupWidthIncrement
+        let bodyHeight = self.layoutConstants.popupBodyHeight * scale
+        let gap = self.layoutConstants.popupGap * scale
         
-        let popupWidth = key.bounds.width + self.layoutConstants.popupWidthIncrement
-        let popupHeight = totalHeight - self.layoutConstants.popupGap - key.bounds.height
-        _ = 0
-        
-        return CGRect(x: (key.bounds.width - popupWidth) / CGFloat(2), y: -popupHeight - self.layoutConstants.popupGap, width: popupWidth, height: popupHeight)
+        return CGRect(x: (key.bounds.width - width) / 2, y: -gap - bodyHeight, width: width, height: bodyHeight)
     }
     
-    func willShowPopup(_ key: KeyboardKey, direction: Direction) {
-        // TODO: actual numbers, not standins
-        if let popup = key.popup {
-            // TODO: total hack
-            let actualSuperview = (self.superview.superview != nil ? self.superview.superview! : self.superview)
-            
-            var localFrame = actualSuperview.convert(popup.frame, from: popup.superview)
-            
-            if localFrame.origin.y < 3 {
-                localFrame.origin.y = 3
-                
-                key.background.attached = Direction.down
-                key.connector?.startDir = Direction.down
-                key.background.hideDirectionIsOpposite = true
-            }
-            else {
-                // TODO: this needs to be reset somewhere
-                key.background.hideDirectionIsOpposite = false
-            }
-            
-            if localFrame.origin.x < 3 {
-                localFrame.origin.x = key.frame.origin.x
-            }
-            
-            if localFrame.origin.x + localFrame.width > superview.bounds.width - 3 {
-                localFrame.origin.x = key.frame.origin.x + key.frame.width - localFrame.width
-            }
-            
-            popup.frame = actualSuperview.convert(localFrame, to: popup.superview)
+    // A keyboard extension cannot draw outside its own view, so a popup that
+    // would reach past the top or the sides of the keyboard is moved or shortened.
+    func willShowPopup(_ key: KeyboardKey) {
+        guard let popup = key.popup else {
+            return
         }
+        
+        // the keyboard's whole view, which also holds the toolbar above the keys
+        let container = self.superview.superview ?? self.superview
+        let margin = self.layoutConstants.popupMargin
+        let keyFrame = container.convert(key.bounds, from: key)
+        var frame = container.convert(popup.frame, from: key)
+        
+        if frame.minY < margin {
+            // Close the gap to the key first, then shorten the popup. Near the top
+            // of a short keyboard it may still have to cover the top of its key.
+            let scale = key.bounds.height / KeyboardKey.referenceHeight
+            let room = keyFrame.minY - margin
+            var gap = max(self.layoutConstants.popupMinimumGap * scale, room - frame.height)
+            var bodyHeight = room - gap
+            let minimumBodyHeight = self.layoutConstants.popupMinimumBodyHeight * scale
+            if bodyHeight < minimumBodyHeight {
+                bodyHeight = minimumBodyHeight
+                gap = room - bodyHeight
+            }
+            
+            frame.origin.y = keyFrame.minY - gap - bodyHeight
+            frame.size.height = bodyHeight
+        }
+        
+        if frame.minX < margin {
+            frame.origin.x = keyFrame.minX
+        }
+        
+        if frame.maxX > container.bounds.width - margin {
+            frame.origin.x = keyFrame.maxX - frame.width
+        }
+        
+        popup.frame = container.convert(frame, to: key)
     }
     
     func willHidePopup(_ key: KeyboardKey) {

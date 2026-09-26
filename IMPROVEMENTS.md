@@ -309,8 +309,8 @@ time a popup appears — that is, on every keypress. Both additions are removed.
 
 The December styling also changed the keys to translucent colours tuned against
 the removed blur layer. Because taps were not registering (§7.1), that design never
-reached anyone in working form. The keys use the palette of the current App Store
-release again; styling them for the iOS 26 keyboard is listed in §10.2.
+reached anyone in working form. The keys now follow the iOS 26 system keyboard
+(§7.13).
 
 The Shift and Delete keys drew their symbols in white in both appearances. On the
 grey special keys of the light palette that is a contrast of about 2:1, so at rest
@@ -336,8 +336,13 @@ With these changes the keyboard holds no mutable global state.
 
 The keyboard decided whether to draw a globe key by comparing the screen's pixel
 height against `2436`, the iPhone X. That matched no later device and, on the
-iPhone X itself, removed the only way to switch keyboards. Every page now carries
-a globe key, as a custom keyboard requires.
+iPhone X itself, removed the only way to switch keyboards.
+
+It now asks the system, through `needsInputModeSwitchKey`. iPhones without a Home
+button draw their own globe key below every keyboard, custom ones included, and
+report `false`; there the keyboard leaves its own out, so the bottom row no longer
+shows two globes. iPads report `true` and keep the key on every page. The keys are
+rebuilt if the answer changes while the keyboard is open.
 
 ### 7.8 Crash in an empty field
 
@@ -349,8 +354,9 @@ character, which is simply absent when the text is empty.
 
 ### 7.9 Keyboard height
 
-The keyboard reserved 30 points at the top for a banner it never creates, so an
-empty strip sat above the keys. It no longer reserves the space.
+The keyboard reserved 30 points at the top for a banner it never created, so an
+empty strip sat above the keys. That space now holds the toolbar (§7.12), and the
+height includes it only when the toolbar exists.
 
 Rotation set the new height only in `viewWillTransition(to:with:)`, although a note
 in the controller records that none of the `UIContentContainer` methods, which
@@ -371,20 +377,62 @@ Full Access is removed.
 
 Whether the letter keys show capitals was computed three different ways, so the key
 caps changed case depending on whether a keypress, a mode change or a relayout had
-run last. All three now follow the Allow Lowercase Key Caps setting: capitals while
-it is off, which is the default, and the Shift state while it is on.
+run last. All three now follow one setting.
+
+That setting, formerly Allow Lowercase Key Caps and now Show Lowercase Keys, was off
+by default, so the letters stayed capitals whatever the state of Shift. It is now on
+by default: the letters are lowercase while Shift is off and capitals while it is
+on or locked, as on the system keyboard. Turning it off brings back capitals at all
+times. The keyboard's settings were unreachable in the App Store release (§7.12),
+so no one has a stored value that would keep the old behaviour.
 
 ### 7.12 Settings panel
 
 The key that opens the keyboard's settings panel was commented out of the layout,
 so Auto-Capitalization, the “.” Shortcut, Keyboard Clicks and Allow Lowercase Key
-Caps were fixed at their defaults. The key is back on every page. The panel is the
-keyboard's one remaining nib, `DefaultSettings.xib`.
+Caps were fixed at their defaults.
+
+The settings now open from a toolbar above the keys, laid out like the toolbars of
+third-party keyboards such as WeChat's: a gear on the left and, on the right, a
+button that hides the keyboard. The bottom row keeps only 123, the space bar and
+Return, with the globe key where §7.7 needs it. The panel itself is built in code
+as a grouped list in the style of the Settings app, with a round back button;
+`DefaultSettings.xib`, the keyboard's last nib, is gone.
 
 §7.8 to §7.12 and the Shift and Delete colours in §7.5 were first fixed on the July
 2026 recovery branch, `fix/ios26-uiux-bugs`, and carried over when that branch was
 merged. None of them has been tried on a device: a custom keyboard cannot be used in
 the simulator until it is enabled in Settings, which these checks did not do.
+
+### 7.13 Styling for iOS 26
+
+The keys were drawn as they were on iOS 8: a 4-point corner, a one-point shadow
+under each key and grey special keys. They now match the iOS 26 system keyboard,
+measured from screenshots of it in the iOS 26.5 simulator on a 402-point-wide
+iPhone 17 Pro. iOS 27 kept this design.
+
+- **Shape.** An 8-point continuous corner, the curve `UIBezierPath(roundedRect:)`
+  draws; fitted against the system's key outline, it matches to a fraction of a
+  pixel. No shadow and no border.
+- **Colour.** Every key shares one fill: white in light mode and RGB 61, 61, 61 in
+  dark mode, the system's values. Keys without a popup, such as Delete, turn grey
+  while held. Return is blue where the field's Return key performs an action, such
+  as searching.
+- **Type.** Capitals and digits at 22 points, lowercase letters at 24.5 points, all
+  on one baseline 6.4 points below the key's centre; "123" and "ABC" at 18 points
+  and "#+=" at 14. Shift, Delete and the globe are SF Symbols at 19 points, and
+  Shift's state shows only in its symbol: `shift`, `shift.fill` or `capslock.fill`.
+- **Spacing.** In portrait, 43-point keys with 6-point gaps, 11 points between rows
+  and 6.5 points at the sides. Shift and Delete are 1.36 letters wide; the space bar
+  starts where the third key of a nine-key row would and Return where the eighth
+  would. On the 402-point iPhone every key lands on the same pixels as the system's.
+- **Popup.** 25.3 points wider than its key, with 13-point top corners, joined to the
+  key by two S-curves; its letter sits where the system's does. In the top row,
+  under the toolbar, it shortens to stay inside the keyboard's view, which a
+  keyboard extension cannot draw outside.
+
+Landscape keeps its previous spacing, with the new shapes and type. It has not been
+checked in the simulator, which could not be rotated for these checks.
 
 ---
 
@@ -418,16 +466,16 @@ together with the entries that still listed them in Xcode's project navigator:
 | `Na'vi Keyboard/KeyboardView.swift`, `KeyboardViewController.swift`, `NSHelper.swift`, `Keyboard.xib`, `Keyboard.storyboard` | An abandoned second keyboard implementation, never referenced by the project. |
 | `Keyboard/Info.plist` | Not used by the build; the extension uses `Na'vi Keyboard/Info.plist`. |
 
-Every Swift file in the repository is now compiled into a target, and the only
-Interface Builder file left is the keyboard's settings panel, `DefaultSettings.xib`
-(§7.12).
+Every Swift file in the repository is now compiled into a target, and no target
+bundles an Interface Builder file (§7.12).
 
 ---
 
 ## 9. Verification
 
-`./build-verify.sh` runs `Scripts/preflight.py` and then `xcodebuild`. The
-pre-flight checks need only Python and cover:
+`./build-verify.sh` runs `Scripts/preflight.py`, then
+`Scripts/test_keyboard_layout.sh`, then `xcodebuild`. The pre-flight checks need
+only Python and cover:
 
 - **Project file** — balanced delimiters, every object reference resolving, no
   CocoaPods or KeyboardKit remnants, valid `SWIFT_VERSION` values.
@@ -441,7 +489,9 @@ pre-flight checks need only Python and cover:
 - **Target membership** — every file a target compiles exists on disk, and any
   Swift file belonging to no target is listed.
 - **Deprecated and legacy API** — the patterns in §5, debug prints, and the
-  keyboard mistakes in §7.8 to §7.10, enforced against compiled sources only.
+  keyboard mistakes in §7.8 and §7.10, enforced against compiled sources only. The
+  rule against reserving room for the top banner (§7.9) is gone now that the
+  toolbar fills that room.
 - **Keyboard touch routing** — `ForwardingView` still limits itself to controls
   (§7.1).
 - **Interface Builder files** — which storyboards and nibs each target bundles.
@@ -457,8 +507,16 @@ pre-flight checks need only Python and cover:
   is complete, with its source checksum and credits. The translator, its sources and
   its own tests are described in [docs/TRANSLATOR.md](docs/TRANSLATOR.md).
 
+The keyboard layout check compiles the keyboard's layout code for Mac Catalyst,
+where UIKit runs without a simulator, and lays the keyboard out at every iPhone
+width in portrait and landscape and at iPad sizes, with and without the globe key.
+It checks that keys stay inside the keyboard without overlapping, that every popup
+stays inside the keyboard's view, that the key caps take the system's sizes and
+baseline, and that on the 402-point iPhone each key lands within a pixel of where
+the iOS 26 system keyboard puts it (§7.13).
+
 All checks pass. Run against earlier revisions, or with the relevant mistake
-reintroduced, the rules report every issue described in §2.5, §7.1, §7.2, §7.8 to
+reintroduced, the rules report every issue described in §2.5, §7.1, §7.2, §7.8,
 §7.10 and the life-cycle and launch-screen section, and every bundled file listed in
 §6.5. The project
 builds with Xcode 27, and the app runs in the iOS 26.5 simulator; running on a
@@ -480,11 +538,10 @@ to the Swift 6 language mode is a self-contained change.
 
 ### 10.2 Needs a device or design input
 
-- **Keyboard styling for iOS 26.** The keyboard now sits on the system's Liquid
-  Glass backdrop with the key palette of the current release. Whether the keys
-  should become translucent to match the iOS 26 system keyboard is a design
-  decision to make by eye on a device, in light and dark mode and with Reduce
-  Transparency on.
+- **Keyboard on a device.** The iOS 26 styling (§7.13), the toolbar (§7.12) and
+  the globe rule (§7.7) were checked in the simulator only, in portrait. Worth a
+  look on an iOS 27 iPhone and an iPad, in landscape and with Reduce Transparency
+  on.
 - **Globe key menu.** Holding the globe key on the system keyboard lists every
   installed keyboard. Custom keyboards get this through
   `handleInputModeList(from:with:)`, which needs the original touch event;
