@@ -198,12 +198,12 @@ private struct PhraseLabel: View {
     let analysis: Analysis
 
     var body: some View {
-        Label {
-            Text(verbatim: "\(analysis.summary) — \(analysis.entry.gloss)")
-                .font(.footnote)
-        } icon: {
+        IconLabel {
             Image(systemName: "link")
+        } content: {
+            Text(verbatim: "\(analysis.summary) — \(analysis.entry.gloss)")
         }
+        .font(.footnote)
         .foregroundStyle(.secondary)
         .accessibilityLabel(Text("Phrase: \(analysis.summary), \(analysis.entry.gloss)"))
     }
@@ -215,7 +215,11 @@ private struct UnknownWordLabel: View {
     let reason: UnknownReason?
 
     var body: some View {
-        Label {
+        IconLabel {
+            Image(systemName: "questionmark.circle.fill")
+                .font(.subheadline)
+                .foregroundStyle(.orange)
+        } content: {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Not in the dictionary")
                     .font(.subheadline.weight(.semibold))
@@ -223,9 +227,6 @@ private struct UnknownWordLabel: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-        } icon: {
-            Image(systemName: "questionmark.circle.fill")
-                .foregroundStyle(.orange)
         }
     }
 
@@ -236,6 +237,34 @@ private struct UnknownWordLabel: View {
         case .notFound, .empty, nil:
             "No dictionary word, with the endings, prefixes and infixes this app knows, makes this form. It may be a name, a newer word, or a form the rules here do not cover."
         }
+    }
+}
+
+/// An icon beside its text, or above it at the accessibility text sizes, where
+/// text flowing around an icon beside it becomes hard to read.
+private struct IconLabel<Icon: View, Content: View>: View {
+
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    private let icon: Icon
+    private let content: Content
+
+    init(@ViewBuilder icon: () -> Icon, @ViewBuilder content: () -> Content) {
+        self.icon = icon()
+        self.content = content()
+    }
+
+    var body: some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 4))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: 8))
+        layout {
+            icon
+            // Without this, the layout can hold the text to one line and truncate it.
+            content
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .accessibilityElement(children: .combine)
     }
 }
 
