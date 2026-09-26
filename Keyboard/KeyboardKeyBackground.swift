@@ -8,278 +8,55 @@
 
 import UIKit
 
-// This class does not actually draw its contents; rather, it generates bezier curves for others to use.
-// (You can still move it around, resize it, and add subviews to it. It just won't display the curve assigned to it.)
-class KeyboardKeyBackground: UIView, Connectable {
-    
-    var fillPath: UIBezierPath?
-    var underPath: UIBezierPath?
-    var edgePaths: [UIBezierPath]?
-    
-    // do not set this manually
-    var cornerRadius: CGFloat
-    var underOffset: CGFloat
-    
-    var startingPoints: [CGPoint]
-    var segmentPoints: [(CGPoint, CGPoint)]
-    var arcCenters: [CGPoint]
-    var arcStartingAngles: [CGFloat]
-    
-    var dirty: Bool
+/// The outlines a key fills: the key alone, or the key joined to its popup.
+///
+/// Both follow the iOS 26 system keyboard. Corners use the continuous curve that
+/// `UIBezierPath(roundedRect:cornerRadius:)` draws, and the popup narrows into its
+/// key through two S-curves rather than meeting it at a corner.
+enum KeyboardKeyBackground {
 
-    var attached: Direction? {
-        didSet {
-            self.dirty = true
-            self.setNeedsLayout()
-        }
-    }
-    var hideDirectionIsOpposite: Bool {
-        didSet {
-            self.dirty = true
-            self.setNeedsLayout()
-        }
-    }
-    
-    init(cornerRadius: CGFloat, underOffset: CGFloat) {
-        attached = nil
-        hideDirectionIsOpposite = false
-        dirty = false
-        
-        startingPoints = []
-        segmentPoints = []
-        arcCenters = []
-        arcStartingAngles = []
-        
-        startingPoints.reserveCapacity(4)
-        segmentPoints.reserveCapacity(4)
-        arcCenters.reserveCapacity(4)
-        arcStartingAngles.reserveCapacity(4)
-        
-        for _ in 0..<4 {
-            startingPoints.append(CGPoint.zero)
-            segmentPoints.append((CGPoint.zero, CGPoint.zero))
-            arcCenters.append(CGPoint.zero)
-            arcStartingAngles.append(0)
-        }
-        
-        self.cornerRadius = cornerRadius
-        self.underOffset = underOffset
-        
-        super.init(frame: CGRect.zero)
-        
-        self.isUserInteractionEnabled = false
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("NSCoding not supported")
-    }
-    
-    var oldBounds: CGRect?
-    override func layoutSubviews() {
-        if !self.dirty {
-            if self.bounds.width == 0 || self.bounds.height == 0 {
-                return
-            }
-            if oldBounds != nil && self.bounds.equalTo(oldBounds!) {
-                return
-            }
-        }
-        oldBounds = self.bounds
-        
-        super.layoutSubviews()
-        
-        self.generatePointsForDrawing(self.bounds)
-        
-        self.dirty = false
-    }
-    
-    let floatPi = CGFloat(Double.pi)
-    let floatPiDiv2 = CGFloat(Double.pi/2.0)
-    let floatPiDivNeg2 = -CGFloat(Double.pi/2.0)
-    
-    func generatePointsForDrawing(_ bounds: CGRect) {
-        let segmentWidth = bounds.width
-        let segmentHeight = bounds.height - CGFloat(underOffset)
-        
-        // base, untranslated corner points
-        self.startingPoints[0] = CGPoint(x: 0, y: segmentHeight)
-        self.startingPoints[1] = CGPoint(x: 0, y: 0)
-        self.startingPoints[2] = CGPoint(x: segmentWidth, y: 0)
-        self.startingPoints[3] = CGPoint(x: segmentWidth, y: segmentHeight)
-        
-        self.arcStartingAngles[0] = floatPiDiv2
-        self.arcStartingAngles[2] = floatPiDivNeg2
-        self.arcStartingAngles[1] = floatPi
-        self.arcStartingAngles[3] = 0
-        
-        //// actual coordinates for each edge, including translation
-        //self.segmentPoints.removeAll(keepCapacity: true)
-        //
-        //// actual coordinates for arc centers for each corner
-        //self.arcCenters.removeAll(keepCapacity: true)
-        //
-        //self.arcStartingAngles.removeAll(keepCapacity: true)
-        
-        for i in 0 ..< self.startingPoints.count {
-            let currentPoint = self.startingPoints[i]
-            let nextPoint = self.startingPoints[(i + 1) % self.startingPoints.count]
-            
-            var floatXCorner: CGFloat = 0
-            var floatYCorner: CGFloat = 0
-            
-            if (i == 1) {
-                floatXCorner = cornerRadius
-            }
-            else if (i == 3) {
-                floatXCorner = -cornerRadius
-            }
-            
-            if (i == 0) {
-                floatYCorner = -cornerRadius
-            }
-            else if (i == 2) {
-                floatYCorner = cornerRadius
-            }
-            
-            let p0 = CGPoint(
-                x: currentPoint.x + (floatXCorner),
-                y: currentPoint.y + underOffset + (floatYCorner))
-            let p1 = CGPoint(
-                x: nextPoint.x - (floatXCorner),
-                y: nextPoint.y + underOffset - (floatYCorner))
-            
-            self.segmentPoints[i] = (p0, p1)
-            
-            let c = CGPoint(
-                x: p0.x - (floatYCorner),
-                y: p0.y + (floatXCorner))
+    /// How far down the key's sides the popup's neck ends, as on the system keyboard.
+    static let neckDepth: CGFloat = 5
 
-            self.arcCenters[i] = c
-        }
-        
-        // order of edge drawing: left edge, down edge, right edge, up edge
-        
-        // We need to have separate paths for all the edges so we can toggle them as needed.
-        // Unfortunately, it doesn't seem possible to assemble the connected fill path
-        // by simply using CGPathAddPath, since it closes all the subpaths, so we have to
-        // duplicate the code a little bit.
-        
-        let fillPath = UIBezierPath()
-        var edgePaths: [UIBezierPath] = []
-        var prevPoint: CGPoint?
-        
-        for i in 0..<4 {
-            var edgePath: UIBezierPath?
-            let segmentPoint = self.segmentPoints[i]
-            
-            if self.attached != nil && (self.hideDirectionIsOpposite ? self.attached!.rawValue != i : self.attached!.rawValue == i) {
-                // do nothing
-                // TODO: quick hack
-                if !self.hideDirectionIsOpposite {
-                    continue
-                }
-            }
-            else {
-                edgePath = UIBezierPath()
-                
-                // TODO: figure out if this is ncessary
-                if prevPoint == nil {
-                    prevPoint = segmentPoint.0
-                    fillPath.move(to: prevPoint!)
-                }
+    static func path(forKey key: CGRect, cornerRadius: CGFloat) -> CGPath {
+        return UIBezierPath(roundedRect: key, cornerRadius: cornerRadius).cgPath
+    }
 
-                fillPath.addLine(to: segmentPoint.0)
-                fillPath.addLine(to: segmentPoint.1)
-                
-                edgePath!.move(to: segmentPoint.0)
-                edgePath!.addLine(to: segmentPoint.1)
-                
-                prevPoint = segmentPoint.1
-            }
-            
-            let shouldDrawArcInOppositeMode = (self.attached != nil ? (self.attached!.rawValue == i) || (self.attached!.rawValue == ((i + 1) % 4)) : false)
-            
-            if (self.attached != nil && (self.hideDirectionIsOpposite ? !shouldDrawArcInOppositeMode : self.attached!.rawValue == ((i + 1) % 4))) {
-                // do nothing
-            } else {
-                edgePath = (edgePath == nil ? UIBezierPath() : edgePath)
-                
-                if prevPoint == nil {
-                    prevPoint = segmentPoint.1
-                    fillPath.move(to: prevPoint!)
-                }
-                
-                let startAngle = self.arcStartingAngles[(i + 1) % 4]
-                let endAngle = startAngle + floatPiDiv2
-                let arcCenter = self.arcCenters[(i + 1) % 4]
-                
-                fillPath.addLine(to: prevPoint!)
-                fillPath.addArc(withCenter: arcCenter, radius: self.cornerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-                
-                edgePath!.move(to: prevPoint!)
-                edgePath!.addArc(withCenter: arcCenter, radius: self.cornerRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-                
-                prevPoint = self.segmentPoints[(i + 1) % 4].0
-            }
-            
-            edgePath?.apply(CGAffineTransform(translationX: 0, y: -self.underOffset))
-            
-            if edgePath != nil { edgePaths.append(edgePath!) }
-        }
-        
-        fillPath.close()
-        fillPath.apply(CGAffineTransform(translationX: 0, y: -self.underOffset))
-        
-        let underPath = { () -> UIBezierPath in
-            let underPath = UIBezierPath()
-            
-            underPath.move(to: self.segmentPoints[2].1)
-            
-            var startAngle = self.arcStartingAngles[3]
-            var endAngle = startAngle + CGFloat(Double.pi/2.0)
-            underPath.addArc(withCenter: self.arcCenters[3], radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: true)
+    /// - Parameters:
+    ///   - key: The key's bounds.
+    ///   - popup: The popup's frame in the key's coordinates. It lies above the
+    ///     key, but near the top of the keyboard it may reach down over the key.
+    static func path(forKey key: CGRect, cornerRadius: CGFloat, popup: CGRect, popupCornerRadius: CGFloat) -> CGPath {
+        let keyPath = self.path(forKey: key, cornerRadius: cornerRadius)
 
-            underPath.addLine(to: self.segmentPoints[3].1)
-            
-            startAngle = self.arcStartingAngles[0]
-            endAngle = startAngle + CGFloat(Double.pi/2.0)
-            underPath.addArc(withCenter: self.arcCenters[0], radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: true)
-            
-            underPath.addLine(to: CGPoint(x: self.segmentPoints[0].0.x, y: self.segmentPoints[0].0.y - self.underOffset))
-            
-            startAngle = self.arcStartingAngles[1]
-            endAngle = startAngle - CGFloat(Double.pi/2.0)
-            underPath.addArc(withCenter: CGPoint(x: self.arcCenters[0].x, y: self.arcCenters[0].y - self.underOffset), radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: false)
-            
-            underPath.addLine(to: CGPoint(x: self.segmentPoints[2].1.x - self.cornerRadius, y: self.segmentPoints[2].1.y + self.cornerRadius - self.underOffset))
-            
-            startAngle = self.arcStartingAngles[0]
-            endAngle = startAngle - CGFloat(Double.pi/2.0)
-            underPath.addArc(withCenter: CGPoint(x: self.arcCenters[3].x, y: self.arcCenters[3].y - self.underOffset), radius: CGFloat(self.cornerRadius), startAngle: startAngle, endAngle: endAngle, clockwise: false)
-            
-            underPath.close()
-            
-            return underPath
-        }()
-        
-        self.fillPath = fillPath
-        self.edgePaths = edgePaths
-        self.underPath = underPath
-    }
-    
-    func attachmentPoints(_ direction: Direction) -> (CGPoint, CGPoint) {
-        let returnValue = (
-            self.segmentPoints[direction.clockwise().rawValue].0,
-            self.segmentPoints[direction.counterclockwise().rawValue].1)
-        
-        return returnValue
-    }
-    
-    func attachmentDirection() -> Direction? {
-        return self.attached
-    }
-    
-    func attach(_ direction: Direction?) {
-        self.attached = direction
+        // The popup's top corners are rounded. Its bottom corners are squared off,
+        // because the neck below carries its sides on down to the key.
+        let radius = min(popupCornerRadius, popup.height / 2, popup.width / 2)
+        let roundedBody = UIBezierPath(roundedRect: popup, cornerRadius: radius).cgPath
+        let squareBottom = CGPath(rect: CGRect(x: popup.minX, y: popup.maxY - radius, width: popup.width, height: radius), transform: nil)
+        let body = roundedBody.union(squareBottom)
+
+        let neckTop = popup.maxY
+        let neckBottom = min(max(key.minY + self.neckDepth, neckTop + 2), key.maxY - cornerRadius)
+        if neckBottom <= neckTop {
+            return body.union(keyPath)
+        }
+
+        // Each side of the neck leaves the popup and meets the key vertically.
+        let middle = (neckTop + neckBottom) / 2
+        let neck = CGMutablePath()
+        neck.move(to: CGPoint(x: popup.minX, y: neckTop - 1))
+        neck.addLine(to: CGPoint(x: popup.minX, y: neckTop))
+        neck.addCurve(to: CGPoint(x: key.minX, y: neckBottom),
+                      control1: CGPoint(x: popup.minX, y: middle),
+                      control2: CGPoint(x: key.minX, y: middle))
+        neck.addLine(to: CGPoint(x: key.maxX, y: neckBottom))
+        neck.addCurve(to: CGPoint(x: popup.maxX, y: neckTop),
+                      control1: CGPoint(x: key.maxX, y: middle),
+                      control2: CGPoint(x: popup.maxX, y: middle))
+        neck.addLine(to: CGPoint(x: popup.maxX, y: neckTop - 1))
+        neck.closeSubpath()
+
+        return body.union(neck).union(keyPath)
     }
 }

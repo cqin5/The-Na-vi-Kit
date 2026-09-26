@@ -85,7 +85,6 @@ DEPRECATED_API = {
     r"\bUIDevice\.current\.userInterfaceIdiom\b": "UIDevice idiom — use the trait collection",
     r"\bkeyboardFrameEndUserInfoKey\b": "manual keyboard frame handling — use view.keyboardLayoutGuide",
     r"\bAudioServicesPlaySystemSound\b": "a system sound, which needs Full Access the keyboard does not request — use UIDevice.current.playInputClick()",
-    r"withTopBanner:\s*true": "room for the top banner, which is never shown, so an empty strip sits above the keys",
     r"\[(\w+)\.index\(before: \1\.endIndex\)\]": "the character before endIndex, which traps on an empty string — use .last",
     r"^\s*print\(": "a debug print in shipping code",
 }
@@ -309,8 +308,10 @@ def check_target_membership(report: Report, project: ProjectFile) -> set[str]:
             report.ok(f"{target} compiles {len(sources)} Swift files, all present")
         compiled.update(sources)
 
+    # Scripts/ holds test code that is compiled on its own, not into a target.
     on_disk = {
-        str(path) for path in pathlib.Path(".").rglob("*.swift") if "Pods/" not in str(path)
+        str(path) for path in pathlib.Path(".").rglob("*.swift")
+        if "Pods/" not in str(path) and not str(path).startswith("Scripts/")
     }
     orphans = sorted(on_disk - compiled)
     if orphans:

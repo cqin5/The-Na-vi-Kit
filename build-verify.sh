@@ -4,7 +4,8 @@
 #
 # Runs Scripts/preflight.py — project integrity, scene life cycle, App Store
 # property list keys, privacy manifests, target membership and deprecated API —
-# then builds with xcodebuild when a toolchain is available.
+# and Scripts/test_keyboard_layout.sh, then builds with xcodebuild when a
+# toolchain is available.
 #
 # Usage: ./build-verify.sh
 
@@ -25,6 +26,17 @@ fi
 
 python3 Scripts/preflight.py
 preflight_status=$?
+
+printf '\n%sKeyboard layout%s\n' "$BOLD" "$NC"
+
+if command -v xcrun >/dev/null 2>&1; then
+    Scripts/test_keyboard_layout.sh | tail -n 1 | sed 's/^/  /'
+    layout_status=${PIPESTATUS[0]}
+else
+    printf '  %s!%s xcrun not found — run this on a Mac with Xcode to check the layout.\n' \
+        "$YELLOW" "$NC"
+    layout_status=0
+fi
 
 printf '\n%sBuild%s\n' "$BOLD" "$NC"
 
@@ -49,7 +61,7 @@ else
     printf '  %s✗%s xcodebuild failed\n' "$RED" "$NC"
 fi
 
-if [ "$preflight_status" -ne 0 ] || [ "$build_status" -ne 0 ]; then
+if [ "$preflight_status" -ne 0 ] || [ "$layout_status" -ne 0 ] || [ "$build_status" -ne 0 ]; then
     exit 1
 fi
 exit 0

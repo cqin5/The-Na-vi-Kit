@@ -14,8 +14,9 @@ extension KeyboardViewController {
     ///
     /// Three things can change it: the system switching between light and dark,
     /// Reduce Transparency being turned on or off, and focus moving to a field that
-    /// asks for a dark keyboard. The first two are observed here; the third arrives
-    /// through `textDidChange(_:)`, which calls `refreshAppearance()` directly.
+    /// asks for a dark keyboard or a different Return key. The first two are
+    /// observed here; the third arrives through `textDidChange(_:)`, which calls
+    /// `refreshAppearance()` directly.
     func addInputTraitsObservers() {
         self.registerForTraitChanges(
             [UITraitUserInterfaceStyle.self],
@@ -38,14 +39,16 @@ extension KeyboardViewController {
         self.refreshAppearance()
     }
 
-    /// Re-applies the key colours if the effective appearance has changed.
+    /// Re-applies the key colours if the effective appearance, or the field's
+    /// Return key, has changed.
     func refreshAppearance() {
         guard let layout = self.layout else {
             return
         }
 
         let appearanceIsDark = self.darkMode()
-        if appearanceIsDark != layout.darkMode || self.solidColorMode() != layout.solidColorMode {
+        let returnKeyType = self.textDocumentProxy.returnKeyType ?? .default
+        if appearanceIsDark != layout.darkMode || self.solidColorMode() != layout.solidColorMode || returnKeyType != layout.returnKeyType {
             self.updateAppearances(appearanceIsDark)
         }
     }

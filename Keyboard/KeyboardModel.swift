@@ -72,7 +72,6 @@ class Key {
         case period
         case space
         case `return`
-        case settings
         case other
     }
     
@@ -109,8 +108,6 @@ class Key {
             case .keyboardChange:
                 return true
             case .return:
-                return true
-            case .settings:
                 return true
             default:
                 return false
