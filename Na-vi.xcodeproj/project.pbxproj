@@ -15,11 +15,7 @@
 		A6E100062F0000000000AA06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */; };
 		A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100032F0000000000AA03 /* PronunciationPlayer.swift */; };
 		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
-		A617909D2149214D00C7ECFE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A617909B2149214C00C7ECFE /* GoogleService-Info.plist */; };
-		A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */; };
 		A6AE8B011D1AD43E00345E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B001D1AD43E00345E2E /* Assets.xcassets */; };
-		A6BB0D3E282A34490071BD1E /* vocabulary-20220106.csv in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C2282A343D0071BD1E /* vocabulary-20220106.csv */; };
 		A6BB0D3F282A34490071BD1E /* vocabulary.json in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C3282A343D0071BD1E /* vocabulary.json */; };
 		A6BB0D40282A34490071BD1E /* 11828.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C5282A343D0071BD1E /* 11828.mp3 */; };
 		A6BB0D41282A34490071BD1E /* 10288.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C6282A343D0071BD1E /* 10288.mp3 */; };
@@ -2699,8 +2695,6 @@
 		A6BB17B3282A344A0071BD1E /* 788.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D39282A34480071BD1E /* 788.mp3 */; };
 		A6BB17B4282A344A0071BD1E /* 7692.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3A282A34480071BD1E /* 7692.mp3 */; };
 		A6BB17B5282A344A0071BD1E /* 7876.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3B282A34480071BD1E /* 7876.mp3 */; };
-		A6BB17B6282A344A0071BD1E /* vocabulary-2016.json in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3C282A34480071BD1E /* vocabulary-2016.json */; };
-		A6BB17B7282A344A0071BD1E /* Eywa.sketch in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3D282A34490071BD1E /* Eywa.sketch */; };
 		A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */; };
 		A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92061D1B32050030D414 /* DefaultSettings.swift */; };
 		A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92071D1B32050030D414 /* DefaultSettings.xib */; };
@@ -2756,11 +2750,9 @@
 		A6E100032F0000000000AA03 /* PronunciationPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PronunciationPlayer.swift; sourceTree = "<group>"; };
 		A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na-vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A61790982149099200C7ECFE /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
-		A617909B2149214C00C7ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
 		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
 		A6AE8AF31D1AD43E00345E2E /* Eywa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eywa.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Na_vi.xcdatamodel; sourceTree = "<group>"; };
 		A6AE8B001D1AD43E00345E2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Na'vi/Assets.xcassets"; sourceTree = "<group>"; };
 		A6AE8B051D1AD43E00345E2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6BB02C2282A343D0071BD1E /* vocabulary-20220106.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "vocabulary-20220106.csv"; sourceTree = "<group>"; };
@@ -8297,14 +8289,12 @@
 		A6CB924E1D1C6E420030D414 /* Shared Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A617909B2149214C00C7ECFE /* GoogleService-Info.plist */,
 				A61790982149099200C7ECFE /* UIDevice.swift */,
 				A6CB92301D1B358E0030D414 /* CQMPHelper.swift */,
 				A6CB92311D1B358E0030D414 /* CQNSHelper.swift */,
 				A6CB92321D1B358E0030D414 /* CQStdHelper.swift */,
 				A6CB92331D1B358E0030D414 /* CQUIHelper.swift */,
 				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
-				A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */,
 			);
 			name = "Shared Resources";
 			sourceTree = "<group>";
@@ -8404,7 +8394,6 @@
 			files = (
 				A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */,
 				A6CB921C1D1B32050030D414 /* DefaultSettings.xib in Resources */,
-				A617909D2149214D00C7ECFE /* GoogleService-Info.plist in Resources */,
 				A6CB92291D1B32050030D414 /* Media.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8482,7 +8471,6 @@
 				A6BB1236282A34490071BD1E /* 4508.mp3 in Resources */,
 				A6BB1202282A34490071BD1E /* 8092.mp3 in Resources */,
 				A6BB14DC282A344A0071BD1E /* 5352.mp3 in Resources */,
-				A6BB17B6282A344A0071BD1E /* vocabulary-2016.json in Resources */,
 				A6BB13DD282A34490071BD1E /* 504.mp3 in Resources */,
 				A6BB0D58282A34490071BD1E /* 8792.mp3 in Resources */,
 				A6BB100B282A34490071BD1E /* 484.mp3 in Resources */,
@@ -8650,7 +8638,6 @@
 				A6BB13DF282A34490071BD1E /* 13058.mp3 in Resources */,
 				A6BB0D70282A34490071BD1E /* 6608.mp3 in Resources */,
 				A6BB0E50282A34490071BD1E /* 11792.mp3 in Resources */,
-				A6BB0D3E282A34490071BD1E /* vocabulary-20220106.csv in Resources */,
 				A6BB0E38282A34490071BD1E /* 8356.mp3 in Resources */,
 				A6BB0E5E282A34490071BD1E /* 8196.mp3 in Resources */,
 				A6BB14F6282A344A0071BD1E /* 1336.mp3 in Resources */,
@@ -9826,7 +9813,6 @@
 				A6BB13AF282A34490071BD1E /* 128.mp3 in Resources */,
 				A6BB10CA282A34490071BD1E /* 2156.mp3 in Resources */,
 				A6BB129E282A34490071BD1E /* 5960.mp3 in Resources */,
-				A6BB17B7282A344A0071BD1E /* Eywa.sketch in Resources */,
 				A6BB170E282A344A0071BD1E /* 2716.mp3 in Resources */,
 				A6BB0EE4282A34490071BD1E /* 6380.mp3 in Resources */,
 				A6BB14A5282A344A0071BD1E /* 8528.mp3 in Resources */,
@@ -9942,7 +9928,6 @@
 				A6BB1193282A34490071BD1E /* 9984.mp3 in Resources */,
 				A6BB15AB282A344A0071BD1E /* 2472.mp3 in Resources */,
 				A6BB1598282A344A0071BD1E /* 60.mp3 in Resources */,
-				A617909C2149214D00C7ECFE /* GoogleService-Info.plist in Resources */,
 				A6BB1546282A344A0071BD1E /* 5724.mp3 in Resources */,
 				A6BB1505282A344A0071BD1E /* 648.mp3 in Resources */,
 				A6BB113A282A34490071BD1E /* 9172.mp3 in Resources */,
@@ -11136,7 +11121,6 @@
 				A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */,
 				A6E200022F0000000000BB02 /* EywaApp.swift in Sources */,
 				A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */,
-				A6AE8AFF1D1AD43E00345E2E /* Na_vi.xcdatamodeld in Sources */,
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
 				A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */,
 			);
@@ -11412,22 +11396,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-
-
-/* Begin XCVersionGroup section */
-		A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */,
-			);
-			currentVersion = A6AE8AFE1D1AD43E00345E2E /* Na_vi.xcdatamodel */;
-			name = Na_vi.xcdatamodeld;
-			path = "Na'vi/Na_vi.xcdatamodeld";
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = A6AE8AEB1D1AD43E00345E2E /* Project object */;
 }

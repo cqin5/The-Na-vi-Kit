@@ -6,8 +6,9 @@ Covers the things that can go wrong without Xcode noticing until an archive is
 rejected or a device misbehaves: project file integrity, the scene-based app life
 cycle that the iOS 27 SDK requires, the launch screen, App Store property list
 keys, privacy manifests, the App Store icon, target membership, deprecated and
-legacy API in the sources that are actually compiled, and any Interface Builder
-files still bundled.
+legacy API in the sources that are actually compiled, any Interface Builder
+files still bundled, and bundle contents — the vocabulary the app cannot work
+without, and files that nothing reads at run time.
 
 Run from the project root, or via ./build-verify.sh.
 """
@@ -38,6 +39,19 @@ RESOURCES_PHASES = {
 }
 
 VALID_SWIFT_VERSIONS = {"4.0", "4.2", "5.0", "6.0"}
+
+# NDDictionary reads this at launch. A release build without it shows an empty
+# dictionary instead of crashing, so nothing else would notice it had gone.
+APP_VOCABULARY = "vocabulary.json"
+
+# Files no target reads at run time. The design file and the exports stay in the
+# repository as source material; bundling them only adds to the download.
+NEVER_BUNDLED = {
+    r"\.sketch$": "a Sketch design file",
+    r"\.csv$": "a spreadsheet export",
+    r"^vocabulary-.+\.json$": "an old vocabulary export; the app reads only vocabulary.json",
+    r"^GoogleService-Info\.plist$": "Firebase configuration, but no Firebase SDK is linked",
+}
 
 # Patterns that must not appear in a source file that is compiled into a target.
 DEPRECATED_API = {
@@ -450,6 +464,28 @@ def check_interface_builder_files(report: Report, project: ProjectFile) -> None:
                 + ", ".join(legacy)
             )
 
+
+def check_bundle_contents(report: Report, project: ProjectFile) -> None:
+    report.section("Bundle contents")
+
+    if APP_VOCABULARY in resource_names(project, RESOURCES_PHASES["Eywa"]):
+        report.ok(f"Eywa bundles {APP_VOCABULARY}")
+    else:
+        report.fail(f"Eywa does not bundle {APP_VOCABULARY}, so the dictionary would load empty")
+
+    for target, phase_id in RESOURCES_PHASES.items():
+        unread = [
+            f"{name} — {reason}"
+            for name in resource_names(project, phase_id)
+            for pattern, reason in NEVER_BUNDLED.items()
+            if re.search(pattern, name)
+        ]
+        for item in unread:
+            report.warn(f"{target} bundles {item}")
+        if not unread:
+            report.ok(f"{target} bundles no design files, exports or Firebase configuration")
+
+
 def check_keyboard_touch_routing(report: Report) -> None:
     report.section("Keyboard touch routing")
 
@@ -486,6 +522,7 @@ def main() -> int:
     check_deprecated_api(report, compiled)
     check_keyboard_touch_routing(report)
     check_interface_builder_files(report, project)
+    check_bundle_contents(report, project)
 
     report.section("Result")
     if report.failures:

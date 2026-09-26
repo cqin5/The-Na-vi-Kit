@@ -208,6 +208,34 @@ without reloading the table.
 - Project format: `objectVersion` 54 → 56, `compatibilityVersion` `Xcode 3.2` →
   `Xcode 14.0`.
 
+### 6.5 Bundle contents
+
+The app bundled four files that nothing reads:
+
+- `Resources/Eywa.sketch`, a 2.5 MB Sketch design file.
+- `Resources/vocabulary-2016.json`, an old export of the vocabulary. The app reads
+  only `Resources/vocabulary.json`.
+- `Resources/vocabulary-20220106.csv`, a source export of the vocabulary.
+- `GoogleService-Info.plist`, Firebase configuration left behind when the Firebase
+  pods were removed in 2022. The keyboard bundled a copy as well.
+
+The design file and the two exports stay in the repository as source material, but
+no target copies them any more. Firebase is not planned, so its configuration file
+is deleted; its API key is covered in §10.4.
+
+Two more things were used only by code that no longer exists:
+
+- Five images in `Assets.xcassets` — `Keyboard Icon`, `InfoIcon`, `Play Audio`,
+  `Bookmarked` and `Keyboard Screen Shot` — that only the storyboards displayed.
+  The SwiftUI screens use SF Symbols instead (§3.2).
+- The Core Data model `Na_vi.xcdatamodeld`, compiled into the app although no code
+  ever loaded a Core Data stack.
+
+The app is 3.3 MB smaller installed and about 2.3 MB smaller to download. A build
+without `vocabulary.json` would still succeed, and a release build would show an
+empty dictionary rather than crash, so the pre-flight checks now fail if the app
+stops bundling it (§9).
+
 ---
 
 ## 7. Keyboard extension
@@ -321,11 +349,15 @@ pre-flight checks need only Python and cover:
 - **Keyboard touch routing** — `ForwardingView` still limits itself to controls
   (§7.1).
 - **Interface Builder files** — which storyboards and nibs each target bundles.
+- **Bundle contents** — the app bundles `vocabulary.json`, and no target bundles a
+  design file, a spreadsheet export, an old vocabulary export or Firebase
+  configuration (§6.5).
 
 All checks pass. Run against earlier revisions, or with the relevant mistake
 reintroduced, the rules report every issue described in §2.5, §7 and the life-cycle
-and launch-screen section. Compiling and running on device requires Xcode 26 or
-later and has not been performed as part of this change.
+and launch-screen section, and every bundled file listed in §6.5. The project
+builds with Xcode 27, and the app runs in the iOS 26.5 simulator; running on a
+device has not been performed as part of this change.
 
 ---
 
@@ -383,16 +415,12 @@ to the Swift 6 language mode is a self-contained change.
 
 ### 10.4 Smaller items
 
-- **Bundle contents.** The app bundle ships `Eywa.sketch` (a 2.5 MB design file),
-  `vocabulary-2016.json` and `vocabulary-20220106.csv`, none of which the app reads,
-  and `GoogleService-Info.plist`, although no Firebase SDK is linked. Removing all
-  four from the app's Resources build phase makes the download about 3.2 MB smaller;
-  the Firebase file is also bundled into the keyboard.
-- **Unused assets.** The asset catalog still holds images that only the storyboards
-  used: `Keyboard Icon`, `InfoIcon`, `Play Audio`, `Bookmarked` and
-  `Keyboard Screen Shot`.
-- **Unused Core Data model.** `Na_vi.xcdatamodeld` is compiled into the app but
-  never loaded.
+- **Firebase API key.** `GoogleService-Info.plist` (§6.5) was committed to this
+  public repository in 2018, so its API key stays in the git history. Firebase is
+  not planned, so deleting the key in the Google Cloud console — or the whole
+  `the-navi-kit` Firebase project, if nothing else uses it — closes this off more
+  completely than rotating it. Deleting the project also retires its Realtime
+  Database, which only its security rules protect, with or without a key.
 - **The keyboard's settings panel is unreachable.** Its key is commented out of
   the layout, so its options are fixed at their defaults, and its key-click option
   would also need the Full Access permission, which the keyboard does not request.
