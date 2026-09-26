@@ -95,3 +95,22 @@ struct GrammarSearch: Sendable {
         Orthography.normalize(headword.replacingOccurrences(of: "+", with: ""))
     }
 }
+
+/// The grammar engine as the app loads it, after the vocabulary.
+enum GrammarState {
+    case loading
+    case ready(GrammarSearch)
+    /// The grammar lexicon could not be loaded. Words can still be looked up, but
+    /// not read.
+    case unavailable
+
+    /// The engine, once it has loaded.
+    var search: GrammarSearch? {
+        switch self {
+        case .ready(let search):
+            search
+        case .loading, .unavailable:
+            nil
+        }
+    }
+}

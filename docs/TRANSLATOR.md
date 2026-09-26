@@ -1,7 +1,7 @@
 # The Na'vi Translator
 
-Eywa can read Na'vi as well as look it up. Search recognises inflected words, and a
-Translate screen glosses a passage word by word. Both run on a grammar engine,
+Eywa can read Na'vi as well as look it up. Search recognises inflected words, and the
+Translate tab glosses a passage word by word. Both run on a grammar engine,
 **NaviGrammar**, that works entirely on the device.
 
 ---
@@ -19,15 +19,15 @@ it comes from, with a one-line analysis:
 | ngati | ngati → nga + patientive |
 | kameie | kameie → kame + «ei» laudative |
 
-**The Translate screen glosses a passage.** Paste or type Na'vi, and each word shows
+**The Translate tab glosses a passage.** Paste or type Na'vi, and each word shows
 the word it comes from, that word's English meaning, and the grammar of the form,
 each feature labelled and explained in plain English. Multi-word entries such as
 *irayo si* "thank" are pointed out. When a word can be read more than one way, every
 reading is listed, most likely first. A word the engine cannot account for is marked
 **Not in the dictionary**, with the reason, and is never guessed at.
 
-**A phrasebook** on the Translate screen lists 67 everyday phrases and sayings by
-topic. Choosing one reads it word by word.
+**The Phrasebook tab** lists 67 everyday phrases and sayings by topic. Choosing one
+reads it word by word.
 
 Nothing typed or pasted leaves the device.
 

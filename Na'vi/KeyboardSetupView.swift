@@ -8,44 +8,35 @@
 import SwiftUI
 import UIKit
 
-/// A compact guide to adding and switching to the Na'vi keyboard.
+/// The Settings tab: a compact guide to adding and switching to the Na'vi keyboard,
+/// and a way to contact the developer.
 struct KeyboardSetupView: View {
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
     @State private var isShowingMailError = false
 
     private var palette: SetupPalette { SetupPalette(colorScheme: colorScheme) }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 28) {
-                    introduction
-                    instructions
-                    support
-                }
-                .frame(maxWidth: 560)
-                .padding(.horizontal, 24)
-                .padding(.top, 28)
-                .padding(.bottom, 28)
-                .frame(maxWidth: .infinity)
+        ScrollView {
+            VStack(spacing: 28) {
+                introduction
+                instructions
+                support
             }
-            .background(palette.background)
-            .navigationTitle("Keyboard setup")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-            .alert("Could Not Send Email", isPresented: $isShowingMailError) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text("No mail app is set up on this device. Add a mail account and try again.")
-            }
+            .frame(maxWidth: 560)
+            .padding(.horizontal, 24)
+            .padding(.top, 28)
+            .padding(.bottom, 28)
+            .frame(maxWidth: .infinity)
+        }
+        .background(palette.background)
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert("Could Not Send Email", isPresented: $isShowingMailError) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("No mail app is set up on this device. Add a mail account and try again.")
         }
         .tint(palette.accent)
     }
@@ -262,16 +253,22 @@ private enum SupportMail {
 }
 
 #Preview("Light") {
-    KeyboardSetupView()
-        .preferredColorScheme(.light)
+    NavigationStack {
+        KeyboardSetupView()
+    }
+    .preferredColorScheme(.light)
 }
 
 #Preview("Dark") {
-    KeyboardSetupView()
-        .preferredColorScheme(.dark)
+    NavigationStack {
+        KeyboardSetupView()
+    }
+    .preferredColorScheme(.dark)
 }
 
 #Preview("Large text") {
-    KeyboardSetupView()
-        .environment(\.dynamicTypeSize, .accessibility3)
+    NavigationStack {
+        KeyboardSetupView()
+    }
+    .environment(\.dynamicTypeSize, .accessibility3)
 }

@@ -96,12 +96,15 @@ files where it compiled thirteen.
 
 ### 3.2 Behaviour
 
-- **Search.** `.searchable` provides the search field. On iPhone with iOS 26 the
-  system places it at the bottom of the screen in Liquid Glass — where the app
-  already kept it — and keeps it above the keyboard. On iOS 18 to 25 it sits in
-  the navigation bar, as is standard on those releases. The keyboard-tracking code
-  the UIKit version needed is gone. An empty search shows the system's
-  "No Results" view.
+- **Navigation.** A tab bar leads to the dictionary, Translate, the phrasebook and
+  Settings, which holds the keyboard setup guide. Each tab keeps its own navigation
+  stack, and a restored scene reopens on the tab last used. The vocabulary and the
+  grammar engine load once, in the background, for the three tabs that need them.
+- **Search.** `.searchable` provides the search field. On iPhone it sits below the
+  navigation title, as is standard in an app with a tab bar; on iPad with iOS 26 it
+  collapses to a search button beside the tab bar. The keyboard-tracking code the
+  UIKit version needed is gone. An empty search shows the system's "No Results"
+  view.
 - **Letter index.** On iOS 26, the list uses SwiftUI's native section index. SwiftUI
   has no section index before iOS 26, so on iOS 18 to 25 a compact index of its own
   keeps A–Z navigation, which the UIKit version offered on every release.
@@ -114,8 +117,8 @@ files where it compiled thirteen.
   setup screen now scrolls, so its instructions can grow with larger text.
 - **Setup screen appearance.** It follows the system appearance instead of a fixed
   dark background.
-- **Icons.** The keyboard-setup and play-pronunciation buttons use SF Symbols,
-  which scale with text and carry accessibility labels.
+- **Icons.** The tab bar and the play-pronunciation buttons use SF Symbols with
+  accessibility labels, and the play buttons scale with text.
 - **Contact.** "Contact Developer" opens a message in the reader's default mail app,
   whichever that is. The in-app Mail composer is gone; it worked only when Apple
   Mail had an account set up.
@@ -132,8 +135,8 @@ blue-to-purple gradient sat behind every screen, a blur view sat behind every ro
 the navigation and search bars were overridden with custom transparent
 appearances, and a hand-built blur sat behind the keyboard's keys.
 
-All of it is gone. In the app, the navigation bar, toolbar button, search field and
-setup sheet take on Liquid Glass from SwiftUI, and no custom glass code remains. The
+All of it is gone. In the app, the navigation bar, tab bar and search field take on
+Liquid Glass from SwiftUI, and no custom glass code remains. The
 keyboard sits on the system's own backdrop, which is Liquid Glass on iOS 26; the
 hand-built layer it replaces also broke typing (§7.1).
 

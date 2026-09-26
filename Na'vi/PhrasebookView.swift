@@ -10,7 +10,9 @@ import SwiftUI
 /// Everyday phrases and sayings, by topic. Choosing one reads it word by word.
 struct PhrasebookView: View {
 
-    let grammar: GrammarSearch
+    /// The grammar engine, which reads a chosen phrase. The phrases themselves are
+    /// listed before it has loaded.
+    let grammar: GrammarState
 
     var body: some View {
         List {
@@ -18,7 +20,7 @@ struct PhrasebookView: View {
                 Section(topic.title) {
                     ForEach(topic.phrases) { phrase in
                         NavigationLink {
-                            TranslateView(grammar: grammar, text: phrase.navi, showsPhrasebook: false)
+                            TranslateScreen(grammar: grammar, text: phrase.navi)
                         } label: {
                             PhraseRow(phrase: phrase)
                         }

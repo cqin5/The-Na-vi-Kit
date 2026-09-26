@@ -16,18 +16,12 @@ struct TranslateView: View {
 
     let grammar: GrammarSearch
 
-    /// Whether the toolbar offers the phrasebook; not when the phrasebook opened this screen.
-    let showsPhrasebook: Bool
-
     @State private var text: String
     @State private var reading: Reading?
 
-    /// - Parameters:
-    ///   - text: text to read straight away, such as a phrase from the phrasebook.
-    ///   - showsPhrasebook: whether the toolbar offers the phrasebook.
-    init(grammar: GrammarSearch, text: String = "", showsPhrasebook: Bool = true) {
+    /// - Parameter text: text to read straight away, such as a phrase from the phrasebook.
+    init(grammar: GrammarSearch, text: String = "") {
         self.grammar = grammar
-        self.showsPhrasebook = showsPhrasebook
         _text = State(initialValue: text)
     }
 
@@ -76,17 +70,6 @@ struct TranslateView: View {
         }
         .navigationTitle("Translate")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            if showsPhrasebook {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        PhrasebookView(grammar: grammar)
-                    } label: {
-                        Label("Phrasebook", systemImage: "text.book.closed")
-                    }
-                }
-            }
-        }
         .task(id: text) {
             // Wait for typing to pause, then read off the main thread.
             do {
@@ -109,6 +92,35 @@ struct TranslateView: View {
         let unknown = reading.unknownWords.count
         let words = reading.words.count == 1 ? "1 word" : "\(reading.words.count) words"
         return unknown == 0 ? words : "\(words), \(unknown) not in the dictionary"
+    }
+}
+
+/// The Translate screen once the grammar engine has loaded, which it does just after
+/// the vocabulary when the app opens. Until then the screen shows its progress, and
+/// if the engine cannot be loaded, says so.
+struct TranslateScreen: View {
+
+    let grammar: GrammarState
+    /// Text to read straight away, such as a phrase from the phrasebook.
+    var text = ""
+
+    var body: some View {
+        switch grammar {
+        case .ready(let search):
+            TranslateView(grammar: search, text: text)
+        case .loading:
+            ProgressView()
+                .navigationTitle("Translate")
+                .navigationBarTitleDisplayMode(.inline)
+        case .unavailable:
+            ContentUnavailableView(
+                "Translation Unavailable",
+                systemImage: "exclamationmark.triangle",
+                description: Text("The grammar data that Translate needs could not be loaded.")
+            )
+            .navigationTitle("Translate")
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 
