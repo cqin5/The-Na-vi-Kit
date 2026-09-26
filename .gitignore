@@ -3,3 +3,10 @@ project.xcworkspace
 xcuserdata
 __pycache__/
 GoogleService-Info.plist
+
+# Downloaded source data (see Scripts/build_grammar_lexicon.py)
+/SourceData/
+
+# Swift Package Manager build output
+.build/
+.swiftpm/
