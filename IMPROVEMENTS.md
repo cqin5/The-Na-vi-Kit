@@ -74,7 +74,8 @@ so the extension now tracks `1.5.2`. Both bundles take their build number from
 The 1024×1024 App Store icon was stored as RGBA. App Store Connect rejects a
 marketing icon with an alpha channel (ITMS-90717). Every pixel was already fully
 opaque, so the file was re-encoded as RGB with identical colour values; it is also
-13% smaller.
+13% smaller. The fourteen smaller icon sizes carried the same unused alpha channel
+and are re-encoded the same way, with identical pixels.
 
 ---
 

@@ -2,3 +2,4 @@
 project.xcworkspace
 xcuserdata
 __pycache__/
+GoogleService-Info.plist
