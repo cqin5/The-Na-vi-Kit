@@ -2755,7 +2755,6 @@
 		A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		A6E100032F0000000000AA03 /* PronunciationPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PronunciationPlayer.swift; sourceTree = "<group>"; };
 		A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na-vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A61790982149099200C7ECFE /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		A617909B2149214C00C7ECFE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
 		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
@@ -5445,7 +5444,6 @@
 		A6BB0D3B282A34480071BD1E /* 7876.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 7876.mp3; sourceTree = "<group>"; };
 		A6BB0D3C282A34480071BD1E /* vocabulary-2016.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "vocabulary-2016.json"; sourceTree = "<group>"; };
 		A6BB0D3D282A34490071BD1E /* Eywa.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = Eywa.sketch; sourceTree = "<group>"; };
-		A6CB92031D1B32050030D414 /* Na'vi Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Na'vi Keyboard.swift"; sourceTree = "<group>"; };
 		A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKeyboard.swift; sourceTree = "<group>"; };
 		A6CB92061D1B32050030D414 /* DefaultSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSettings.swift; sourceTree = "<group>"; };
 		A6CB92071D1B32050030D414 /* DefaultSettings.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DefaultSettings.xib; sourceTree = "<group>"; };
@@ -5453,7 +5451,6 @@
 		A6CB92091D1B32050030D414 /* ExtraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraView.swift; sourceTree = "<group>"; };
 		A6CB920A1D1B32050030D414 /* ForwardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForwardingView.swift; sourceTree = "<group>"; };
 		A6CB920B1D1B32050030D414 /* ImageKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageKey.swift; sourceTree = "<group>"; };
-		A6CB920C1D1B32050030D414 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A6CB920D1D1B32050030D414 /* KeyboardConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardConnector.swift; sourceTree = "<group>"; };
 		A6CB920E1D1B32050030D414 /* KeyboardInputTraits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardInputTraits.swift; sourceTree = "<group>"; };
 		A6CB920F1D1B32050030D414 /* KeyboardKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardKey.swift; sourceTree = "<group>"; };
@@ -5463,11 +5460,7 @@
 		A6CB92131D1B32050030D414 /* KeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		A6CB92141D1B32050030D414 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		A6CB92161D1B32050030D414 /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
-		A6CB92171D1B32050030D414 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
-		A6CB92301D1B358E0030D414 /* CQMPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQMPHelper.swift; path = Keyboard/CQMPHelper.swift; sourceTree = "<group>"; };
 		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQNSHelper.swift; path = Keyboard/CQNSHelper.swift; sourceTree = "<group>"; };
-		A6CB92321D1B358E0030D414 /* CQStdHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQStdHelper.swift; path = Keyboard/CQStdHelper.swift; sourceTree = "<group>"; };
-		A6CB92331D1B358E0030D414 /* CQUIHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQUIHelper.swift; path = Keyboard/CQUIHelper.swift; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -8237,10 +8230,7 @@
 				A6CB922D1D1B33D90030D414 /* Controllers */,
 				A6CB922E1D1B33FC0030D414 /* Models */,
 				A6CB922F1D1B34260030D414 /* Views */,
-				A6CB92031D1B32050030D414 /* Na'vi Keyboard.swift */,
-				A6CB920C1D1B32050030D414 /* Info.plist */,
 				A6CB92141D1B32050030D414 /* Media.xcassets */,
-				A6CB92171D1B32050030D414 /* Utilities.swift */,
 			);
 			name = "Na'vi Keyboard";
 			path = Keyboard;
@@ -8298,11 +8288,7 @@
 			isa = PBXGroup;
 			children = (
 				A617909B2149214C00C7ECFE /* GoogleService-Info.plist */,
-				A61790982149099200C7ECFE /* UIDevice.swift */,
-				A6CB92301D1B358E0030D414 /* CQMPHelper.swift */,
 				A6CB92311D1B358E0030D414 /* CQNSHelper.swift */,
-				A6CB92321D1B358E0030D414 /* CQStdHelper.swift */,
-				A6CB92331D1B358E0030D414 /* CQUIHelper.swift */,
 				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
 				A6AE8AFD1D1AD43E00345E2E /* Na_vi.xcdatamodeld */,
 			);
