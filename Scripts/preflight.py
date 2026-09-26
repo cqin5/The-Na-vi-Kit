@@ -7,8 +7,9 @@ rejected or a device misbehaves: project file integrity, the scene-based app lif
 cycle that the iOS 27 SDK requires, the launch screen, App Store property list
 keys, privacy manifests, the App Store icon, target membership, deprecated and
 legacy API in the sources that are actually compiled, any Interface Builder
-files still bundled, and bundle contents — the vocabulary the app cannot work
-without, and files that nothing reads at run time.
+files still bundled, bundle contents — the vocabulary the app cannot work
+without, and files that nothing reads at run time — and the vocabulary entries
+themselves.
 
 Run from the project root, or via ./build-verify.sh.
 """
@@ -43,6 +44,16 @@ VALID_SWIFT_VERSIONS = {"4.0", "4.2", "5.0", "6.0"}
 # NDDictionary reads this at launch. A release build without it shows an empty
 # dictionary instead of crashing, so nothing else would notice it had gone.
 APP_VOCABULARY = "vocabulary.json"
+VOCABULARY_FILE = pathlib.Path("Resources") / APP_VOCABULARY
+
+# The keys NDDictionaryEntry decodes. One entry without them fails the whole file,
+# and a release build then shows an empty dictionary.
+VOCABULARY_FIELDS = ("Na'vi", "IPA", "Part of speech", "English", "Audio URL", "Audio local URL")
+DICTIONARY_ENTRY = pathlib.Path("Na'vi/NDDictionaryEntry.swift")
+
+# Stress underlining and sense separators from a flashcard export, which the app
+# would show as literal text.
+VOCABULARY_MARKUP = re.compile(r"</?u>|\s\|\s")
 
 # Files no target reads at run time. The design file and the exports stay in the
 # repository as source material; bundling them only adds to the download.
@@ -489,6 +500,74 @@ def check_bundle_contents(report: Report, project: ProjectFile) -> None:
             report.ok(f"{target} bundles no design files, exports or Firebase configuration")
 
 
+def check_vocabulary(report: Report, project: ProjectFile) -> None:
+    report.section("Vocabulary")
+
+    import json
+
+    try:
+        data = json.loads(VOCABULARY_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        report.fail(f"{VOCABULARY_FILE} does not parse: {error}")
+        return
+    entries = data.get("dict") if isinstance(data, dict) else None
+    if not isinstance(entries, list) or not entries:
+        report.fail(f"{VOCABULARY_FILE} has no \"dict\" list of entries")
+        return
+
+    names = re.search(
+        r"partOfSpeechNames: \[String: String\] = \[(.*?)\n    \]",
+        DICTIONARY_ENTRY.read_text(encoding="utf-8") if DICTIONARY_ENTRY.exists() else "",
+        re.DOTALL,
+    )
+    known_codes = set(re.findall(r'"([^"]+)":', names.group(1))) if names else None
+    if known_codes is None:
+        report.warn(f"could not read the part-of-speech names in {DICTIONARY_ENTRY}")
+
+    bundled = set(resource_names(project, RESOURCES_PHASES["Eywa"]))
+    problems: dict[str, list[str]] = {}
+
+    def note(kind: str, detail: str) -> None:
+        problems.setdefault(kind, []).append(detail)
+
+    seen: set[tuple[str, ...]] = set()
+    recordings = 0
+    for number, entry in enumerate(entries, 1):
+        if not isinstance(entry, dict):
+            note("are not objects", f"entry {number}")
+            continue
+        label = repr(entry.get("Na'vi", f"entry {number}"))
+        missing = [field for field in VOCABULARY_FIELDS if not isinstance(entry.get(field), str)]
+        if missing:
+            note("lack fields the app decodes", f"{label} ({', '.join(missing)})")
+            continue
+        if not entry["Na'vi"].strip() or not entry["English"].strip():
+            note("have an empty headword or meaning", label)
+        if VOCABULARY_MARKUP.search(entry["Na'vi"] + entry["English"]):
+            note("contain flashcard markup", label)
+        codes = [code.strip() for code in entry["Part of speech"].split(",") if code.strip()]
+        if known_codes is not None and (not codes or any(code not in known_codes for code in codes)):
+            note("have a part of speech the app cannot spell out", f"{label} ({entry['Part of speech']!r})")
+        recording = entry["Audio local URL"]
+        if recording:
+            recordings += 1
+            if recording not in bundled:
+                note("name a recording the app does not bundle", f"{label} ({recording})")
+        signature = (entry["Na'vi"], entry["Part of speech"], entry["English"])
+        if signature in seen:
+            note("are exact duplicates", label)
+        seen.add(signature)
+
+    for kind, details in problems.items():
+        shown = ", ".join(details[:5]) + (f" and {len(details) - 5} more" if len(details) > 5 else "")
+        report.fail(f"{len(details)} entries {kind}: {shown}")
+    if not problems:
+        report.ok(
+            f"all {len(entries)} entries decode, {recordings} with a bundled recording "
+            "and every part of speech spelled out"
+        )
+
+
 def check_keyboard_touch_routing(report: Report) -> None:
     report.section("Keyboard touch routing")
 
@@ -526,6 +605,7 @@ def main() -> int:
     check_keyboard_touch_routing(report)
     check_interface_builder_files(report, project)
     check_bundle_contents(report, project)
+    check_vocabulary(report, project)
 
     report.section("Result")
     if report.failures:
