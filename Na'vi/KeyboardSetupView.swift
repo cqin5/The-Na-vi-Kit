@@ -8,37 +8,31 @@
 import SwiftUI
 import UIKit
 
-/// How to turn on the Na'vi keyboard, with a way to contact the developer.
+/// A compact guide to adding and switching to the Na'vi keyboard.
 struct KeyboardSetupView: View {
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     @State private var isShowingMailError = false
 
-    private let steps = [
-        SetupStep(number: 1, instruction: "1. In Settings, go to General", imageName: "Add-Keyboard-Step-1"),
-        SetupStep(number: 2, instruction: "2. Go to Keyboard", imageName: "Add-Keyboard-Step-2"),
-        SetupStep(number: 3, instruction: "3. Go to Keyboards", imageName: "Add-Keyboard-Step-3"),
-        SetupStep(number: 4, instruction: "4. Add New Keyboard", imageName: "Add-Keyboard-Step-4"),
-        SetupStep(number: 5, instruction: "5. Add Eywa", imageName: "Add-Keyboard-Step-5"),
-    ]
+    private var palette: SetupPalette { SetupPalette(colorScheme: colorScheme) }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 32) {
-                    ForEach(steps) { step in
-                        SetupStepView(step: step)
-                    }
-
-                    Button("Contact Developer") {
-                        contactDeveloper()
-                    }
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                VStack(spacing: 28) {
+                    introduction
+                    instructions
+                    support
                 }
-                .padding()
+                .frame(maxWidth: 560)
+                .padding(.horizontal, 24)
+                .padding(.top, 28)
+                .padding(.bottom, 28)
+                .frame(maxWidth: .infinity)
             }
-            .navigationTitle("Turn on Na'vi Keyboard")
+            .background(palette.background)
+            .navigationTitle("Keyboard setup")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
@@ -53,10 +47,90 @@ struct KeyboardSetupView: View {
                 Text("No mail app is set up on this device. Add a mail account and try again.")
             }
         }
+        .tint(palette.accent)
     }
 
-    /// Opens a message to the developer in whichever app the reader has chosen as
-    /// their default mail app.
+    private var introduction: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Image(systemName: "keyboard")
+                    .font(.subheadline)
+                Text(verbatim: "EYWA")
+                    .font(.caption.weight(.medium))
+                    .tracking(2.5)
+            }
+            .foregroundStyle(palette.accent)
+            .accessibilityHidden(true)
+
+            Text("Type in Na'vi.")
+                .font(.system(.largeTitle, design: .serif, weight: .medium))
+                .foregroundStyle(palette.ink)
+                .accessibilityAddTraits(.isHeader)
+
+            Text("Add Eywa in Settings, then select the Na'vi keyboard when typing.")
+                .font(.subheadline)
+                .foregroundStyle(palette.secondaryInk)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.bottom, 4)
+    }
+
+    private var instructions: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            SetupInstruction(number: 1, title: "Open keyboard settings", palette: palette) {
+                Text("In the Settings app, follow this path:")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.secondaryInk)
+
+                SettingsPath(palette: palette)
+                    .padding(.top, 4)
+            }
+
+            Divider().padding(.horizontal, 22)
+
+            SetupInstruction(number: 2, title: "Add Eywa", palette: palette) {
+                Text("Tap **Add New Keyboard…**, then choose **Eywa** under Third-Party Keyboards.")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.secondaryInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Divider().padding(.horizontal, 22)
+
+            SetupInstruction(number: 3, title: "Make the switch", palette: palette) {
+                Text("When typing, touch and hold the globe key and choose **Na'vi Keyboard**.")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.secondaryInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                .strokeBorder(palette.ink.opacity(0.06))
+        }
+    }
+
+    private var support: some View {
+        VStack(spacing: 12) {
+            Label("No Full Access required", systemImage: "lock")
+                .font(.footnote)
+                .foregroundStyle(palette.secondaryInk)
+
+            Button(action: contactDeveloper) {
+                Label("Contact Developer", systemImage: "envelope")
+                    .font(.footnote.weight(.medium))
+                    .padding(.horizontal, 16)
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(palette.accent)
+        }
+    }
+
+    /// Opens a message in the reader's default mail app.
     private func contactDeveloper() {
         guard let url = SupportMail.url else {
             isShowingMailError = true
@@ -72,38 +146,103 @@ struct KeyboardSetupView: View {
     }
 }
 
-// MARK: - Steps
+// MARK: - Visual language
 
-private struct SetupStep: Identifiable {
-    let number: Int
-    let instruction: LocalizedStringKey
-    let imageName: String
+/// Neutral surfaces, ink typography, and a restrained slate-blue accent.
+private struct SetupPalette {
+    let colorScheme: ColorScheme
 
-    var id: Int { number }
+    var background: Color {
+        colorScheme == .dark ? Color(red: 0.065, green: 0.075, blue: 0.09)
+            : Color(red: 0.96, green: 0.965, blue: 0.97)
+    }
+
+    var surface: Color {
+        colorScheme == .dark ? Color(red: 0.105, green: 0.12, blue: 0.14) : .white
+    }
+
+    var ink: Color {
+        colorScheme == .dark ? Color(red: 0.92, green: 0.94, blue: 0.96)
+            : Color(red: 0.12, green: 0.16, blue: 0.20)
+    }
+
+    var accent: Color {
+        colorScheme == .dark ? Color(red: 0.58, green: 0.73, blue: 0.83)
+            : Color(red: 0.20, green: 0.35, blue: 0.46)
+    }
+
+    var secondaryInk: Color {
+        colorScheme == .dark ? Color(red: 0.67, green: 0.70, blue: 0.74)
+            : Color(red: 0.36, green: 0.39, blue: 0.43)
+    }
+
+    var tint: Color { accent.opacity(colorScheme == .dark ? 0.12 : 0.055) }
 }
 
-private struct SetupStepView: View {
+// MARK: - Instructions
 
-    let step: SetupStep
+private struct SetupInstruction<Content: View>: View {
+    let number: Int
+    let title: LocalizedStringKey
+    let palette: SetupPalette
+    @ViewBuilder var content: Content
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text(step.instruction)
-                .font(.headline)
-                .multilineTextAlignment(.center)
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
+                Text(verbatim: String(format: "%02d", number))
+                    .font(.system(.footnote, design: .monospaced, weight: .medium))
+                    .foregroundStyle(palette.accent)
+                    .accessibilityHidden(true)
 
-            // The instruction carries the meaning; the screenshot only illustrates it.
-            Image(step.imageName)
-                .resizable()
-                .scaledToFit()
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .strokeBorder(.separator)
-                }
-                .frame(maxWidth: 500)
-                .accessibilityHidden(true)
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+            }
+
+            content
         }
+        .padding(22)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// The entire Settings route remains visible, including on narrow screens or
+/// at larger text sizes, where it changes from a breadcrumb to a vertical path.
+private struct SettingsPath: View {
+    let palette: SetupPalette
+
+    var body: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 8) {
+                Text("General")
+                chevron
+                Text("Keyboard")
+                chevron
+                Text("Keyboards")
+            }
+
+            VStack(alignment: .leading, spacing: 10) {
+                Text("General")
+                Label("Keyboard", systemImage: "arrow.turn.down.right")
+                Label("Keyboards", systemImage: "arrow.turn.down.right")
+            }
+        }
+        .font(.footnote.weight(.medium))
+        .foregroundStyle(palette.ink)
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.tint, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("General, then Keyboard, then Keyboards")
+    }
+
+    private var chevron: some View {
+        Image(systemName: "chevron.right")
+            .font(.system(size: 9, weight: .bold))
+            .foregroundStyle(palette.accent)
     }
 }
 
@@ -122,6 +261,17 @@ private enum SupportMail {
     }
 }
 
-#Preview {
+#Preview("Light") {
     KeyboardSetupView()
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark") {
+    KeyboardSetupView()
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Large text") {
+    KeyboardSetupView()
+        .environment(\.dynamicTypeSize, .accessibility3)
 }
