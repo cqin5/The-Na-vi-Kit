@@ -9,7 +9,8 @@ keys, privacy manifests, the App Store icon, target membership, deprecated and
 legacy API in the sources that are actually compiled, any Interface Builder
 files still bundled, bundle contents — the vocabulary the app cannot work
 without, and files that nothing reads at run time — and the vocabulary entries
-themselves.
+themselves. It also checks the NaviGrammar package: that the app links it, that it
+stays free of UIKit and SwiftUI, and that its lexicon is intact.
 
 Run from the project root, or via ./build-verify.sh.
 """
@@ -89,6 +90,24 @@ DEPRECATED_API = {
     r"\[(\w+)\.index\(before: \1\.endIndex\)\]": "the character before endIndex, which traps on an empty string — use .last",
     r"^\s*print\(": "a debug print in shipping code",
 }
+
+
+# The grammar engine, a local Swift package the app links. It must stay free of
+# UIKit and SwiftUI so that the keyboard extension can use it too.
+GRAMMAR_PACKAGE = pathlib.Path("Packages/NaviGrammar")
+GRAMMAR_PRODUCT = "NaviGrammar"
+GRAMMAR_LEXICON = GRAMMAR_PACKAGE / "Sources/NaviGrammar/Resources/lexicon.tsv"
+GRAMMAR_LEXICON_COLUMNS = ["id", "navi", "pos", "infixes", "grammar", "en"]
+INTERFACE_IMPORTS = re.compile(r"^\s*(?:@testable\s+)?import\s+(UIKit|SwiftUI)\b", re.MULTILINE)
+
+# The phrasebook's phrases must come from appendix F of the LearnNavi dictionary,
+# whose phrases the grammar package's tests check word by word.
+PHRASEBOOK = pathlib.Path("Na'vi/Phrasebook.swift")
+APPENDIX_F_TESTS = GRAMMAR_PACKAGE / "Tests/NaviGrammarTests/AppendixFTests.swift"
+
+# Directories whose Swift files are not Xcode target members: dependency managers,
+# Swift packages (built by SwiftPM), downloaded source data, and tool worktrees.
+NOT_TARGET_SOURCES = {"Pods", "Packages", "SourceData", ".build", ".swiftpm", ".claude"}
 
 
 class Report:
@@ -310,7 +329,8 @@ def check_target_membership(report: Report, project: ProjectFile) -> set[str]:
         compiled.update(sources)
 
     on_disk = {
-        str(path) for path in pathlib.Path(".").rglob("*.swift") if "Pods/" not in str(path)
+        str(path) for path in pathlib.Path(".").rglob("*.swift")
+        if not NOT_TARGET_SOURCES.intersection(path.parts)
     }
     orphans = sorted(on_disk - compiled)
     if orphans:
@@ -568,6 +588,116 @@ def check_vocabulary(report: Report, project: ProjectFile) -> None:
         )
 
 
+def check_grammar_package(report: Report, project: ProjectFile) -> set[str]:
+    """Checks the NaviGrammar package and returns its sources, which the deprecated
+    API check then covers as it does the app's."""
+    report.section("Grammar package")
+
+    if not (GRAMMAR_PACKAGE / "Package.swift").exists():
+        report.fail(f"{GRAMMAR_PACKAGE}/Package.swift is missing")
+        return set()
+
+    text = project.text
+    references = re.findall(r"isa = XCLocalSwiftPackageReference;\s*relativePath = \"?([^;\"]+)\"?;", text)
+    products = re.findall(r"isa = XCSwiftPackageProductDependency;[^}]*?productName = (\w+);", text)
+    app_target = re.search(r'name = "Na-vi";\s*packageProductDependencies = \((.*?)\);', text, re.DOTALL)
+    if str(GRAMMAR_PACKAGE) not in references:
+        report.fail(f"the project does not reference the local package {GRAMMAR_PACKAGE}")
+    elif GRAMMAR_PRODUCT not in products or app_target is None or GRAMMAR_PRODUCT not in app_target.group(1):
+        report.fail(f"Eywa does not depend on the {GRAMMAR_PRODUCT} product")
+    elif f"{GRAMMAR_PRODUCT} in Frameworks" not in text:
+        report.fail(f"Eywa does not link {GRAMMAR_PRODUCT}")
+    else:
+        report.ok(f"Eywa links {GRAMMAR_PRODUCT} from {GRAMMAR_PACKAGE}")
+
+    sources = sorted((GRAMMAR_PACKAGE / "Sources").rglob("*.swift"))
+    interface = [
+        f"{path} imports {match.group(1)}"
+        for path in sources
+        for match in INTERFACE_IMPORTS.finditer(path.read_text(encoding="utf-8"))
+    ]
+    if interface:
+        for item in interface:
+            report.fail(f"{item}; the package must stay usable from the keyboard extension")
+    else:
+        report.ok(f"{len(sources)} package sources import neither UIKit nor SwiftUI")
+
+    check_grammar_lexicon(report)
+    return {str(path) for path in sources}
+
+
+def check_grammar_lexicon(report: Report) -> None:
+    """The lexicon the analyser loads: a damaged file would make every word unknown
+    in a release build, with nothing else to show for it."""
+    manifest = (GRAMMAR_PACKAGE / "Package.swift").read_text(encoding="utf-8")
+    relative = GRAMMAR_LEXICON.relative_to(GRAMMAR_PACKAGE / "Sources/NaviGrammar")
+    if f'"{relative}"' not in manifest:
+        report.fail(f"Package.swift does not bundle {relative}")
+
+    try:
+        lines = GRAMMAR_LEXICON.read_text(encoding="utf-8").splitlines()
+    except (OSError, UnicodeDecodeError) as error:
+        report.fail(f"{GRAMMAR_LEXICON} cannot be read: {error}")
+        return
+
+    metadata = dict(
+        line[2:].split("\t", 1) for line in lines if line.startswith("# ") and "\t" in line
+    )
+    body = [line for line in lines if line and not line.startswith("#")]
+    problems = []
+    if not body or body[0].split("\t") != GRAMMAR_LEXICON_COLUMNS:
+        problems.append("the column header is missing or changed")
+    rows = [line.split("\t") for line in body[1:]]
+    malformed = [number for number, row in enumerate(rows, 1) if len(row) != len(GRAMMAR_LEXICON_COLUMNS)]
+    if malformed:
+        problems.append(f"{len(malformed)} rows do not have {len(GRAMMAR_LEXICON_COLUMNS)} columns")
+    ids = [row[0] for row in rows]
+    if len(set(ids)) != len(ids):
+        problems.append("ids repeat")
+    if metadata.get("entries") != str(len(rows)):
+        problems.append(f"the header says {metadata.get('entries')} entries but there are {len(rows)}")
+    credit = metadata.get("credit", "")
+    if "Paul Frommer" not in credit or "Littauer" not in credit:
+        problems.append("the credit line is missing or incomplete")
+    if len(metadata.get("sha256", "")) != 64:
+        problems.append("the source checksum is missing")
+
+    if problems:
+        for problem in problems:
+            report.fail(f"{GRAMMAR_LEXICON.name}: {problem}")
+    else:
+        report.ok(f"{GRAMMAR_LEXICON.name} has {len(rows)} entries, its source checksum and credits")
+
+
+def check_phrasebook(report: Report) -> None:
+    report.section("Phrasebook")
+
+    def key(phrase: str) -> str:
+        return " ".join(phrase.lower().rstrip(".!?").split())
+
+    try:
+        phrasebook = PHRASEBOOK.read_text(encoding="utf-8")
+        appendix = APPENDIX_F_TESTS.read_text(encoding="utf-8")
+    except OSError as error:
+        report.fail(f"cannot read the phrasebook or the appendix F phrases: {error}")
+        return
+
+    phrases = re.findall(r'Phrase\(navi: "((?:[^"\\]|\\.)*)"', phrasebook)
+    listed = re.search(r"static let phrases: \[String\] = \[(.*?)\n    \]", appendix, re.DOTALL)
+    sources = {key(phrase) for phrase in re.findall(r'"((?:[^"\\]|\\.)*)"', listed.group(1))} if listed else set()
+
+    problems = [f"{phrase!r} is not an appendix F phrase" for phrase in phrases if key(phrase) not in sources]
+    repeated = sorted({phrase for phrase in phrases if phrases.count(phrase) > 1})
+    problems += [f"{phrase!r} appears more than once" for phrase in repeated]
+    if not phrases:
+        problems.append("no phrases found")
+
+    for problem in problems:
+        report.fail(f"{PHRASEBOOK.name}: {problem}")
+    if not problems:
+        report.ok(f"all {len(phrases)} phrases are from appendix F, each once")
+
+
 def check_keyboard_touch_routing(report: Report) -> None:
     report.section("Keyboard touch routing")
 
@@ -601,11 +731,13 @@ def main() -> int:
     check_app_life_cycle(report, project)
     check_app_store_icon(report)
     compiled = check_target_membership(report, project)
+    compiled |= check_grammar_package(report, project)
     check_deprecated_api(report, compiled)
     check_keyboard_touch_routing(report)
     check_interface_builder_files(report, project)
     check_bundle_contents(report, project)
     check_vocabulary(report, project)
+    check_phrasebook(report)
 
     report.section("Result")
     if report.failures:
