@@ -13,14 +13,16 @@ import Foundation
 /// Playback is owned by the app rather than by a table view cell, so scrolling the
 /// list no longer cuts a recording short when the cell that started it is reused.
 /// The audio session is configured once and released again when the clip ends, so
-/// whatever the listener had playing before can resume.
+/// whatever the listener had playing before can resume. Activating and releasing the
+/// session can block for a noticeable time, so neither happens on the main thread, and
+/// neither does preparing a player, which activates the session as well.
 @MainActor
 final class PronunciationPlayer {
 
     static let shared = PronunciationPlayer()
 
     private var player: AVAudioPlayer?
-    private var releaseTask: Task<Void, Never>?
+    private var playback: Task<Void, Never>?
     private var hasConfiguredCategory = false
 
     private init() {}
@@ -34,16 +36,39 @@ final class PronunciationPlayer {
 
         configureCategoryIfNeeded()
 
-        do {
-            try AVAudioSession.sharedInstance().setActive(true)
+        // The clip being replaced is cancelled and awaited first, so a session release
+        // it has already started finishes before this clip activates the session.
+        let previous = playback
+        previous?.cancel()
+        playback = Task {
+            await previous?.value
+            guard !Task.isCancelled else { return }
 
-            let player = try AVAudioPlayer(contentsOf: url)
-            self.player = player
-            player.play()
+            do {
+                try await Self.activateSession()
+            } catch {
+                assertionFailure("Could not activate the audio session: \(error)")
+                return
+            }
 
-            scheduleSessionRelease(after: player.duration)
-        } catch {
-            assertionFailure("Could not play \(fileName): \(error)")
+            do {
+                let player = try await Self.preparePlayer(for: url)
+                // A newer clip took over while this one was loading; it releases the
+                // session when it ends.
+                guard !Task.isCancelled else { return }
+
+                self.player = player
+                player.play()
+
+                try await Task.sleep(for: .seconds(player.duration + 0.1))
+            } catch is CancellationError {
+                return
+            } catch {
+                assertionFailure("Could not play \(fileName): \(error)")
+            }
+
+            player = nil
+            try? await Self.releaseSession()
         }
     }
 
@@ -60,17 +85,45 @@ final class PronunciationPlayer {
         }
     }
 
-    private func scheduleSessionRelease(after duration: TimeInterval) {
-        releaseTask?.cancel()
-        releaseTask = Task { [duration] in
-            try? await Task.sleep(for: .seconds(duration + 0.1))
-            guard !Task.isCancelled else { return }
+    /// Loads a recording away from the main thread. Preparing the player allocates its
+    /// audio queue, which activates the session again, synchronously, on this thread.
+    @concurrent
+    private nonisolated static func preparePlayer(for url: URL) async throws -> sending AVAudioPlayer {
+        let player = try AVAudioPlayer(contentsOf: url)
+        player.prepareToPlay()
+        return player
+    }
 
-            player = nil
-            try? AVAudioSession.sharedInstance().setActive(
-                false,
-                options: .notifyOthersOnDeactivation
-            )
+    private nonisolated static func activateSession() async throws {
+        if #available(iOS 27.0, *) {
+            _ = try await AVAudioSession.sharedInstance().activate()
+        } else {
+            try await offMainThread { try $0.setActive(true) }
+        }
+    }
+
+    private nonisolated static func releaseSession() async throws {
+        if #available(iOS 27.0, *) {
+            _ = try await AVAudioSession.sharedInstance().deactivate(options: .notifyOthersOnDeactivation)
+        } else {
+            try await offMainThread { try $0.setActive(false, options: .notifyOthersOnDeactivation) }
+        }
+    }
+
+    /// Runs a blocking session call on a background queue, for systems that predate
+    /// the asynchronous activate and deactivate calls.
+    private nonisolated static func offMainThread(
+        _ body: @escaping @Sendable (AVAudioSession) throws -> Void
+    ) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                do {
+                    try body(.sharedInstance())
+                    continuation.resume()
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
 }
