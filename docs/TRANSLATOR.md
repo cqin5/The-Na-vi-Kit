@@ -26,6 +26,9 @@ each feature labelled and explained in plain English. Multi-word entries such as
 reading is listed, most likely first. A word the engine cannot account for is marked
 **Not in the dictionary**, with the reason, and is never guessed at.
 
+**A phrasebook** on the Translate screen lists 67 everyday phrases and sayings by
+topic. Choosing one reads it word by word.
+
 Nothing typed or pasted leaves the device.
 
 ---
@@ -42,7 +45,8 @@ Nothing typed or pasted leaves the device.
 | `Analyser` | NaviGrammar | Takes a word apart and ranks its readings |
 | `TextReader` | NaviGrammar | Splits a passage into words, finds multi-word entries, handles lenition across words |
 | `GrammarSearch` | `Na'vi/GrammarSearch.swift` | Connects readings to the app's dictionary entries |
-| Screens | `Na'vi/WordFormRow.swift`, `Na'vi/TranslateView.swift` | Search results and the Translate screen |
+| Screens | `Na'vi/WordFormRow.swift`, `Na'vi/TranslateView.swift`, `Na'vi/PhrasebookView.swift` | Search results, the Translate screen and the phrasebook |
+| Phrasebook | `Na'vi/Phrasebook.swift` | Phrases from appendix F, by topic, with English renderings |
 
 NaviGrammar is a local Swift package with no dependency beyond Foundation, written
 in the Swift 6 language mode with value types throughout, for iOS 18 and later. It
@@ -114,7 +118,15 @@ A word that no reading explains is reported as unknown, with one of three reason
 it is empty; it uses letters that Na'vi does not; or no dictionary word, with the
 endings, prefixes and infixes the engine knows, makes that form.
 
-### 2.4 Reading a passage
+### 2.4 The phrasebook
+
+The phrasebook's Na'vi is taken verbatim from appendix F, "Useful Phrases", of the
+LearnNavi dictionary, most of which comes from Dr. Frommer's blog. The English
+renderings and notes are this app's own. Phrases whose words the engine does not know
+are left out. The pre-flight checks confirm that every phrasebook phrase appears in
+appendix F, and the engine's tests check every word of every appendix F phrase.
+
+### 2.5 Reading a passage
 
 `TextReader` splits a passage at spaces and punctuation. Apostrophes (the tìftang)
 and hyphens inside a word stay part of it. If a word is not known with a leading or
@@ -245,7 +257,7 @@ The two Python files test the lexicon builder and the pre-flight checks.
 | Suite | What it checks |
 |-|-|
 | Appendix H examples | Every example form in appendix H: generated from its base word, then analysed back, with the book's reading ranked first |
-| Appendix F phrases | Every word of the dictionary's 106 useful phrases has a reading, except three documented gaps; 30 readings and 6 multi-word entries checked in detail |
+| Appendix F phrases | Every word of the dictionary's 111 useful phrases has a reading, except three documented gaps; 30 readings and 6 multi-word entries checked in detail |
 | Dr. Frommer's forms | 47 forms from the posts in §3.2, and forms those posts rule out (*soaiayä*, *oengìl*, *kelnìt*, …) |
 | Analyser | *Oel ngati kameie*; normalisation of capitals, curly apostrophes, decomposed letters and hyphens; unknown words and their reasons; ambiguity; each rule |
 | Orthography, Lexicon, Text reader | Lenition both ways; malformed lexicon lines rejected with their line number; tokenising, phrases, quotation marks and long passages |
@@ -273,7 +285,8 @@ The remaining ambiguities are real, and the engine lists every reading. Two exam
 
 ### 4.4 Pre-flight checks
 
-`Scripts/preflight.py` confirms three things about the package:
+`Scripts/preflight.py` confirms that every phrasebook phrase comes from appendix F,
+and three things about the package:
 
 - the app links NaviGrammar;
 - its sources import neither UIKit nor SwiftUI;

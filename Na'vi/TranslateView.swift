@@ -16,8 +16,20 @@ struct TranslateView: View {
 
     let grammar: GrammarSearch
 
-    @State private var text = ""
+    /// Whether the toolbar offers the phrasebook; not when the phrasebook opened this screen.
+    let showsPhrasebook: Bool
+
+    @State private var text: String
     @State private var reading: Reading?
+
+    /// - Parameters:
+    ///   - text: text to read straight away, such as a phrase from the phrasebook.
+    ///   - showsPhrasebook: whether the toolbar offers the phrasebook.
+    init(grammar: GrammarSearch, text: String = "", showsPhrasebook: Bool = true) {
+        self.grammar = grammar
+        self.showsPhrasebook = showsPhrasebook
+        _text = State(initialValue: text)
+    }
 
     var body: some View {
         List {
@@ -64,6 +76,17 @@ struct TranslateView: View {
         }
         .navigationTitle("Translate")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if showsPhrasebook {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        PhrasebookView(grammar: grammar)
+                    } label: {
+                        Label("Phrasebook", systemImage: "text.book.closed")
+                    }
+                }
+            }
+        }
         .task(id: text) {
             // Wait for typing to pause, then read off the main thread.
             do {

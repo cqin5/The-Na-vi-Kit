@@ -100,6 +100,11 @@ GRAMMAR_LEXICON = GRAMMAR_PACKAGE / "Sources/NaviGrammar/Resources/lexicon.tsv"
 GRAMMAR_LEXICON_COLUMNS = ["id", "navi", "pos", "infixes", "grammar", "en"]
 INTERFACE_IMPORTS = re.compile(r"^\s*(?:@testable\s+)?import\s+(UIKit|SwiftUI)\b", re.MULTILINE)
 
+# The phrasebook's phrases must come from appendix F of the LearnNavi dictionary,
+# whose phrases the grammar package's tests check word by word.
+PHRASEBOOK = pathlib.Path("Na'vi/Phrasebook.swift")
+APPENDIX_F_TESTS = GRAMMAR_PACKAGE / "Tests/NaviGrammarTests/AppendixFTests.swift"
+
 # Directories whose Swift files are not Xcode target members: dependency managers,
 # Swift packages (built by SwiftPM), downloaded source data, and tool worktrees.
 NOT_TARGET_SOURCES = {"Pods", "Packages", "SourceData", ".build", ".swiftpm", ".claude"}
@@ -664,6 +669,35 @@ def check_grammar_lexicon(report: Report) -> None:
         report.ok(f"{GRAMMAR_LEXICON.name} has {len(rows)} entries, its source checksum and credits")
 
 
+def check_phrasebook(report: Report) -> None:
+    report.section("Phrasebook")
+
+    def key(phrase: str) -> str:
+        return " ".join(phrase.lower().rstrip(".!?").split())
+
+    try:
+        phrasebook = PHRASEBOOK.read_text(encoding="utf-8")
+        appendix = APPENDIX_F_TESTS.read_text(encoding="utf-8")
+    except OSError as error:
+        report.fail(f"cannot read the phrasebook or the appendix F phrases: {error}")
+        return
+
+    phrases = re.findall(r'Phrase\(navi: "((?:[^"\\]|\\.)*)"', phrasebook)
+    listed = re.search(r"static let phrases: \[String\] = \[(.*?)\n    \]", appendix, re.DOTALL)
+    sources = {key(phrase) for phrase in re.findall(r'"((?:[^"\\]|\\.)*)"', listed.group(1))} if listed else set()
+
+    problems = [f"{phrase!r} is not an appendix F phrase" for phrase in phrases if key(phrase) not in sources]
+    repeated = sorted({phrase for phrase in phrases if phrases.count(phrase) > 1})
+    problems += [f"{phrase!r} appears more than once" for phrase in repeated]
+    if not phrases:
+        problems.append("no phrases found")
+
+    for problem in problems:
+        report.fail(f"{PHRASEBOOK.name}: {problem}")
+    if not problems:
+        report.ok(f"all {len(phrases)} phrases are from appendix F, each once")
+
+
 def check_keyboard_touch_routing(report: Report) -> None:
     report.section("Keyboard touch routing")
 
@@ -703,6 +737,7 @@ def main() -> int:
     check_interface_builder_files(report, project)
     check_bundle_contents(report, project)
     check_vocabulary(report, project)
+    check_phrasebook(report)
 
     report.section("Result")
     if report.failures:

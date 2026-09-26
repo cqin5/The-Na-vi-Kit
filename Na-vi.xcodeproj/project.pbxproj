@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A6E3000B2F0000000000CC0B /* Phrasebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E3000A2F0000000000CC0A /* Phrasebook.swift */; };
+		A6E3000D2F0000000000CC0D /* PhrasebookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E3000C2F0000000000CC0C /* PhrasebookView.swift */; };
 		A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300042F0000000000CC04 /* GrammarSearch.swift */; };
 		A6E300072F0000000000CC07 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300062F0000000000CC06 /* TranslateView.swift */; };
 		A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300082F0000000000CC08 /* WordFormRow.swift */; };
@@ -2748,6 +2750,8 @@
 		A6E300042F0000000000CC04 /* GrammarSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrammarSearch.swift; sourceTree = "<group>"; };
 		A6E300062F0000000000CC06 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
 		A6E300082F0000000000CC08 /* WordFormRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordFormRow.swift; sourceTree = "<group>"; };
+		A6E3000A2F0000000000CC0A /* Phrasebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrasebook.swift; sourceTree = "<group>"; };
+		A6E3000C2F0000000000CC0C /* PhrasebookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasebookView.swift; sourceTree = "<group>"; };
 		A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEntryRow.swift; sourceTree = "<group>"; };
 		A6E200052F0000000000BB05 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
 		A6E200032F0000000000BB03 /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
@@ -8280,6 +8284,8 @@
 				A6E300042F0000000000CC04 /* GrammarSearch.swift */,
 				A6E300062F0000000000CC06 /* TranslateView.swift */,
 				A6E300082F0000000000CC08 /* WordFormRow.swift */,
+				A6E3000A2F0000000000CC0A /* Phrasebook.swift */,
+				A6E3000C2F0000000000CC0C /* PhrasebookView.swift */,
 				A6E100032F0000000000AA03 /* PronunciationPlayer.swift */,
 				A6CB92511D1C92DB0030D414 /* Models */,
 			);
@@ -11120,6 +11126,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */,
+				A6E3000B2F0000000000CC0B /* Phrasebook.swift in Sources */,
+				A6E3000D2F0000000000CC0D /* PhrasebookView.swift in Sources */,
 				A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */,
 				A6E300072F0000000000CC07 /* TranslateView.swift in Sources */,
 				A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */,

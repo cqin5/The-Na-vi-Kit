@@ -333,5 +333,60 @@ class GrammarPackageCheckTests(unittest.TestCase):
         self.assertTrue(any(path.endswith("Analyser.swift") for path in sources))
 
 
+class PhrasebookCheckTests(unittest.TestCase):
+
+    APPENDIX = 'static let phrases: [String] = [\n        "kaltxì",\n        "oel ngati kameie",\n    ]\n'
+
+    def run_check(self, phrasebook: str) -> tuple[int, str]:
+        with tempfile.TemporaryDirectory() as directory:
+            book = pathlib.Path(directory) / "Phrasebook.swift"
+            appendix = pathlib.Path(directory) / "AppendixFTests.swift"
+            book.write_text(phrasebook, encoding="utf-8")
+            appendix.write_text(self.APPENDIX, encoding="utf-8")
+            report = preflight.Report()
+            output = io.StringIO()
+            originals = preflight.PHRASEBOOK, preflight.APPENDIX_F_TESTS
+            preflight.PHRASEBOOK, preflight.APPENDIX_F_TESTS = book, appendix
+            try:
+                with contextlib.redirect_stdout(output):
+                    preflight.check_phrasebook(report)
+            finally:
+                preflight.PHRASEBOOK, preflight.APPENDIX_F_TESTS = originals
+        return report.failures, output.getvalue()
+
+    def test_phrases_from_appendix_f_pass_whatever_their_capitals_and_final_punctuation(self) -> None:
+        failures, output = self.run_check('Phrase(navi: "Kaltxì!", english: "Hello")\nPhrase(navi: "Oel ngati kameie", english: "I see you")')
+        self.assertEqual(failures, 0, output)
+        self.assertIn("all 2 phrases", output)
+
+    def test_invented_phrase(self) -> None:
+        failures, output = self.run_check('Phrase(navi: "Oel ngati tsun kameie", english: "I can see you")')
+        self.assertEqual(failures, 1)
+        self.assertIn("is not an appendix F phrase", output)
+
+    def test_misspelled_phrase(self) -> None:
+        failures, output = self.run_check('Phrase(navi: "Kaltxi", english: "Hello")')
+        self.assertEqual(failures, 1)
+
+    def test_repeated_phrase(self) -> None:
+        failures, output = self.run_check('Phrase(navi: "Kaltxì", english: "Hi")\nPhrase(navi: "kaltxì", english: "Hello")')
+        self.assertEqual(failures, 0, output)
+        failures, output = self.run_check('Phrase(navi: "Kaltxì", english: "Hi")\nPhrase(navi: "Kaltxì", english: "Hello")')
+        self.assertEqual(failures, 1)
+        self.assertIn("more than once", output)
+
+    def test_empty_phrasebook(self) -> None:
+        failures, output = self.run_check("enum Phrasebook {}")
+        self.assertEqual(failures, 1)
+        self.assertIn("no phrases found", output)
+
+    def test_real_phrasebook_passes(self) -> None:
+        report = preflight.Report()
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            preflight.check_phrasebook(report)
+        self.assertEqual(report.failures, 0, output.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()
