@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300042F0000000000CC04 /* GrammarSearch.swift */; };
+		A6E300072F0000000000CC07 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300062F0000000000CC06 /* TranslateView.swift */; };
 		A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300082F0000000000CC08 /* WordFormRow.swift */; };
 		A6E300032F0000000000CC03 /* NaviGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = A6E300022F0000000000CC02 /* NaviGrammar */; };
 		A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */; };
@@ -2745,6 +2746,7 @@
 
 /* Begin PBXFileReference section */
 		A6E300042F0000000000CC04 /* GrammarSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrammarSearch.swift; sourceTree = "<group>"; };
+		A6E300062F0000000000CC06 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
 		A6E300082F0000000000CC08 /* WordFormRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordFormRow.swift; sourceTree = "<group>"; };
 		A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEntryRow.swift; sourceTree = "<group>"; };
 		A6E200052F0000000000BB05 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
@@ -8276,6 +8278,7 @@
 				A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */,
 				A6E200052F0000000000BB05 /* DictionaryView.swift */,
 				A6E300042F0000000000CC04 /* GrammarSearch.swift */,
+				A6E300062F0000000000CC06 /* TranslateView.swift */,
 				A6E300082F0000000000CC08 /* WordFormRow.swift */,
 				A6E100032F0000000000AA03 /* PronunciationPlayer.swift */,
 				A6CB92511D1C92DB0030D414 /* Models */,
@@ -11118,6 +11121,7 @@
 			files = (
 				A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */,
 				A6E300052F0000000000CC05 /* GrammarSearch.swift in Sources */,
+				A6E300072F0000000000CC07 /* TranslateView.swift in Sources */,
 				A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */,
 				A6E200062F0000000000BB06 /* DictionaryView.swift in Sources */,
 				A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */,

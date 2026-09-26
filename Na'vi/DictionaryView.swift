@@ -41,6 +41,15 @@ struct DictionaryView: View {
                             isShowingKeyboardSetup = true
                         }
                     }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        if let grammar {
+                            NavigationLink {
+                                TranslateView(grammar: grammar)
+                            } label: {
+                                Label("Translate", systemImage: "translate")
+                            }
+                        }
+                    }
                 }
         }
         .sheet(isPresented: $isShowingKeyboardSetup) {
