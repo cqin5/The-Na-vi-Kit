@@ -448,6 +448,10 @@ pre-flight checks need only Python and cover:
 - **Bundle contents** — the app bundles `vocabulary.json`, and no target bundles a
   design file, a spreadsheet export, an old vocabulary export or Firebase
   configuration (§6.5).
+- **Vocabulary** — every entry has the fields the app decodes, no leftover
+  flashcard markup, a part of speech the app can spell out and, when it names a
+  recording, one the app bundles. `Scripts/test_preflight.py` feeds the check one
+  broken vocabulary per mistake.
 
 All checks pass. Run against earlier revisions, or with the relevant mistake
 reintroduced, the rules report every issue described in §2.5, §7.1, §7.2, §7.8 to
