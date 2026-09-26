@@ -13,13 +13,6 @@
 		A6E300072F0000000000CC07 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300062F0000000000CC06 /* TranslateView.swift */; };
 		A6E300092F0000000000CC09 /* WordFormRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300082F0000000000CC08 /* WordFormRow.swift */; };
 		A6E300032F0000000000CC03 /* NaviGrammar in Frameworks */ = {isa = PBXBuildFile; productRef = 307AAC37208A4F6716BD2093 /* NaviGrammar */; };
-		A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */; };
-		A6E200062F0000000000BB06 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200052F0000000000BB05 /* DictionaryView.swift */; };
-		A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200032F0000000000BB03 /* KeyboardSetupView.swift */; };
-		A6E200022F0000000000BB02 /* EywaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200012F0000000000BB01 /* EywaApp.swift */; };
-		A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */; };
-		A6E100062F0000000000AA06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */; };
-		A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100032F0000000000AA03 /* PronunciationPlayer.swift */; };
 		A614202A1D1AD5DC001C0FBD /* Na-vi Keyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A6AE8B011D1AD43E00345E2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6AE8B001D1AD43E00345E2E /* Assets.xcassets */; };
 		A6BB0D3F282A34490071BD1E /* vocabulary.json in Resources */ = {isa = PBXBuildFile; fileRef = A6BB02C3282A343D0071BD1E /* vocabulary.json */; };
@@ -2717,6 +2710,13 @@
 		A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
 		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
 		A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924F1D1C92D60030D414 /* NDDictionary.swift */; };
+		A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E100032F0000000000AA03 /* PronunciationPlayer.swift */; };
+		A6E100062F0000000000AA06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */; };
+		A6E100082F0000000000AA08 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */; };
+		A6E200022F0000000000BB02 /* EywaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200012F0000000000BB01 /* EywaApp.swift */; };
+		A6E200042F0000000000BB04 /* KeyboardSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200032F0000000000BB03 /* KeyboardSetupView.swift */; };
+		A6E200062F0000000000BB06 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200052F0000000000BB05 /* DictionaryView.swift */; };
+		A6E200082F0000000000BB08 /* DictionaryEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2749,13 +2749,6 @@
 		A6E300082F0000000000CC08 /* WordFormRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordFormRow.swift; sourceTree = "<group>"; };
 		A6E3000A2F0000000000CC0A /* Phrasebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrasebook.swift; sourceTree = "<group>"; };
 		A6E3000C2F0000000000CC0C /* PhrasebookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhrasebookView.swift; sourceTree = "<group>"; };
-		A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEntryRow.swift; sourceTree = "<group>"; };
-		A6E200052F0000000000BB05 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
-		A6E200032F0000000000BB03 /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
-		A6E200012F0000000000BB01 /* EywaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EywaApp.swift; sourceTree = "<group>"; };
-		A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = "Na'vi Keyboard/PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
-		A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		A6E100032F0000000000AA03 /* PronunciationPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PronunciationPlayer.swift; sourceTree = "<group>"; };
 		A61420231D1AD5DC001C0FBD /* Na-vi Keyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Na-vi Keyboard.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A699EE1A2828C6D50067D977 /* Na-vi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi.entitlements"; sourceTree = "<group>"; };
 		A699EE1B2828C6DA0067D977 /* Na-vi Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Na-vi Keyboard.entitlements"; sourceTree = "<group>"; };
@@ -5460,6 +5453,13 @@
 		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQNSHelper.swift; path = Keyboard/CQNSHelper.swift; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
+		A6E100032F0000000000AA03 /* PronunciationPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PronunciationPlayer.swift; sourceTree = "<group>"; };
+		A6E100052F0000000000AA05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A6E100072F0000000000AA07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = "Na'vi Keyboard/PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
+		A6E200012F0000000000BB01 /* EywaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EywaApp.swift; sourceTree = "<group>"; };
+		A6E200032F0000000000BB03 /* KeyboardSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSetupView.swift; sourceTree = "<group>"; };
+		A6E200052F0000000000BB05 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
+		A6E200072F0000000000BB07 /* DictionaryEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryEntryRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -8352,7 +8352,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 2620;
+				LastUpgradeCheck = 2700;
 				ORGANIZATIONNAME = CQ;
 				TargetAttributes = {
 					A61420221D1AD5DC001C0FBD = {
@@ -11087,7 +11087,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-
 /* Begin PBXSourcesBuildPhase section */
 		A614201F1D1AD5DC001C0FBD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -11139,15 +11138,14 @@
 		};
 /* End PBXTargetDependency section */
 
-
 /* Begin XCBuildConfiguration section */
 		A614202B1D1AD5DC001C0FBD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SWIFT_STRICT_CONCURRENCY = minimal;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R447R667ZP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
@@ -11163,6 +11161,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -11171,10 +11170,10 @@
 		A614202C1D1AD5DC001C0FBD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SWIFT_STRICT_CONCURRENCY = minimal;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi Keyboard.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R447R667ZP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				INFOPLIST_FILE = "Na'vi Keyboard/Info.plist";
@@ -11190,6 +11189,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -11198,7 +11198,6 @@
 		A6AE8B1C1D1AD43E00345E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 5;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -11228,6 +11227,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -11260,7 +11260,6 @@
 		A6AE8B1D1D1AD43E00345E2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 5;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -11290,6 +11289,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = MJS6LB37T9;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -11316,13 +11316,14 @@
 		A6AE8B1F1D1AD43E00345E2E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_PREVIEWS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R447R667ZP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -11343,13 +11344,14 @@
 		A6AE8B201D1AD43E00345E2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ENABLE_PREVIEWS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Na-vi.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R447R667ZP;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Na'vi/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
