@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Tests for the vocabulary and grammar package checks in preflight.py.
+Tests for the vocabulary, grammar package, phrasebook, keyboard privacy and shared
+settings checks in preflight.py.
 
 Each case feeds a check one realistic mistake — the kind a hand-merged export, a
 flashcard import or a hand edit to the project leaves behind — and asserts that the
@@ -16,6 +17,7 @@ import io
 import json
 import os
 import pathlib
+import plistlib
 import sys
 import tempfile
 import unittest
@@ -385,6 +387,212 @@ class PhrasebookCheckTests(unittest.TestCase):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
             preflight.check_phrasebook(report)
+        self.assertEqual(report.failures, 0, output.getvalue())
+
+
+class KeyboardPrivacyCheckTests(unittest.TestCase):
+
+    # What the keyboard legitimately does: types, reads its settings, plays clicks
+    # and haptics.
+    CLEAN = (
+        "import UIKit\n"
+        "let clicks = UserDefaults.standard.bool(forKey: kKeyboardClicks)\n"
+        "UIDevice.current.playInputClick()\n"
+        "self.textDocumentProxy.insertText(\"kaltxì\")\n"
+    )
+
+    def run_check(self, *sources: str) -> tuple[int, str]:
+        """Runs the check on each source as a keyboard file, plus a clean one."""
+        with tempfile.TemporaryDirectory() as directory:
+            paths = []
+            for number, source in enumerate((self.CLEAN, *sources)):
+                path = pathlib.Path(directory) / f"Keyboard{number}.swift"
+                path.write_text(source, encoding="utf-8")
+                paths.append(str(path))
+            report = preflight.Report()
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                preflight.check_keyboard_privacy(report, paths)
+        return report.failures, output.getvalue()
+
+    def test_keyboard_code_passes(self) -> None:
+        failures, output = self.run_check()
+        self.assertEqual(failures, 0, output)
+        self.assertIn("across 1 keyboard sources", output)
+
+    def test_url_session(self) -> None:
+        failures, output = self.run_check("let task = URLSession.shared.dataTask(with: url)\n")
+        self.assertEqual(failures, 1)
+        self.assertIn("Keyboard1.swift:1  URLSession", output)
+
+    def test_request_built_for_later(self) -> None:
+        failures, output = self.run_check("var request = URLRequest(url: endpoint)\n")
+        self.assertEqual(failures, 1)
+        self.assertIn("URLRequest", output)
+
+    def test_network_framework_imported_with_an_attribute(self) -> None:
+        failures, output = self.run_check("import UIKit\n@preconcurrency import Network\n")
+        self.assertEqual(failures, 1)
+        self.assertIn("Keyboard1.swift:2  a networking framework", output)
+
+    def test_network_extension_imported(self) -> None:
+        failures, output = self.run_check("import NetworkExtension\n")
+        self.assertEqual(failures, 1)
+
+    def test_connection_without_an_import_line(self) -> None:
+        failures, output = self.run_check("let connection = Network.NWConnection(host: host, port: 443, using: .tls)\n")
+        self.assertEqual(failures, 1)
+        self.assertIn("connection", output)
+
+    def test_socket_stream(self) -> None:
+        failures, output = self.run_check(
+            "Stream.getStreamsToHost(withName: host, port: 80, inputStream: &input, outputStream: &output)\n"
+        )
+        self.assertEqual(failures, 1)
+        self.assertIn("socket stream", output)
+
+    def test_reading_the_pasteboard(self) -> None:
+        failures, output = self.run_check("    let copied = UIPasteboard.general.string\n")
+        self.assertEqual(failures, 1)
+        self.assertIn("pasteboard", output)
+
+    def test_every_use_is_reported(self) -> None:
+        failures, output = self.run_check("URLSession.shared\n", "UIPasteboard.general\n\nURLSession.shared\n")
+        self.assertEqual(failures, 3)
+        self.assertIn("Keyboard2.swift:3", output)
+
+    def test_names_in_comments_are_fine(self) -> None:
+        failures, output = self.run_check("// Never use URLSession or UIPasteboard here.\n    // import Network\n")
+        self.assertEqual(failures, 0, output)
+
+    def test_similar_names_are_fine(self) -> None:
+        failures, output = self.run_check("let networkStatus = 0\nlet pasteboardLike = \"URLSessionless\"\nlet requestCount = 1\nimport NaviGrammar\n")
+        self.assertEqual(failures, 0, output)
+
+    def test_missing_sources_phase(self) -> None:
+        report = preflight.Report()
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            preflight.check_keyboard_privacy(report, None)
+        self.assertEqual(report.failures, 1)
+        self.assertIn("no sources build phase", output.getvalue())
+
+    def test_real_keyboard_passes(self) -> None:
+        report = preflight.Report()
+        output = io.StringIO()
+        project = preflight.ProjectFile(preflight.PROJECT.read_text(encoding="utf-8"))
+        sources = project.compiled_sources(preflight.SOURCES_PHASES["Na'vi Keyboard"])
+        with contextlib.redirect_stdout(output):
+            preflight.check_keyboard_privacy(report, sources)
+        self.assertEqual(report.failures, 0, output.getvalue())
+        self.assertIn("Keyboard/KeyboardHaptics.swift", sources)
+        self.assertIn("Keyboard/KeyboardViewController.swift", sources)
+
+
+
+def entitlements(*groups: str) -> bytes:
+    return plistlib.dumps({"com.apple.security.application-groups": list(groups)} if groups else {})
+
+
+def manifest(*reasons: str) -> bytes:
+    return plistlib.dumps({
+        "NSPrivacyTracking": False,
+        "NSPrivacyTrackingDomains": [],
+        "NSPrivacyCollectedDataTypes": [],
+        "NSPrivacyAccessedAPITypes": [{
+            "NSPrivacyAccessedAPIType": "NSPrivacyAccessedAPICategoryUserDefaults",
+            "NSPrivacyAccessedAPITypeReasons": list(reasons),
+        }] if reasons else [],
+    })
+
+
+class SharedSettingsCheckTests(unittest.TestCase):
+
+    GROUP = "group.live.moquan.eywa"
+    SIGNED = 'CODE_SIGN_ENTITLEMENTS = "{app}";\nCODE_SIGN_ENTITLEMENTS = "{keyboard}";\n'
+
+    def run_check(self, *, app: bytes | None = None, keyboard: bytes | None = None,
+                  settings: str | None = None, manifests: tuple[bytes, bytes] | None = None,
+                  signed: str | None = None) -> tuple[int, str]:
+        """Runs the check on entitlements, settings code and manifests written to a
+        temporary directory; each defaults to a correct one."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            app_path, keyboard_path = root / "Na-vi.entitlements", root / "Na-vi Keyboard.entitlements"
+            app_path.write_bytes(entitlements(self.GROUP) if app is None else app)
+            keyboard_path.write_bytes(entitlements(self.GROUP) if keyboard is None else keyboard)
+            settings_path = root / "KeyboardSettings.swift"
+            settings_path.write_text(
+                f'struct KeyboardSettings {{\n    static let appGroup = "{self.GROUP}"\n}}\n' if settings is None else settings,
+                encoding="utf-8",
+            )
+            manifest_paths = [root / "App.xcprivacy", root / "Keyboard.xcprivacy"]
+            for path, content in zip(manifest_paths, manifests or (manifest("1C8F.1"), manifest("1C8F.1"))):
+                path.write_bytes(content)
+            project_text = (signed or self.SIGNED).format(app=app_path, keyboard=keyboard_path)
+
+            report = preflight.Report()
+            output = io.StringIO()
+            originals = preflight.ENTITLEMENTS, preflight.KEYBOARD_SETTINGS, preflight.PRIVACY_MANIFESTS
+            preflight.ENTITLEMENTS = {"Eywa": app_path, "Na'vi Keyboard": keyboard_path}
+            preflight.KEYBOARD_SETTINGS = settings_path
+            preflight.PRIVACY_MANIFESTS = manifest_paths
+            try:
+                with contextlib.redirect_stdout(output):
+                    preflight.check_shared_settings(report, preflight.ProjectFile(project_text))
+            finally:
+                preflight.ENTITLEMENTS, preflight.KEYBOARD_SETTINGS, preflight.PRIVACY_MANIFESTS = originals
+        return report.failures, output.getvalue()
+
+    def test_shared_group_passes(self) -> None:
+        failures, output = self.run_check()
+        self.assertEqual(failures, 0, output)
+        self.assertIn("share group.live.moquan.eywa", output)
+
+    def test_keyboard_without_the_group(self) -> None:
+        failures, output = self.run_check(keyboard=entitlements())
+        self.assertEqual(failures, 1)
+        self.assertIn("Na-vi Keyboard.entitlements does not declare group.live.moquan.eywa", output)
+
+    def test_app_still_on_the_old_group(self) -> None:
+        failures, output = self.run_check(app=entitlements("group.CQ.Navi"))
+        self.assertEqual(failures, 1)
+        self.assertIn("Na-vi.entitlements does not declare", output)
+
+    def test_group_named_in_code_differs_from_both(self) -> None:
+        failures, output = self.run_check(settings='static let appGroup = "group.live.moquan.Eywa"\n')
+        self.assertEqual(failures, 2)
+
+    def test_code_names_no_group(self) -> None:
+        failures, output = self.run_check(settings="struct KeyboardSettings {}\n")
+        self.assertEqual(failures, 1)
+        self.assertIn("does not name the App Group", output)
+
+    def test_entitlements_that_are_not_a_property_list(self) -> None:
+        failures, output = self.run_check(keyboard=b"<?xml version=\"1.0\"?><plist><dict>")
+        self.assertEqual(failures, 1)
+        self.assertIn("cannot be read", output)
+
+    def test_manifest_without_the_app_group_reason(self) -> None:
+        failures, output = self.run_check(manifests=(manifest("1C8F.1"), manifest("CA92.1")))
+        self.assertEqual(failures, 1)
+        self.assertIn("does not give 1C8F.1", output)
+
+    def test_manifest_without_any_user_defaults_entry(self) -> None:
+        failures, output = self.run_check(manifests=(manifest(), manifest("1C8F.1")))
+        self.assertEqual(failures, 1)
+
+    def test_target_signed_with_other_entitlements(self) -> None:
+        failures, output = self.run_check(signed='CODE_SIGN_ENTITLEMENTS = "{app}";\nCODE_SIGN_ENTITLEMENTS = "Other.entitlements";\n')
+        self.assertEqual(failures, 1)
+        self.assertIn("Na'vi Keyboard is not signed with", output)
+
+    def test_real_project_passes(self) -> None:
+        report = preflight.Report()
+        output = io.StringIO()
+        project = preflight.ProjectFile(preflight.PROJECT.read_text(encoding="utf-8"))
+        with contextlib.redirect_stdout(output):
+            preflight.check_shared_settings(report, project)
         self.assertEqual(report.failures, 0, output.getvalue())
 
 

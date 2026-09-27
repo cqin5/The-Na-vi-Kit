@@ -31,6 +31,18 @@ PRIVACY_MANIFESTS = [
 ]
 APP_ICON_SET = pathlib.Path("Na'vi/Assets.xcassets/AppIcon.appiconset")
 
+# The app saves the keyboard's settings in an App Group, and the keyboard reads
+# them from it. If the two targets' entitlements, or the group the code names,
+# differ, the keyboard keeps its defaults and nothing says why.
+ENTITLEMENTS = {
+    "Eywa": pathlib.Path("Na-vi.entitlements"),
+    "Na'vi Keyboard": pathlib.Path("Na-vi Keyboard.entitlements"),
+}
+KEYBOARD_SETTINGS = pathlib.Path("Keyboard/KeyboardSettings.swift")
+APP_GROUPS_KEY = "com.apple.security.application-groups"
+# The required reason for reading user defaults that an App Group shares.
+APP_GROUP_DEFAULTS_REASON = "1C8F.1"
+
 SOURCES_PHASES = {
     "Eywa": "A6AE8AEF1D1AD43E00345E2E",
     "Na'vi Keyboard": "A614201F1D1AD5DC001C0FBD",
@@ -85,11 +97,23 @@ DEPRECATED_API = {
     r"\bvar hashValue\b": "a hashValue requirement — implement hash(into:)",
     r"\bUIDevice\.current\.userInterfaceIdiom\b": "UIDevice idiom — use the trait collection",
     r"\bkeyboardFrameEndUserInfoKey\b": "manual keyboard frame handling — use view.keyboardLayoutGuide",
-    r"\bAudioServicesPlaySystemSound\b": "a system sound, which needs Full Access the keyboard does not request — use UIDevice.current.playInputClick()",
+    r"\bAudioServicesPlaySystemSound\b": "a system sound, which plays only with Full Access, an option most people leave off — use UIDevice.current.playInputClick()",
     r"\[(\w+)\.index\(before: \1\.endIndex\)\]": "the character before endIndex, which traps on an empty string — use .last",
     r"^\s*print\(": "a debug print in shipping code",
 }
 
+
+# The keyboard asks for Full Access only to play haptics, and the app tells people
+# that nothing they type leaves their device. Full Access would let the keyboard
+# reach the network and read the pasteboard, so no keyboard source may do either.
+KEYBOARD_PRIVACY = {
+    r"^\s*(?:@\w+\s+)*import\s+(Network\w*|CFNetwork|WebKit|SafariServices|MultipeerConnectivity)\b": "a networking framework",
+    r"\bURLSession\b": "URLSession",
+    r"\bURLRequest\b": "URLRequest",
+    r"\bNW(?:Connection|Listener|Browser|PathMonitor)\b": "a Network framework connection",
+    r"\bCFStream\w*\b|\bgetStreamsToHost\b": "a socket stream",
+    r"\bUIPasteboard\b": "the pasteboard",
+}
 
 # The grammar engine, a local Swift package the app links. It must stay free of
 # UIKit and SwiftUI so that the keyboard extension can use it too.
@@ -718,6 +742,74 @@ def check_keyboard_touch_routing(report: Report) -> None:
         )
 
 
+def check_keyboard_privacy(report: Report, sources: list[str] | None) -> None:
+    report.section("Keyboard privacy")
+
+    if sources is None:
+        report.fail("no sources build phase found for Na'vi Keyboard")
+        return
+
+    swift = [pathlib.Path(path) for path in sorted(sources) if path.endswith(".swift")]
+    hits = []
+    for file in swift:
+        if not file.exists():
+            continue
+        for number, line in enumerate(file.read_text(encoding="utf-8").splitlines(), 1):
+            if line.lstrip().startswith("//"):
+                continue
+            for pattern, label in KEYBOARD_PRIVACY.items():
+                if re.search(pattern, line):
+                    hits.append(f"{file}:{number}  {label}")
+
+    if hits:
+        for hit in hits:
+            report.fail(f"{hit} — the keyboard has Full Access only for haptics, and nothing typed may leave the device")
+    else:
+        report.ok(f"no network or pasteboard access across {len(swift)} keyboard sources")
+
+
+def check_shared_settings(report: Report, project: ProjectFile) -> None:
+    report.section("Shared settings")
+
+    match = re.search(r'static let appGroup = "([^"]+)"', KEYBOARD_SETTINGS.read_text(encoding="utf-8")) \
+        if KEYBOARD_SETTINGS.exists() else None
+    if match is None:
+        report.fail(f"{KEYBOARD_SETTINGS} does not name the App Group the settings live in")
+        return
+    group = match.group(1)
+
+    problems = []
+    for target, path in ENTITLEMENTS.items():
+        if f'CODE_SIGN_ENTITLEMENTS = "{path}";' not in project.text:
+            problems.append(f"{target} is not signed with {path}")
+        try:
+            groups = plistlib.loads(path.read_bytes()).get(APP_GROUPS_KEY, [])
+        except Exception as error:  # noqa: BLE001 - report whatever plistlib raises
+            problems.append(f"{path} cannot be read: {error}")
+            continue
+        if group not in groups:
+            problems.append(f"{path} does not declare {group}, the group {KEYBOARD_SETTINGS.name} reads")
+
+    for path in PRIVACY_MANIFESTS:
+        try:
+            manifest = plistlib.loads(path.read_bytes())
+        except Exception:  # noqa: BLE001 - check_property_lists reports it
+            continue
+        reasons = [
+            reason
+            for entry in manifest.get("NSPrivacyAccessedAPITypes", [])
+            if entry.get("NSPrivacyAccessedAPIType") == "NSPrivacyAccessedAPICategoryUserDefaults"
+            for reason in entry.get("NSPrivacyAccessedAPITypeReasons", [])
+        ]
+        if APP_GROUP_DEFAULTS_REASON not in reasons:
+            problems.append(f"{path} does not give {APP_GROUP_DEFAULTS_REASON} as its reason for App Group defaults")
+
+    for problem in problems:
+        report.fail(problem)
+    if not problems:
+        report.ok(f"the app and the keyboard share {group}, and both manifests give {APP_GROUP_DEFAULTS_REASON}")
+
+
 def main() -> int:
     if not PROJECT.exists():
         print(f"{PROJECT} not found. Run this from the project root.", file=sys.stderr)
@@ -734,6 +826,8 @@ def main() -> int:
     compiled |= check_grammar_package(report, project)
     check_deprecated_api(report, compiled)
     check_keyboard_touch_routing(report)
+    check_keyboard_privacy(report, project.compiled_sources(SOURCES_PHASES["Na'vi Keyboard"]))
+    check_shared_settings(report, project)
     check_interface_builder_files(report, project)
     check_bundle_contents(report, project)
     check_vocabulary(report, project)

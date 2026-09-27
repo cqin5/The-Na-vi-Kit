@@ -18,6 +18,9 @@ struct TranslateView: View {
 
     @State private var text: String
     @State private var reading: Reading?
+    /// Counts pastes and clears, which replace the whole passage. Each plays a
+    /// light tap.
+    @State private var replacements = 0
 
     /// - Parameter text: text to read straight away, such as a phrase from the phrasebook.
     init(grammar: GrammarSearch, text: String = "") {
@@ -38,6 +41,7 @@ struct TranslateView: View {
                     PasteButton(payloadType: String.self) { strings in
                         if let pasted = strings.first {
                             text = pasted
+                            replacements += 1
                         }
                     }
                     .labelStyle(.titleAndIcon)
@@ -47,11 +51,13 @@ struct TranslateView: View {
 
                     Button("Clear", systemImage: "xmark.circle", role: .destructive) {
                         text = ""
+                        replacements += 1
                     }
                     .labelStyle(.iconOnly)
                     .disabled(text.isEmpty)
                 }
                 .buttonStyle(.borderless)
+                .sensoryFeedback(.impact(weight: .light), trigger: replacements)
             } footer: {
                 Text("Each word is looked up and taken apart on this device.")
             }

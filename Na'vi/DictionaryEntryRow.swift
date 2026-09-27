@@ -17,6 +17,10 @@ struct DictionaryEntryRow: View {
 
     let entry: NDDictionaryEntry
 
+    /// Counts taps on the play button. Each plays a light tap, felt at once,
+    /// while the recording takes a moment to start.
+    @State private var playCount = 0
+
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
@@ -36,12 +40,14 @@ struct DictionaryEntryRow: View {
             if entry.hasRecording {
                 // Borderless, so tapping elsewhere in the row doesn't trigger playback.
                 Button {
+                    playCount += 1
                     PronunciationPlayer.shared.play(fileNamed: entry.localAudioFileName)
                 } label: {
                     Image(systemName: "speaker.wave.2.fill")
                         .imageScale(.large)
                 }
                 .buttonStyle(.borderless)
+                .sensoryFeedback(.impact(weight: .light), trigger: playCount)
                 .accessibilityLabel(Text("Play pronunciation of \(entry.navi)"))
             }
         }

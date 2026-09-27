@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 
 /// The Settings tab: a compact guide to adding and switching to the Na'vi keyboard,
-/// and a way to contact the developer.
+/// the keyboard's settings, and a way to contact the developer.
 struct KeyboardSetupView: View {
 
     @Environment(\.colorScheme) private var colorScheme
@@ -22,6 +22,7 @@ struct KeyboardSetupView: View {
             VStack(spacing: 28) {
                 introduction
                 instructions
+                KeyboardSettingsSection(palette: palette)
                 support
             }
             .frame(maxWidth: 560)
@@ -38,6 +39,8 @@ struct KeyboardSetupView: View {
         } message: {
             Text("No mail app is set up on this device. Add a mail account and try again.")
         }
+        // The error haptic plays as the alert appears, not as it is dismissed.
+        .sensoryFeedback(.error, trigger: isShowingMailError) { _, isShowing in isShowing }
         .tint(palette.accent)
     }
 
@@ -95,6 +98,17 @@ struct KeyboardSetupView: View {
                     .foregroundStyle(palette.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)
             }
+
+            Divider().padding(.horizontal, 22)
+
+            // iOS plays a keyboard's haptics only with Full Access, which the
+            // keyboard asks for as an option.
+            SetupInstruction(number: 4, title: "Allow Full Access (optional)", palette: palette) {
+                Text("Tap **Na'vi Keyboard** in the keyboard list, then turn on **Allow Full Access**. Eywa needs it only to play haptics, and never sends what you type anywhere.")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.secondaryInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .background(palette.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay {
@@ -105,7 +119,9 @@ struct KeyboardSetupView: View {
 
     private var support: some View {
         VStack(spacing: 12) {
-            Label("No Full Access required", systemImage: "lock")
+            // Scripts/preflight.py keeps the keyboard free of network and
+            // pasteboard access, which is what keeps this true.
+            Label("Nothing you type leaves your device", systemImage: "lock")
                 .font(.footnote)
                 .foregroundStyle(palette.secondaryInk)
 
@@ -168,6 +184,107 @@ private struct SetupPalette {
     }
 
     var tint: Color { accent.opacity(colorScheme == .dark ? 0.12 : 0.055) }
+}
+
+// MARK: - Keyboard settings
+
+/// The keyboard's settings. The app saves them in the App Group it shares with the
+/// keyboard, which the keyboard can read with or without Full Access.
+private struct KeyboardSettingsSection: View {
+    let palette: SetupPalette
+
+    @AppStorage(KeyboardSettings.autoCapitalizationKey, store: KeyboardSettings.sharedStore)
+    private var autoCapitalization = KeyboardSettings.defaultAutoCapitalization
+    @AppStorage(KeyboardSettings.periodShortcutKey, store: KeyboardSettings.sharedStore)
+    private var periodShortcut = KeyboardSettings.defaultPeriodShortcut
+    @AppStorage(KeyboardSettings.keyboardClicksKey, store: KeyboardSettings.sharedStore)
+    private var keyboardClicks = KeyboardSettings.defaultKeyboardClicks
+    @AppStorage(KeyboardSettings.hapticsKey, store: KeyboardSettings.sharedStore)
+    private var haptics = KeyboardSettings.defaultHaptics
+    @AppStorage(KeyboardSettings.hapticStrengthKey, store: KeyboardSettings.sharedStore)
+    private var hapticStrength = KeyboardSettings.defaultHapticStrength
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Keyboard")
+                .font(.headline)
+                .foregroundStyle(palette.ink)
+                .accessibilityAddTraits(.isHeader)
+                .padding(.horizontal, 4)
+
+            VStack(alignment: .leading, spacing: 0) {
+                SettingRow(palette: palette) {
+                    Toggle("Auto-Capitalization", isOn: $autoCapitalization)
+                }
+
+                Divider().padding(.horizontal, 22)
+
+                SettingRow(palette: palette) {
+                    Toggle("“.” Shortcut", isOn: $periodShortcut)
+                }
+
+                Divider().padding(.horizontal, 22)
+
+                SettingRow(palette: palette) {
+                    Toggle("Keyboard Clicks", isOn: $keyboardClicks)
+                }
+
+                Divider().padding(.horizontal, 22)
+
+                SettingRow(palette: palette) {
+                    VStack(alignment: .leading, spacing: 14) {
+                        Toggle("Haptic Feedback", isOn: $haptics)
+
+                        if haptics {
+                            Picker("Strength", selection: $hapticStrength) {
+                                Text("Light").tag(HapticStrength.light)
+                                Text("Medium").tag(HapticStrength.medium)
+                                Text("Strong").tag(HapticStrength.strong)
+                            }
+                            .pickerStyle(.segmented)
+                        }
+                    }
+                }
+            }
+            .background(palette.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .strokeBorder(palette.ink.opacity(0.06))
+            }
+            // A sample of the chosen strength, as the keys will play it.
+            .sensoryFeedback(trigger: hapticStrength) { _, strength in
+                Self.sample(of: strength)
+            }
+            .sensoryFeedback(trigger: haptics) { _, isOn in
+                isOn ? Self.sample(of: hapticStrength) : nil
+            }
+
+            Text("Haptic feedback plays only while Allow Full Access is on.")
+                .font(.footnote)
+                .foregroundStyle(palette.secondaryInk)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 4)
+        }
+        .animation(.default, value: haptics)
+    }
+
+    private static func sample(of strength: HapticStrength) -> SensoryFeedback {
+        .impact(weight: strength.usesMediumWeight ? .medium : .light, intensity: strength.intensity)
+    }
+}
+
+/// One row of the settings card, inset like the setup steps above it.
+private struct SettingRow<Content: View>: View {
+    let palette: SetupPalette
+    @ViewBuilder var content: Content
+
+    var body: some View {
+        content
+            .foregroundStyle(palette.ink)
+            .padding(.horizontal, 22)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
 }
 
 // MARK: - Instructions

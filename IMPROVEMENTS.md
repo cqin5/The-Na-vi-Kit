@@ -77,6 +77,20 @@ opaque, so the file was re-encoded as RGB with identical colour values; it is al
 13% smaller. The fourteen smaller icon sizes carried the same unused alpha channel
 and are re-encoded the same way, with identical pixels.
 
+### 2.6 Bundle identifiers
+
+The app and the keyboard were `CQ.Navi` and `CQ.Navi.Navi-Keyboard`, registered to
+the developer account that published Eywa, which is no longer active. Team
+R447R667ZP, which signs the app now, cannot register them, so anything that needs
+an explicit App ID failed: the App Group that carries the keyboard's settings
+(§7.12), and any App Store release. They are now `live.moquan.eywa` and
+`live.moquan.eywa.keyboard`, like the team's other apps, and the App Group is
+`group.live.moquan.eywa`.
+
+To iOS and the App Store this is a new app. On a device it installs beside a build
+of the old one rather than replacing it, starts with none of its data, and brings a
+keyboard of its own to add in Settings; on the App Store it would be a new listing.
+
 ---
 
 ## 3. SwiftUI interface
@@ -96,15 +110,22 @@ files where it compiled thirteen.
 
 ### 3.2 Behaviour
 
-- **Navigation.** A tab bar leads to the dictionary, Translate, the phrasebook and
-  Settings, which holds the keyboard setup guide. Each tab keeps its own navigation
-  stack, and a restored scene reopens on the tab last used. The vocabulary and the
-  grammar engine load once, in the background, for the three tabs that need them.
-- **Search.** `.searchable` provides the search field. On iPhone it sits below the
-  navigation title, as is standard in an app with a tab bar; on iPad with iOS 26 it
-  collapses to a search button beside the tab bar. The keyboard-tracking code the
-  UIKit version needed is gone. An empty search shows the system's "No Results"
-  view.
+- **Navigation.** A tab bar leads to the dictionary, Translate, the phrasebook,
+  Settings, which holds the keyboard setup guide and the keyboard's settings, and
+  search. Each tab keeps its own navigation stack, and a restored scene reopens on
+  the tab last used. The vocabulary and the grammar engine load once, in the
+  background, for the tabs that need them.
+- **Search.** Looking a word up has a tab of its own, with the tab bar's search
+  role. On iOS 26 and later it stands apart at the trailing end of the tab bar, and
+  choosing it puts the cursor in a search field at the bottom of the screen, which
+  rests on top of the keyboard while typing, within reach of the thumb as iOS 26's
+  design intends. Inside an ordinary tab, `.searchable` keeps the field at the top
+  whatever placement it is given, so a search tab is the only system way to put it
+  there. Until a word is typed, the tab shows a hint rather than the whole
+  dictionary, which the Dictionary tab lists for browsing by letter. Before iOS 26
+  the search tab is an ordinary tab with its field at the top. The keyboard-tracking
+  code the UIKit version needed is gone. A search that finds nothing shows the
+  system's "No Results" view.
 - **Letter index.** On iOS 26, the list uses SwiftUI's native section index. SwiftUI
   has no section index before iOS 26, so on iOS 18 to 25 a compact index of its own
   keeps A–Z navigation, which the UIKit version offered on every release.
@@ -122,6 +143,16 @@ files where it compiled thirteen.
 - **Contact.** "Contact Developer" opens a message in the reader's default mail app,
   whichever that is. The in-app Mail composer is gone; it worked only when Apple
   Mail had an account set up.
+- **Haptics.** The play-pronunciation button plays a light tap, felt at once while
+  the recording takes a moment to start. Paste and Clear on the Translate screen
+  play the same tap, since each replaces the whole passage. The letter index that
+  iOS 18 to 25 use plays a selection tick for each jump, and "Could Not Send Email"
+  arrives with the error haptic. Choosing a strength for the keyboard's haptics in
+  Settings plays a sample of it. All of them follow the System Haptics setting. The
+  keyboard's haptics are described in §7.14.
+- **Keyboard settings.** Auto-Capitalization, the “.” Shortcut, Keyboard Clicks and
+  Haptic Feedback, with its strength, are set in the app's Settings tab rather than
+  in the keyboard (§7.12).
 - **Previews.** Both screens have `#Preview`s, and previews are enabled for the app
   target.
 
@@ -389,6 +420,9 @@ on or locked, as on the system keyboard. Turning it off brings back capitals at 
 times. The keyboard's settings were unreachable in the App Store release (§7.12),
 so no one has a stored value that would keep the old behaviour.
 
+Show Lowercase Keys is no longer a setting: how the key caps follow Shift is a
+design decision, and the letters now always follow it, as on the system keyboard.
+
 ### 7.12 Settings panel
 
 The key that opens the keyboard's settings panel was commented out of the layout,
@@ -401,6 +435,26 @@ button that hides the keyboard. The bottom row keeps only 123, the space bar and
 Return, with the globe key where §7.7 needs it. The panel itself is built in code
 as a grouped list in the style of the Settings app, with a round back button;
 `DefaultSettings.xib`, the keyboard's last nib, is gone.
+
+The panel and the gear have since gone again. The settings are in the app's
+Settings tab, which saves them in the App Group `group.live.moquan.eywa` that both
+targets' entitlements declare (§2.6), and the keyboard reads them from there with
+`KeyboardSettings`, a file both targets compile. A keyboard without Full Access may
+read its App Group but not write to it, which is all this keyboard does, so the
+settings apply with or without Full Access. A change made in the app reaches a
+keyboard that is still running on its next key. Show Lowercase Keys is no longer a
+setting (§7.11). Both privacy manifests give reason `1C8F.1` for these user
+defaults, and a pre-flight rule checks that the two entitlements, the group the code
+names and the manifests agree.
+
+The toolbar keeps only the hide-keyboard button, and has grown from 36 to 44 points
+in portrait and from 32 to 36 in landscape. The iOS 26 keyboard's top corners curve
+down about 25 points, and in the shorter bar the buttons, which sit over the first
+and last keys, came within a few points of the curve. The key rows stay where the
+system keyboard's are; the keyboard reaches higher, by about 9 points on an iOS 27
+iPhone and 15 in the iOS 26.5 simulator, where the system leaves more room above a
+keyboard's view. The top row's key popups have more room too, 44 points where they
+had 36.
 
 §7.8 to §7.12 and the Shift and Delete colours in §7.5 were first fixed on the July
 2026 recovery branch, `fix/ios26-uiux-bugs`, and carried over when that branch was
@@ -436,6 +490,33 @@ iPhone 17 Pro. iOS 27 kept this design.
 
 Landscape keeps its previous spacing, with the new shapes and type. It has not been
 checked in the simulator, which could not be rotated for these checks.
+
+### 7.14 Haptic feedback
+
+The keys now tap under the finger, as the system keyboard's do with its own Haptic
+Feedback setting on: a tap as each key goes down, the toolbar's button included,
+and a lighter tick for each character a held Delete key removes. A finger sliding
+onto another key does not tap again, just as it does not click. `KeyboardHaptics`
+keeps its generators ready: when the keyboard appears and again after each tap, so
+fast typing never waits for the Taptic Engine.
+
+A keyboard cannot read the system keyboard's setting, so it has its own: Haptic
+Feedback, in the app's Settings tab (§7.12), on by default, with a strength of
+Light, Medium or Strong; choosing one plays a sample. Medium, the default, is the
+light impact at full intensity, Light the same at half intensity, and Strong the
+medium impact.
+
+iOS plays a keyboard extension's haptics only while the keyboard has Full Access,
+and drops them silently otherwise. The keyboard therefore now asks for Full Access
+(`RequestsOpenAccess`), as an option. Everything else works without it, as App
+Review guideline 4.4.1 requires, and haptics play once Allow Full Access is on.
+The app's Settings tab says so beneath the switch, and its setup guide has an
+optional fourth step for turning it on.
+
+The guide no longer says that no Full Access is required. It says instead that
+nothing typed leaves the device, and a pre-flight rule keeps that true: Full Access
+would let the keyboard use the network and read the pasteboard, so the rule rejects
+any keyboard source that does either.
 
 ---
 
@@ -477,8 +558,8 @@ bundles an Interface Builder file (§7.12).
 ## 9. Verification
 
 `./build-verify.sh` runs `Scripts/preflight.py`, then
-`Scripts/test_keyboard_layout.sh`, then `xcodebuild`. The pre-flight checks need
-only Python and cover:
+`Scripts/test_keyboard_layout.sh` and `Scripts/test_keyboard_haptics.sh`, then
+`xcodebuild`. The pre-flight checks need only Python and cover:
 
 - **Project file** — balanced delimiters, every object reference resolving, no
   CocoaPods or KeyboardKit remnants, valid `SWIFT_VERSION` values.
@@ -497,6 +578,13 @@ only Python and cover:
   toolbar fills that room.
 - **Keyboard touch routing** — `ForwardingView` still limits itself to controls
   (§7.1).
+- **Keyboard privacy** — no keyboard source uses the network or the pasteboard,
+  which Full Access would allow (§7.14). `Scripts/test_preflight.py` feeds the
+  check each kind of use.
+- **Shared settings** — both targets are signed with entitlements that declare the
+  App Group `KeyboardSettings` reads, and both privacy manifests give `1C8F.1` as
+  the reason for its user defaults (§7.12). `Scripts/test_preflight.py` feeds the
+  check each mismatch.
 - **Interface Builder files** — which storyboards and nibs each target bundles.
 - **Bundle contents** — the app bundles `vocabulary.json`, and no target bundles a
   design file, a spreadsheet export, an old vocabulary export or Firebase
@@ -517,6 +605,22 @@ It checks that keys stay inside the keyboard without overlapping, that every pop
 stays inside the keyboard's view, that the key caps take the system's sizes and
 baseline, and that on the 402-point iPhone each key lands within a pixel of where
 the iOS 26 system keyboard puts it (§7.13).
+
+The keyboard haptics check compiles the whole keyboard for Mac Catalyst and presses
+keys as `ForwardingView` does for a finger, by sending each key the control events
+of a touch. It checks that every key on every page taps once as it goes down and
+never as it comes up; that sliding between keys, rollover, a cancelled touch and a
+double-tapped Shift each tap once per finger; that a held Delete ticks for each
+character and stops when the finger lifts or slides off; that the toolbar's one
+button taps and the toolbar is 44 points tall; that a setting changed in the app
+takes effect on the next key, and the strength chosen reaches it, with a stored
+value this version does not know read as the default; and that nothing plays
+without Full Access (§7.14). It also saves every value through `@AppStorage`, as the
+app's Settings tab does, and checks that `KeyboardSettings` reads each one back. A
+process without an app has no `UIApplication` to deliver control actions, so the
+check hands each action to its target as UIApplication would. Each of twenty
+deliberate mistakes in the keyboard's haptic and settings code, from wiring the tap
+to the key's release to ignoring the chosen strength, fails at least one check.
 
 All checks pass. Run against earlier revisions, or with the relevant mistake
 reintroduced, the rules report every issue described in §2.5, §7.1, §7.2, §7.8,
@@ -544,7 +648,12 @@ to the Swift 6 language mode is a self-contained change.
 - **Keyboard on a device.** The iOS 26 styling (§7.13), the toolbar (§7.12) and
   the globe rule (§7.7) were checked in the simulator only, in portrait. Worth a
   look on an iOS 27 iPhone and an iPad, in landscape and with Reduce Transparency
-  on.
+  on. The haptics (§7.14) can be felt only on an iPhone: they should play with
+  Allow Full Access on and stay silent with it off.
+- **New bundle identifiers on a device.** The first device build has Xcode's
+  automatic signing register `live.moquan.eywa`, `live.moquan.eywa.keyboard` and
+  `group.live.moquan.eywa` for team R447R667ZP (§2.6). Worth confirming on a device
+  that a setting changed in the app reaches the keyboard with Full Access off.
 - **Globe key menu.** Holding the globe key on the system keyboard lists every
   installed keyboard. Custom keyboards get this through
   `handleInputModeList(from:with:)`, which needs the original touch event;

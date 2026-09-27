@@ -27,13 +27,15 @@ enum AppTab: String {
     case translate
     case phrasebook
     case settings
+    case search
 }
 
-/// The dictionary, the Translate screen, the phrasebook and settings, each in a tab
-/// with a navigation stack of its own. The vocabulary and the grammar engine load
-/// here, once, because three of the tabs need them.
+/// The dictionary, the Translate screen, the phrasebook, settings and search, each in
+/// a tab with a navigation stack of its own. The vocabulary and the grammar engine
+/// load here, once, because most of the tabs need them.
 ///
-/// The tab bar takes on Liquid Glass from the system on iOS 26 and later.
+/// The tab bar takes on Liquid Glass from the system on iOS 26 and later, where the
+/// search tab stands apart at its trailing end.
 struct AppTabView: View {
 
     @SceneStorage("selectedTab") private var selection = AppTab.dictionary
@@ -45,7 +47,7 @@ struct AppTabView: View {
         TabView(selection: $selection) {
             Tab("Dictionary", systemImage: "character.book.closed", value: AppTab.dictionary) {
                 NavigationStack {
-                    DictionaryView(sections: sections, hasLoaded: hasLoaded, grammar: grammar.search)
+                    DictionaryView(sections: sections)
                 }
             }
 
@@ -66,7 +68,14 @@ struct AppTabView: View {
                     KeyboardSetupView()
                 }
             }
+
+            Tab(value: AppTab.search, role: .search) {
+                NavigationStack {
+                    DictionarySearchView(sections: sections, hasLoaded: hasLoaded, grammar: grammar.search)
+                }
+            }
         }
+        .activatingSearchOnSelection()
         .task {
             guard !hasLoaded else {
                 return
@@ -84,6 +93,20 @@ struct AppTabView: View {
                 GrammarSearch.load(sections: loaded)
             }.value
             grammar = search.map { GrammarState.ready($0) } ?? .unavailable
+        }
+    }
+}
+
+private extension View {
+
+    /// On iOS 26 and later, choosing the search tab puts the cursor straight into its
+    /// field, so the keyboard comes up with the field on top of it.
+    @ViewBuilder
+    func activatingSearchOnSelection() -> some View {
+        if #available(iOS 26.0, *) {
+            self.tabViewSearchActivation(.searchTabSelection)
+        } else {
+            self
         }
     }
 }

@@ -2695,7 +2695,6 @@
 		A6BB17B4282A344A0071BD1E /* 7692.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3A282A34480071BD1E /* 7692.mp3 */; };
 		A6BB17B5282A344A0071BD1E /* 7876.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A6BB0D3B282A34480071BD1E /* 7876.mp3 */; };
 		A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */; };
-		A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92061D1B32050030D414 /* DefaultSettings.swift */; };
 		A6CB921E1D1B32050030D414 /* ExtraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92091D1B32050030D414 /* ExtraView.swift */; };
 		A6CB921F1D1B32050030D414 /* ForwardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920A1D1B32050030D414 /* ForwardingView.swift */; };
 		A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB920B1D1B32050030D414 /* ImageKey.swift */; };
@@ -2707,6 +2706,9 @@
 		A6CB92281D1B32050030D414 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92131D1B32050030D414 /* KeyboardViewController.swift */; };
 		A6CB92291D1B32050030D414 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A6CB92141D1B32050030D414 /* Media.xcassets */; };
 		A6E300022F0000000000CC02 /* KeyboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E300012F0000000000CC01 /* KeyboardToolbar.swift */; };
+		A6E400022F0000000000DD02 /* KeyboardHaptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E400012F0000000000DD01 /* KeyboardHaptics.swift */; };
+		A6E400042F0000000000DD04 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E400032F0000000000DD03 /* KeyboardSettings.swift */; };
+		A6E400052F0000000000DD05 /* KeyboardSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E400032F0000000000DD03 /* KeyboardSettings.swift */; };
 		A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92311D1B358E0030D414 /* CQNSHelper.swift */; };
 		A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */; };
 		A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6CB924F1D1C92D60030D414 /* NDDictionary.swift */; };
@@ -5438,7 +5440,6 @@
 		A6BB0D3C282A34480071BD1E /* vocabulary-2016.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "vocabulary-2016.json"; sourceTree = "<group>"; };
 		A6BB0D3D282A34490071BD1E /* Eywa.sketch */ = {isa = PBXFileReference; lastKnownFileType = file; path = Eywa.sketch; sourceTree = "<group>"; };
 		A6CB92051D1B32050030D414 /* DefaultKeyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultKeyboard.swift; sourceTree = "<group>"; };
-		A6CB92061D1B32050030D414 /* DefaultSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSettings.swift; sourceTree = "<group>"; };
 		A6CB92091D1B32050030D414 /* ExtraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraView.swift; sourceTree = "<group>"; };
 		A6CB920A1D1B32050030D414 /* ForwardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForwardingView.swift; sourceTree = "<group>"; };
 		A6CB920B1D1B32050030D414 /* ImageKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageKey.swift; sourceTree = "<group>"; };
@@ -5450,6 +5451,8 @@
 		A6CB92131D1B32050030D414 /* KeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		A6CB92141D1B32050030D414 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		A6E300012F0000000000CC01 /* KeyboardToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardToolbar.swift; sourceTree = "<group>"; };
+		A6E400012F0000000000DD01 /* KeyboardHaptics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHaptics.swift; sourceTree = "<group>"; };
+		A6E400032F0000000000DD03 /* KeyboardSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KeyboardSettings.swift; path = Keyboard/KeyboardSettings.swift; sourceTree = "<group>"; };
 		A6CB92311D1B358E0030D414 /* CQNSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CQNSHelper.swift; path = Keyboard/CQNSHelper.swift; sourceTree = "<group>"; };
 		A6CB92451D1B6AEA0030D414 /* NDDictionaryEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionaryEntry.swift; sourceTree = "<group>"; };
 		A6CB924F1D1C92D60030D414 /* NDDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NDDictionary.swift; sourceTree = "<group>"; };
@@ -8238,6 +8241,7 @@
 			isa = PBXGroup;
 			children = (
 				A6CB920A1D1B32050030D414 /* ForwardingView.swift */,
+				A6E400012F0000000000DD01 /* KeyboardHaptics.swift */,
 				A6CB920E1D1B32050030D414 /* KeyboardInputTraits.swift */,
 				A6CB92111D1B32050030D414 /* KeyboardLayout.swift */,
 				A6CB92131D1B32050030D414 /* KeyboardViewController.swift */,
@@ -8257,7 +8261,6 @@
 		A6CB922F1D1B34260030D414 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A6CB92061D1B32050030D414 /* DefaultSettings.swift */,
 				A6CB92091D1B32050030D414 /* ExtraView.swift */,
 				A6CB920B1D1B32050030D414 /* ImageKey.swift */,
 				A6CB920F1D1B32050030D414 /* KeyboardKey.swift */,
@@ -8288,6 +8291,7 @@
 			isa = PBXGroup;
 			children = (
 				A6CB92311D1B358E0030D414 /* CQNSHelper.swift */,
+				A6E400032F0000000000DD03 /* KeyboardSettings.swift */,
 				A6AE8B001D1AD43E00345E2E /* Assets.xcassets */,
 			);
 			name = "Shared Resources";
@@ -11097,7 +11101,8 @@
 				A6CB92201D1B32050030D414 /* ImageKey.swift in Sources */,
 				A6CB921A1D1B32050030D414 /* DefaultKeyboard.swift in Sources */,
 				A6E300022F0000000000CC02 /* KeyboardToolbar.swift in Sources */,
-				A6CB921B1D1B32050030D414 /* DefaultSettings.swift in Sources */,
+				A6E400022F0000000000DD02 /* KeyboardHaptics.swift in Sources */,
+				A6E400042F0000000000DD04 /* KeyboardSettings.swift in Sources */,
 				A6CB92371D1B358E0030D414 /* CQNSHelper.swift in Sources */,
 				A6CB92251D1B32050030D414 /* KeyboardKeyBackground.swift in Sources */,
 				A6CB92241D1B32050030D414 /* KeyboardKey.swift in Sources */,
@@ -11124,6 +11129,7 @@
 				A6E100042F0000000000AA04 /* PronunciationPlayer.swift in Sources */,
 				A6CB92461D1B6AEA0030D414 /* NDDictionaryEntry.swift in Sources */,
 				A6CB92501D1C92D70030D414 /* NDDictionary.swift in Sources */,
+				A6E400052F0000000000DD05 /* KeyboardSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11156,7 +11162,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.5.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
+				PRODUCT_BUNDLE_IDENTIFIER = live.moquan.eywa.keyboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -11184,7 +11190,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.5.2;
-				PRODUCT_BUNDLE_IDENTIFIER = "CQ.Navi.Navi-Keyboard";
+				PRODUCT_BUNDLE_IDENTIFIER = live.moquan.eywa.keyboard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -11332,7 +11338,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.5.2;
-				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
+				PRODUCT_BUNDLE_IDENTIFIER = live.moquan.eywa;
 				PRODUCT_NAME = Eywa;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;
@@ -11360,7 +11366,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.5.2;
-				PRODUCT_BUNDLE_IDENTIFIER = CQ.Navi;
+				PRODUCT_BUNDLE_IDENTIFIER = live.moquan.eywa;
 				PRODUCT_NAME = Eywa;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTS_MACCATALYST = NO;

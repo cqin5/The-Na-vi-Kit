@@ -7,13 +7,28 @@
 
 import SwiftUI
 
-/// The Na'vi–English dictionary: every entry grouped by first letter, with search
-/// and a letter index. Searching for an inflected word, such as oel, also lists the
-/// entry of the word it comes from, with the grammar of the form.
+/// The Na'vi–English dictionary: every entry grouped by first letter, with a letter
+/// index. Looking a word up has a tab of its own, `DictionarySearchView`.
 ///
-/// Navigation bar, search field and list take on Liquid Glass from the system on
-/// iOS 26 and later.
+/// Navigation bar and list take on Liquid Glass from the system on iOS 26 and later.
 struct DictionaryView: View {
+
+    let sections: [DictionarySection]
+
+    var body: some View {
+        DictionaryList(sections: sections, wordForms: [])
+            .navigationTitle("Na'vi-English")
+            .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// Looks a word up in the dictionary, in Na'vi or English. Searching for an
+/// inflected word, such as oel, also lists the entry of the word it comes from,
+/// with the grammar of the form.
+///
+/// It fills the tab bar's search tab. On iOS 26 and later the search field sits at
+/// the bottom of the screen, so while typing it rests on top of the keyboard.
+struct DictionarySearchView: View {
 
     let sections: [DictionarySection]
     /// Whether the vocabulary has loaded, so that an empty list means no results.
@@ -25,16 +40,24 @@ struct DictionaryView: View {
     @State private var query = ""
 
     var body: some View {
-        let visibleSections = NDDictionary.filtered(sections, matching: query)
+        // A query of only spaces matches everything, so it counts as no query.
+        let isEmptyQuery = query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        let visibleSections = isEmptyQuery ? [] : NDDictionary.filtered(sections, matching: query)
         let wordForms = grammar?.wordForms(matching: query) ?? []
 
         DictionaryList(sections: visibleSections, wordForms: wordForms)
             .overlay {
-                if hasLoaded && visibleSections.isEmpty && wordForms.isEmpty && !query.isEmpty {
+                if isEmptyQuery {
+                    ContentUnavailableView(
+                        "Look Up a Word",
+                        systemImage: "character.book.closed",
+                        description: Text("Type a word in Na'vi or in English.")
+                    )
+                } else if hasLoaded && visibleSections.isEmpty && wordForms.isEmpty {
                     ContentUnavailableView.search(text: query)
                 }
             }
-            .navigationTitle("Na'vi-English")
+            .navigationTitle("Search")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $query, prompt: "Look up")
     }
@@ -119,10 +142,15 @@ private struct SectionIndexBar: View {
     let labels: [String]
     let select: (Int) -> Void
 
+    /// Counts jumps. Each plays a selection tick, the haptic for moving between
+    /// discrete values.
+    @State private var jumps = 0
+
     var body: some View {
         VStack(spacing: 1) {
             ForEach(labels.indices, id: \.self) { index in
                 Button {
+                    jumps += 1
                     select(index)
                 } label: {
                     Text(verbatim: labels[index])
@@ -133,6 +161,7 @@ private struct SectionIndexBar: View {
             }
         }
         .buttonStyle(.borderless)
+        .sensoryFeedback(.selection, trigger: jumps)
         // The index has to fit the screen's height, so its letters stop growing
         // at the largest standard text size.
         .dynamicTypeSize(...DynamicTypeSize.xLarge)
@@ -140,9 +169,15 @@ private struct SectionIndexBar: View {
     }
 }
 
-#Preview {
+#Preview("Dictionary") {
+    NavigationStack {
+        DictionaryView(sections: NDDictionary.loadSections())
+    }
+}
+
+#Preview("Search") {
     let sections = NDDictionary.loadSections()
     NavigationStack {
-        DictionaryView(sections: sections, hasLoaded: true, grammar: GrammarSearch.load(sections: sections))
+        DictionarySearchView(sections: sections, hasLoaded: true, grammar: GrammarSearch.load(sections: sections))
     }
 }

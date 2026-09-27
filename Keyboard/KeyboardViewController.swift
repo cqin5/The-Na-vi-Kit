@@ -8,12 +8,6 @@
 
 import UIKit
 
-// TODO: move this somewhere else and localize
-let kAutoCapitalization = "kAutoCapitalization"
-let kPeriodShortcut = "kPeriodShortcut"
-let kKeyboardClicks = "kKeyboardClicks"
-let kSmallLowercase = "kSmallLowercase"
-
 class KeyboardViewController: UIInputViewController {
     
     let backspaceDelay: TimeInterval = 0.5
@@ -28,8 +22,14 @@ class KeyboardViewController: UIInputViewController {
     var heightConstraint: NSLayoutConstraint?
     
     var bannerView: ExtraView?
-    var settingsView: ExtraView?
     
+    /// The keyboard's settings, which the app's Settings tab changes. Tests give
+    /// it a store of their own.
+    var settings = KeyboardSettings()
+
+    /// Plays the keys' haptics. Tests replace it to count the taps.
+    lazy var haptics = KeyboardHaptics(view: self.view)
+
     var currentMode: Int {
         didSet {
             if oldValue != currentMode {
@@ -91,14 +91,6 @@ class KeyboardViewController: UIInputViewController {
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        UserDefaults.standard.register(defaults: [
-            kAutoCapitalization: true,
-            kPeriodShortcut: true,
-            kKeyboardClicks: false,
-            // Letters follow Shift, as on the system keyboard.
-            kSmallLowercase: true
-        ])
-        
         self.shiftState = .disabled
         self.currentMode = 0
         
@@ -106,8 +98,6 @@ class KeyboardViewController: UIInputViewController {
         
         self.forwardingView = ForwardingView(frame: CGRect.zero)
         self.view.addSubview(self.forwardingView)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardViewController.defaultsChanged(_:)), name: UserDefaults.didChangeNotification, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -119,11 +109,6 @@ class KeyboardViewController: UIInputViewController {
         backspaceRepeatTimer?.invalidate()
         
         NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func defaultsChanged(_ notification: Notification) {
-        //let defaults = notification.object as? NSUserDefaults
-        self.updateKeyCaps(self.shiftState.uppercase())
     }
     
     // without this here kludge, the height constraint for the keyboard does not work for some reason
@@ -244,10 +229,9 @@ class KeyboardViewController: UIInputViewController {
         }
         else {
             let uppercase = self.shiftState.uppercase()
-            let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
             
             self.forwardingView.frame = orientationSavvyBounds
-            self.layout?.layoutKeys(self.currentMode, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
+            self.layout?.layoutKeys(self.currentMode, uppercase: uppercase, characterUppercase: uppercase, shiftState: self.shiftState)
             self.lastLayoutBounds = orientationSavvyBounds
             self.setupKeys()
         }
@@ -274,6 +258,10 @@ class KeyboardViewController: UIInputViewController {
 
         self.keyboardHeight = self.canonicalKeyboardHeight(withTopBanner: true)
         self.refreshAppearance()
+
+        if self.playsHaptics {
+            self.haptics.prepare(strength: self.settings.hapticStrength)
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -303,9 +291,11 @@ class KeyboardViewController: UIInputViewController {
         return self.traitCollection.verticalSizeClass != .compact
     }
 
-    /// The height of the toolbar above the keys.
+    /// The height of the toolbar above the keys. The keyboard's rounded top
+    /// corners curve down beside the toolbar's button, so it is tall enough to
+    /// keep the button clear of the curve.
     var toolbarHeight: CGFloat {
-        return (self.isPortraitLayout ? 36 : 32)
+        return (self.isPortraitLayout ? 44 : 36)
     }
 
     func canonicalKeyboardHeight(withTopBanner: Bool) -> CGFloat {
@@ -376,6 +366,7 @@ class KeyboardViewController: UIInputViewController {
                             keyView.addTarget(self, action: #selector(KeyboardViewController.unHighlightKey(_:)), for: [.touchUpInside, .touchUpOutside, .touchDragOutside, .touchDragExit, .touchCancel])
                         }
                         
+                        keyView.addTarget(self, action: #selector(KeyboardViewController.playKeyHaptic), for: .touchDown)
                         keyView.addTarget(self, action: #selector(KeyboardViewController.playKeySound), for: .touchDown)
                     }
                 }
@@ -451,7 +442,6 @@ class KeyboardViewController: UIInputViewController {
         self.layout?.updateKeyAppearance()
         
         self.bannerView?.darkMode = appearanceIsDark
-        self.settingsView?.darkMode = appearanceIsDark
     }
     
     @objc func highlightKey(_ sender: KeyboardKey) {
@@ -488,7 +478,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func handleAutoPeriod(_ key: Key) {
-        if !UserDefaults.standard.bool(forKey: kPeriodShortcut) {
+        if !self.settings.periodShortcut {
             return
         }
         
@@ -570,6 +560,9 @@ class KeyboardViewController: UIInputViewController {
     
     @objc func backspaceRepeatCallback() {
         self.playKeySound()
+        if self.playsHaptics {
+            self.haptics.repeatStep()
+        }
         
         self.textDocumentProxy.deleteBackward()
         _ = self.setCapsIfNeeded()
@@ -635,9 +628,9 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
+    // Letters follow Shift, as on the system keyboard.
     func updateKeyCaps(_ uppercase: Bool) {
-        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
-        self.layout?.updateKeyCaps(false, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
+        self.layout?.updateKeyCaps(false, uppercase: uppercase, characterUppercase: uppercase, shiftState: self.shiftState)
     }
     
     @objc func modeChangeTapped(_ sender: KeyboardKey) {
@@ -652,8 +645,7 @@ class KeyboardViewController: UIInputViewController {
         self.shiftWasMultitapped = false
         
         let uppercase = self.shiftState.uppercase()
-        let characterUppercase = (UserDefaults.standard.bool(forKey: kSmallLowercase) ? uppercase : true)
-        self.layout?.layoutKeys(mode, uppercase: uppercase, characterUppercase: characterUppercase, shiftState: self.shiftState)
+        self.layout?.layoutKeys(mode, uppercase: uppercase, characterUppercase: uppercase, shiftState: self.shiftState)
         
         self.setupKeys()
     }
@@ -666,36 +658,6 @@ class KeyboardViewController: UIInputViewController {
         self.advanceToNextInputMode()
     }
     
-    @IBAction func toggleSettings() {
-        // lazy load settings
-        if self.settingsView == nil {
-            if let aSettings = self.createSettings() {
-                aSettings.darkMode = self.darkMode()
-                
-                aSettings.isHidden = true
-                self.view.addSubview(aSettings)
-                self.settingsView = aSettings
-                
-                aSettings.translatesAutoresizingMaskIntoConstraints = false
-                
-                NSLayoutConstraint.activate([
-                    aSettings.widthAnchor.constraint(equalTo: self.view.widthAnchor),
-                    aSettings.heightAnchor.constraint(equalTo: self.view.heightAnchor),
-                    aSettings.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-                    aSettings.centerYAnchor.constraint(equalTo: self.view.centerYAnchor)
-                ])
-            }
-        }
-        
-        if let settings = self.settingsView {
-            let hidden = settings.isHidden
-            settings.isHidden = !hidden
-            self.forwardingView.isHidden = hidden
-            self.forwardingView.isUserInteractionEnabled = !hidden
-            self.bannerView?.isHidden = hidden
-        }
-    }
-
     func setCapsIfNeeded() -> Bool {
         if self.shouldAutoCapitalize() {
             switch self.shiftState {
@@ -748,7 +710,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func shouldAutoCapitalize() -> Bool {
-        if !UserDefaults.standard.bool(forKey: kAutoCapitalization) {
+        if !self.settings.autoCapitalization {
             return false
         }
         
@@ -817,13 +779,26 @@ class KeyboardViewController: UIInputViewController {
     // through AudioToolbox. It plays because this controller adopts
     // UIInputViewAudioFeedback (at the end of this file).
     @objc func playKeySound() {
-        if !UserDefaults.standard.bool(forKey: kKeyboardClicks) {
+        if !self.settings.keyboardClicks {
             return
         }
 
         UIDevice.current.playInputClick()
     }
     
+    /// Whether keys play haptics: the keyboard's own setting, since a keyboard
+    /// cannot read the system keyboard's, and Full Access, without which iOS
+    /// plays no haptics for a keyboard extension.
+    var playsHaptics: Bool {
+        return self.hasFullAccess && self.settings.haptics
+    }
+
+    @objc func playKeyHaptic() {
+        if self.playsHaptics {
+            self.haptics.keyDown(strength: self.settings.hapticStrength)
+        }
+    }
+
     //////////////////////////////////////
     // MOST COMMONLY EXTENDABLE METHODS //
     //////////////////////////////////////
@@ -840,17 +815,10 @@ class KeyboardViewController: UIInputViewController {
     func createBanner() -> ExtraView? {
         // note that dark mode is not yet valid here, so we just put false for clarity
         let toolbar = KeyboardToolbar(globalColors: type(of: self).globalColors, darkMode: false, solidColorMode: self.solidColorMode())
-        toolbar.settingsButton.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: .touchUpInside)
         toolbar.dismissButton.addTarget(self, action: #selector(UIInputViewController.dismissKeyboard), for: .touchUpInside)
+        // The toolbar's button taps like a key.
+        toolbar.dismissButton.addTarget(self, action: #selector(KeyboardViewController.playKeyHaptic), for: .touchDown)
         return toolbar
-    }
-    
-    // a settings view that replaces the keyboard when the settings button is pressed
-    func createSettings() -> ExtraView? {
-        // note that dark mode is not yet valid here, so we just put false for clarity
-        let settingsView = DefaultSettings(globalColors: type(of: self).globalColors, darkMode: false, solidColorMode: self.solidColorMode())
-        settingsView.backButton.addTarget(self, action: #selector(KeyboardViewController.toggleSettings), for: UIControl.Event.touchUpInside)
-        return settingsView
     }
 }
 

@@ -32,7 +32,7 @@ struct KeyboardLayoutTests {
     /// keys' view sits at the bottom of the keyboard's view, under the toolbar.
     ///
     /// The layout holds its views weakly, so callers keep all four alive.
-    static func makeLayout(width: CGFloat, keysHeight: CGFloat, toolbarHeight: CGFloat = 36, scale: CGFloat = 3, globe: Bool) -> (KeyboardLayout, Keyboard, UIView, UIView) {
+    static func makeLayout(width: CGFloat, keysHeight: CGFloat, toolbarHeight: CGFloat = 44, scale: CGFloat = 3, globe: Bool) -> (KeyboardLayout, Keyboard, UIView, UIView) {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: width, height: keysHeight + toolbarHeight))
         let keysView = UIView(frame: CGRect(x: 0, y: toolbarHeight, width: width, height: keysHeight))
         container.addSubview(keysView)
@@ -145,7 +145,7 @@ struct KeyboardLayoutTests {
                 }
             }
             for width in landscapeWidths {
-                let (layout, keyboard, view, container) = makeLayout(width: width, keysHeight: 162, toolbarHeight: 32, globe: globe)
+                let (layout, keyboard, view, container) = makeLayout(width: width, keysHeight: 162, toolbarHeight: 36, globe: globe)
                 defer { withExtendedLifetime(container) {} }
                 for page in 0..<keyboard.pages.count {
                     guard let frames = layout.generateKeyFrames(keyboard, bounds: view.bounds, page: page) else {
