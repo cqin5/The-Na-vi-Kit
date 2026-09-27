@@ -89,6 +89,14 @@ struct GrammarSearch: Sendable {
         }
     }
 
+    /// The vocabulary entry for a headword, for its pronunciation and recording: the
+    /// first entry with a recording, or else the first entry. Nil when the vocabulary
+    /// does not list the word.
+    func dictionaryEntry(forHeadword headword: String) -> NDDictionaryEntry? {
+        let entries = entriesByHeadword[Self.key(headword), default: []]
+        return entries.first(where: \.hasRecording) ?? entries.first
+    }
+
     /// Headwords compared as the grammar engine compares them, without the + that
     /// marks a leniting adposition.
     private static func key(_ headword: String) -> String {

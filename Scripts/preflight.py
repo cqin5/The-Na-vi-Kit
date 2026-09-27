@@ -128,6 +128,27 @@ INTERFACE_IMPORTS = re.compile(r"^\s*(?:@testable\s+)?import\s+(UIKit|SwiftUI)\b
 PHRASEBOOK = pathlib.Path("Na'vi/Phrasebook.swift")
 APPENDIX_F_TESTS = GRAMMAR_PACKAGE / "Tests/NaviGrammarTests/AppendixFTests.swift"
 
+# The phrasebook's Basics pages. Their words must be ones the dictionary lists, their
+# alphabet that of appendix G, and their phrases, like the phrasebook's, must come
+# from appendix F.
+BASICS = pathlib.Path("Na'vi/Basics.swift")
+
+# Words the Basics pages use that neither the lexicon nor the vocabulary lists, and
+# where the dictionary uses them.
+ATTESTED_ELSEWHERE = {
+    "menga": "appendix A of the LearnNavi dictionary: Menga lu karyu, you two are teachers",
+}
+
+# Appendix G of the LearnNavi dictionary, "The Alphabet": the 33 letters and the name
+# it gives each. Vowels and diphthongs are named by themselves.
+APPENDIX_G = {
+    "'": "tìftang", "a": "a", "aw": "aw", "ay": "ay", "ä": "ä", "e": "e", "ew": "ew",
+    "ey": "ey", "f": "fä", "h": "hä", "i": "i", "ì": "ì", "k": "kek", "kx": "kxekx",
+    "l": "lel", "ll": "'ll", "m": "mem", "n": "nen", "ng": "ngeng", "o": "o", "p": "pep",
+    "px": "pxepx", "r": "rer", "rr": "'rr", "s": "sä", "t": "tet", "tx": "txetx",
+    "ts": "tsä", "u": "u", "v": "vä", "w": "wä", "y": "yä", "z": "zä",
+}
+
 # Directories whose Swift files are not Xcode target members: dependency managers,
 # Swift packages (built by SwiftPM), test code in Scripts/ that is compiled on its
 # own, downloaded source data, and tool worktrees.
@@ -697,29 +718,101 @@ def check_phrasebook(report: Report) -> None:
     report.section("Phrasebook")
 
     def key(phrase: str) -> str:
-        return " ".join(phrase.lower().rstrip(".!?").split())
+        # An ellipsis stands where the learner puts a word in, as X does in appendix F,
+        # whose phrases the tests list without it: "tsalì'uri alu, ral lu 'upe".
+        text = re.sub(r"\s*…\s*", " ", phrase)
+        text = re.sub(r"\s+([,;])", r"\1", text)
+        return " ".join(text.lower().rstrip(".!?").split())
 
     try:
-        phrasebook = PHRASEBOOK.read_text(encoding="utf-8")
+        books = {path: path.read_text(encoding="utf-8") for path in (PHRASEBOOK, BASICS)}
         appendix = APPENDIX_F_TESTS.read_text(encoding="utf-8")
     except OSError as error:
         report.fail(f"cannot read the phrasebook or the appendix F phrases: {error}")
         return
 
-    phrases = re.findall(r'Phrase\(navi: "((?:[^"\\]|\\.)*)"', phrasebook)
+    phrases = [
+        (path, phrase)
+        for path, text in books.items()
+        for phrase in re.findall(r'Phrase\(navi: "((?:[^"\\]|\\.)*)"', text)
+    ]
     listed = re.search(r"static let phrases: \[String\] = \[(.*?)\n    \]", appendix, re.DOTALL)
     sources = {key(phrase) for phrase in re.findall(r'"((?:[^"\\]|\\.)*)"', listed.group(1))} if listed else set()
 
-    problems = [f"{phrase!r} is not an appendix F phrase" for phrase in phrases if key(phrase) not in sources]
-    repeated = sorted({phrase for phrase in phrases if phrases.count(phrase) > 1})
+    problems = [f"{path.name}: {phrase!r} is not an appendix F phrase" for path, phrase in phrases if key(phrase) not in sources]
+    texts = [phrase for _, phrase in phrases]
+    repeated = sorted({phrase for phrase in texts if texts.count(phrase) > 1})
     problems += [f"{phrase!r} appears more than once" for phrase in repeated]
     if not phrases:
-        problems.append("no phrases found")
+        problems.append(f"{PHRASEBOOK.name}: no phrases found")
 
     for problem in problems:
-        report.fail(f"{PHRASEBOOK.name}: {problem}")
+        report.fail(problem)
     if not problems:
         report.ok(f"all {len(phrases)} phrases are from appendix F, each once")
+
+
+def check_basics(report: Report) -> None:
+    """The Basics pages: every word is one the dictionary lists, and the alphabet is
+    appendix G's, each letter with its name and an example the app has a recording of."""
+    report.section("Phrasebook basics")
+
+    import json
+    import unicodedata
+
+    def key(word: str) -> str:
+        # As the app compares headwords: composed letters, the straight apostrophe, no
+        # + for lenition, any case.
+        composed = unicodedata.normalize("NFC", word.replace("’", "'").replace("+", ""))
+        return composed.lower().strip()
+
+    try:
+        basics = BASICS.read_text(encoding="utf-8")
+        rows = [line.split("\t") for line in GRAMMAR_LEXICON.read_text(encoding="utf-8").splitlines()]
+        vocabulary = json.loads(VOCABULARY_FILE.read_text(encoding="utf-8"))["dict"]
+        recorded = {key(entry["Na'vi"]) for entry in vocabulary if entry["Audio local URL"]}
+        listed = {key(entry["Na'vi"]) for entry in vocabulary}
+    except (OSError, UnicodeDecodeError, ValueError, KeyError, TypeError) as error:
+        report.fail(f"cannot read the basics, the lexicon or the vocabulary: {error}")
+        return
+    listed |= {key(row[1]) for row in rows if len(row) == len(GRAMMAR_LEXICON_COLUMNS) and row[0].isdigit()}
+
+    problems = []
+    words = re.findall(r'BasicWord\(navi: "((?:[^"\\]|\\.)*)"', basics)
+    for word in words:
+        if key(word) not in listed and key(word) not in ATTESTED_ELSEWHERE:
+            problems.append(f"{word!r} is in neither the lexicon nor the vocabulary")
+    for word in sorted(ATTESTED_ELSEWHERE):
+        if word in listed:
+            report.warn(f"{word!r} is now in the dictionary; ATTESTED_ELSEWHERE no longer needs it")
+    if not words:
+        problems.append("no words found")
+
+    letters = re.findall(
+        r'NaviLetter\(letter: "((?:[^"\\]|\\.)*)"(?:, name: "((?:[^"\\]|\\.)*)")?.*?example: BasicWord\(navi: "((?:[^"\\]|\\.)*)"',
+        basics,
+        re.DOTALL,
+    )
+    spelled = [letter for letter, _, _ in letters]
+    for letter in sorted(set(APPENDIX_G) - set(spelled)):
+        problems.append(f"the alphabet leaves out {letter!r}")
+    for letter in sorted(set(spelled) - set(APPENDIX_G)):
+        problems.append(f"{letter!r} is not a letter of appendix G")
+    for letter in sorted({letter for letter in spelled if spelled.count(letter) > 1}):
+        problems.append(f"{letter!r} is listed more than once")
+    for letter, name, example in letters:
+        expected = APPENDIX_G.get(letter)
+        if expected is not None and key(name or letter) != expected:
+            problems.append(f"{letter!r} is named {name or letter!r}, but appendix G names it {expected!r}")
+        if letter not in key(example):
+            problems.append(f"the example for {letter!r}, {example!r}, does not have that letter")
+        if key(example) not in recorded:
+            problems.append(f"the example for {letter!r}, {example!r}, has no recording")
+
+    for problem in problems:
+        report.fail(f"{BASICS.name}: {problem}")
+    if not problems:
+        report.ok(f"all {len(words)} words are in the dictionary, and the alphabet is appendix G's {len(letters)} letters")
 
 
 def check_keyboard_touch_routing(report: Report) -> None:
@@ -832,6 +925,7 @@ def main() -> int:
     check_bundle_contents(report, project)
     check_vocabulary(report, project)
     check_phrasebook(report)
+    check_basics(report)
 
     report.section("Result")
     if report.failures:

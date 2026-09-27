@@ -26,8 +26,10 @@ each feature labelled and explained in plain English. Multi-word entries such as
 reading is listed, most likely first. A word the engine cannot account for is marked
 **Not in the dictionary**, with the reason, and is never guessed at.
 
-**The Phrasebook tab** lists 67 everyday phrases and sayings by topic. Choosing one
-reads it word by word.
+**The Phrasebook tab** opens on a short list: six Basics pages (pronunciation,
+numbers, time, times of day, pronouns and questions) and seven topics of everyday
+phrases and sayings, each on a screen of its own. Choosing a phrase reads it word by
+word. The Numbers page converts between numbers and Na'vi number words, both ways.
 
 Nothing typed or pasted leaves the device.
 
@@ -45,8 +47,11 @@ Nothing typed or pasted leaves the device.
 | `Analyser` | NaviGrammar | Takes a word apart and ranks its readings |
 | `TextReader` | NaviGrammar | Splits a passage into words, finds multi-word entries, handles lenition across words |
 | `GrammarSearch` | `Na'vi/GrammarSearch.swift` | Connects readings to the app's dictionary entries |
+| `Numeral` | NaviGrammar | Builds and reads number words by the number system of appendix A |
 | Screens | `Na'vi/WordFormRow.swift`, `Na'vi/TranslateView.swift`, `Na'vi/PhrasebookView.swift` | Search results, the Translate screen and the phrasebook |
+| Basics pages | `Na'vi/NumbersView.swift`, `Na'vi/PronunciationView.swift`, `Na'vi/PronounsView.swift`, `Na'vi/WordListView.swift` | The phrasebook's numbers, alphabet, pronouns, and word lists |
 | Phrasebook | `Na'vi/Phrasebook.swift` | Phrases from appendix F, by topic, with English renderings |
+| Basics | `Na'vi/Basics.swift` | Words for the Basics pages, the alphabet of appendix G, and appendix F's phrases about age |
 
 NaviGrammar is a local Swift package with no dependency beyond Foundation, written
 in the Swift 6 language mode with value types throughout, for iOS 18 and later. It
@@ -122,9 +127,29 @@ endings, prefixes and infixes the engine knows, makes that form.
 
 The phrasebook's Na'vi is taken verbatim from appendix F, "Useful Phrases", of the
 LearnNavi dictionary, most of which comes from Dr. Frommer's blog. The English
-renderings and notes are this app's own. Phrases whose words the engine does not know
-are left out. The pre-flight checks confirm that every phrasebook phrase appears in
-appendix F, and the engine's tests check every word of every appendix F phrase.
+renderings and notes are this app's own. An ellipsis stands where appendix F writes X
+for a word the learner puts in: *… nìNa'vi slu pelì'u?* "How do you say … in Na'vi?".
+Phrases whose words the engine does not know are left out of the topics. The Numbers
+page shows the two about age, *Ngari solalew polpxaya zìsìt?* and *Oeri solalew zìsìt
+apxevol*, without linking them to Translate.
+
+The Basics pages draw on the dictionary's other appendices and its word list:
+
+| Page | Source |
+|-|-|
+| Pronunciation | The 33 letters of appendix G and their names; each letter's example is a word the app has a recording of |
+| Numbers | Appendix A, through `Numeral`, and the digit names *'eyt* and *nayn* |
+| Time, Times of Day | The days of the week and the parts of the day from appendix B; other time words from the dictionary |
+| Pronouns, Questions | Dictionary headwords; each pronoun's case forms come from the generator |
+
+Every word on these pages is a headword of the lexicon or the vocabulary, except
+*menga* "you two", which appendix A uses: *Menga lu karyu*, "You two are teachers".
+A word's pronunciation and recording come from the vocabulary entry with the same
+headword.
+
+The pre-flight checks confirm that every phrase appears in appendix F, that every
+Basics word is in the dictionary, and that the alphabet is appendix G's. The engine's
+tests check every word of every appendix F phrase.
 
 ### 2.5 Reading a passage
 
@@ -205,9 +230,10 @@ A reading that uses a Reef spelling or a Reef form is marked as such.
 
 These words and forms are reported as unknown rather than guessed at:
 
-- **Compound numbers.** Numbers are built by the number system of appendix A (for
-  example *pxevol* "24"), which the engine does not implement. Numbers the dictionary
-  lists are known.
+- **Compound numbers in a passage.** `Numeral` builds and reads the numbers of
+  appendix A (for example *pxevol* "24"), and the phrasebook's Numbers page uses it,
+  but the analyser does not consult it, so Translate reports *pxevol* as unknown.
+  Numbers the dictionary lists are known.
 - **Time words with -am and -ay.** Appendix H limits these suffixes to time words,
   and the lexicon does not mark which words those are. The common forms, such as
   *trram* and *trray*, are in the dictionary.
@@ -258,6 +284,7 @@ The two Python files test the lexicon builder and the pre-flight checks.
 |-|-|
 | Appendix H examples | Every example form in appendix H: generated from its base word, then analysed back, with the book's reading ranked first |
 | Appendix F phrases | Every word of the dictionary's 111 useful phrases has a reading, except three documented gaps; 30 readings and 6 multi-word entries checked in detail |
+| Appendix A numbers | Every number word in appendix A's charts, both ways; every number from 0 to 32,767 has one word, which reads back as that number; misspellings such as *volmun* rejected; typed digits in any script |
 | Dr. Frommer's forms | 47 forms from the posts in §3.2, and forms those posts rule out (*soaiayä*, *oengìl*, *kelnìt*, …) |
 | Analyser | *Oel ngati kameie*; normalisation of capitals, curly apostrophes, decomposed letters and hyphens; unknown words and their reasons; ambiguity; each rule |
 | Orthography, Lexicon, Text reader | Lenition both ways; malformed lexicon lines rejected with their line number; tokenising, phrases, quotation marks and long passages |
@@ -286,7 +313,9 @@ The remaining ambiguities are real, and the engine lists every reading. Two exam
 ### 4.4 Pre-flight checks
 
 `Scripts/preflight.py` confirms that every phrasebook phrase comes from appendix F,
-and three things about the package:
+that every word on the Basics pages is in the dictionary, that their alphabet is
+appendix G's, each letter with its name and a recorded example, and three things about
+the package:
 
 - the app links NaviGrammar;
 - its sources import neither UIKit nor SwiftUI;
